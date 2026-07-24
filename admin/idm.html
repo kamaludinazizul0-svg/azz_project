@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Kelola IDM - Admin</title><link rel="icon" href="/images/logo.png" /><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/admin/css/admin.css" /></head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div><nav class="sidebar-nav"><div class="sidebar-section-label">Umum</div><a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a><div class="sidebar-section-label">Konten</div><a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Slider</a><a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a><a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri</a><a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing</a>
+      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
+      
+      <div class="sidebar-section-label">Layanan Publik</div>
+      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a><div class="sidebar-section-label">Profil</div><a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil</a><a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat</a><a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Penduduk</a><div class="sidebar-section-label">Keuangan</div><a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a><a href="/admin/idm.html" class="sidebar-link active"><span class="icon">🏆</span> IDM</a><a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> PPID</a><div class="sidebar-section-label">Pengaturan</div><a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a></nav><div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Admin</span><span class="role">Admin</span></div></div><div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:.78rem">🌐</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪</button></div></div></aside>
+  <main class="admin-main">
+    <div class="topbar"><div class="topbar-left"><div class="topbar-title">Kelola Data IDM</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div></div>
+    <div class="page-content">
+      <div class="page-header-admin"><div><h1>🏆 Kelola Data IDM</h1><p>Indeks Desa Membangun</p></div><button class="btn-admin btn-primary-admin" onclick="saveAll()">💾 Simpan Semua</button></div>
+
+      <div class="admin-card" style="margin-bottom:24px"><div class="admin-card-header"><h3>📋 Data Utama IDM</h3></div><div class="admin-card-body">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <div class="form-group"><label class="form-label">Tahun</label><input type="number" id="fTahun" class="form-control" /></div>
+          <div class="form-group"><label class="form-label">Skor IDM (0-1)</label><input type="number" id="fSkor" class="form-control" step="0.0001" min="0" max="1" /></div>
+          <div class="form-group"><label class="form-label">Status</label><select id="fStatus" class="form-control"><option>Desa Sangat Tertinggal</option><option>Desa Tertinggal</option><option>Desa Berkembang</option><option>Desa Maju</option><option>Desa Mandiri</option></select></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <div class="form-group"><label class="form-label">IKS (Sosial)</label><input type="number" id="fIKS" class="form-control" step="0.0001" /></div>
+          <div class="form-group"><label class="form-label">IKE (Ekonomi)</label><input type="number" id="fIKE" class="form-control" step="0.0001" /></div>
+          <div class="form-group"><label class="form-label">IKL (Lingkungan)</label><input type="number" id="fIKL" class="form-control" step="0.0001" /></div>
+        </div>
+      </div></div>
+
+      <div class="admin-card" style="margin-bottom:24px"><div class="admin-card-header"><h3>📊 Riwayat IDM</h3><button class="btn-admin btn-light btn-sm-admin" onclick="addRiwayat()">➕ Tambah</button></div><div class="admin-card-body"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Tahun</th><th>Skor</th><th>Status</th><th style="width:60px">Aksi</th></tr></thead><tbody id="tbRiwayat"></tbody></table></div></div></div>
+
+      <div style="text-align:center;margin-top:24px"><button class="btn-admin btn-primary-admin" onclick="saveAll()" style="padding:14px 48px;font-size:1rem">💾 Simpan Semua Perubahan</button></div>
+    </div>
+  </main>
+</div>
+<script src="/admin/js/admin.js"></script>
+<script>
+let idmData={};
+document.addEventListener('DOMContentLoaded',loadData);
+async function loadData(){
+  idmData=await adminFetch('/idm')||{};
+  document.getElementById('fTahun').value=idmData.tahun||2024;
+  document.getElementById('fSkor').value=idmData.skor||0;
+  document.getElementById('fStatus').value=idmData.status||'Desa Mandiri';
+  document.getElementById('fIKS').value=idmData.iks||0;
+  document.getElementById('fIKE').value=idmData.ike||0;
+  document.getElementById('fIKL').value=idmData.ikl||0;
+  renderRiwayat();
+}
+function renderRiwayat(){const tb=document.getElementById('tbRiwayat');const d=idmData.riwayat||[];tb.innerHTML=d.map((r,i)=>`<tr><td><input type="number" class="form-control" value="${r.tahun}" data-idx="${i}" data-f="tahun" /></td><td><input type="number" class="form-control" value="${r.skor}" step="0.0001" data-idx="${i}" data-f="skor" /></td><td><input type="text" class="form-control" value="${r.status}" data-idx="${i}" data-f="status" /></td><td><button class="btn-admin btn-danger btn-sm-admin" onclick="removeRiwayat(${i})">🗑️</button></td></tr>`).join('');}
+function addRiwayat(){if(!idmData.riwayat)idmData.riwayat=[];idmData.riwayat.push({tahun:2023,skor:0.7,status:'Desa Maju'});renderRiwayat();}
+function removeRiwayat(i){idmData.riwayat.splice(i,1);renderRiwayat();}
+
+async function saveAll(){
+  idmData.tahun=parseInt(document.getElementById('fTahun').value);
+  idmData.skor=parseFloat(document.getElementById('fSkor').value);
+  idmData.status=document.getElementById('fStatus').value;
+  idmData.iks=parseFloat(document.getElementById('fIKS').value);
+  idmData.ike=parseFloat(document.getElementById('fIKE').value);
+  idmData.ikl=parseFloat(document.getElementById('fIKL').value);
+  document.querySelectorAll('[data-idx]').forEach(el=>{const i=parseInt(el.dataset.idx);const f=el.dataset.f;if(idmData.riwayat[i])idmData.riwayat[i][f]=f==='status'?el.value:parseFloat(el.value);});
+  const r=await adminFetch('/idm',{method:'PUT',body:JSON.stringify(idmData)});
+  if(r)showToast('Data IDM berhasil disimpan');
+}
+</script>
+</body></html>

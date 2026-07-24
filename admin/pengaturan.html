@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Pengaturan - Admin</title><link rel="icon" href="/images/logo.png" /><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/admin/css/admin.css" /></head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div><nav class="sidebar-nav"><div class="sidebar-section-label">Umum</div><a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a><div class="sidebar-section-label">Konten</div><a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Slider</a><a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a><a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri</a><a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing</a>
+      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
+      
+      <div class="sidebar-section-label">Layanan Publik</div>
+      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a><div class="sidebar-section-label">Profil</div><a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil</a><a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat</a><a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Penduduk</a><div class="sidebar-section-label">Keuangan</div><a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a><a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> IDM</a><a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> PPID</a><div class="sidebar-section-label">Pengaturan</div><a href="/admin/pengaturan.html" class="sidebar-link active"><span class="icon">⚙️</span> Pengaturan</a></nav><div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Admin</span><span class="role">Admin</span></div></div><div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:.78rem">🌐</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪</button></div></div></aside>
+  <main class="admin-main">
+    <div class="topbar"><div class="topbar-left"><div class="topbar-title">Pengaturan Sistem</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div></div>
+    <div class="page-content">
+      <div class="page-header-admin"><div><h1>⚙️ Pengaturan</h1><p>Konfigurasi akun dan sistem</p></div></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        
+        <!-- Ganti Password -->
+        <div class="admin-card"><div class="admin-card-header"><h3>🔑 Ganti Password</h3></div><div class="admin-card-body">
+          <form id="pwdForm" onsubmit="changePassword(event)">
+            <div class="form-group"><label class="form-label">Password Lama *</label><input type="password" id="oldPwd" class="form-control" required /></div>
+            <div class="form-group"><label class="form-label">Password Baru *</label><input type="password" id="newPwd" class="form-control" required /></div>
+            <div class="form-group"><label class="form-label">Konfirmasi Password Baru *</label><input type="password" id="confirmPwd" class="form-control" required /></div>
+            <button type="submit" class="btn-admin btn-primary-admin" style="width:100%">💾 Simpan Password Baru</button>
+          </form>
+        </div></div>
+
+        <!-- Integrasi WA -->
+        <div class="admin-card"><div class="admin-card-header"><h3>💬 Integrasi WhatsApp (Fonnte)</h3></div><div class="admin-card-body">
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px">Masukkan Token dari <a href="https://fonnte.com" target="_blank">Fonnte</a> untuk mengaktifkan fitur pengiriman WA otomatis (misal: saat surat disetujui).</p>
+          <form onsubmit="saveWaToken(event)">
+            <div class="form-group"><label class="form-label">Fonnte API Token</label>
+            <input type="text" id="fonnteToken" class="form-control" placeholder="Masukkan Token API Fonnte..." /></div>
+            <button type="submit" class="btn-admin btn-primary-admin" style="width:100%;background:#25D366;border:none">💾 Simpan Token WA</button>
+          </form>
+        </div></div>
+
+        <!-- Info Sistem -->
+        <div style="display:flex;flex-direction:column;gap:24px">
+          <div class="admin-card"><div class="admin-card-header"><h3>💻 Informasi Sistem</h3></div><div class="admin-card-body">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">Versi Sistem</span><strong>v1.0.0</strong></div>
+              <div style="display:flex;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">Platform</span><strong>Node.js / Express</strong></div>
+              <div style="display:flex;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">Waktu Server</span><strong id="serverTime">-</strong></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Developer</span><strong>Antigravity</strong></div>
+            </div>
+          </div></div>
+          
+          <div class="admin-card"><div class="admin-card-header"><h3>🔗 Link Cepat</h3></div><div class="admin-card-body" style="display:flex;flex-direction:column;gap:12px">
+            <a href="/" target="_blank" class="btn-admin btn-light" style="justify-content:start">🌐 Buka Halaman Utama Website</a>
+            <a href="/admin/dashboard.html" class="btn-admin btn-light" style="justify-content:start">📊 Kembali ke Dashboard</a>
+            <button class="btn-admin btn-danger" style="justify-content:start" data-logout>🚪 Logout Akun</button>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/admin/js/admin.js"></script>
+<script>
+let currentDesaData = {};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  setInterval(()=>{
+    document.getElementById('serverTime').textContent=new Date().toLocaleString('id-ID');
+  },1000);
+  
+  // Load WA Token
+  const res = await adminFetch('/desa');
+  if (res) {
+    currentDesaData = res;
+    if (res.kontak && res.kontak.fonnte_token) {
+      document.getElementById('fonnteToken').value = res.kontak.fonnte_token;
+    }
+  }
+});
+
+async function saveWaToken(e) {
+  e.preventDefault();
+  const token = document.getElementById('fonnteToken').value;
+  if (!currentDesaData.kontak) currentDesaData.kontak = {};
+  currentDesaData.kontak.fonnte_token = token;
+  
+  const res = await adminFetch('/desa', { method: 'PUT', body: JSON.stringify(currentDesaData) });
+  if (res) {
+    showToast('Token WhatsApp Fonnte berhasil disimpan!');
+  }
+}
+
+async function changePassword(e){
+  e.preventDefault();
+  const oldPwd=document.getElementById('oldPwd').value;
+  const newPwd=document.getElementById('newPwd').value;
+  const confirmPwd=document.getElementById('confirmPwd').value;
+  
+  if(newPwd!==confirmPwd){ showToast('❌ Konfirmasi password baru tidak cocok'); return; }
+  if(newPwd.length<6){ showToast('❌ Password baru minimal 6 karakter'); return; }
+  
+  try{
+    const r=await adminFetch('/auth/change-password',{method:'POST',body:JSON.stringify({oldPassword:oldPwd,newPassword:newPwd})});
+    if(r){
+      showToast('✅ Password berhasil diubah! Silakan login kembali.');
+      e.target.reset();
+      setTimeout(()=>{ localStorage.removeItem('adminToken'); window.location.href='/admin/index.html'; }, 2000);
+    }
+  }catch(err){
+    showToast('❌ Gagal mengubah password. Cek password lama anda.');
+  }
+}
+</script>
+</body></html>

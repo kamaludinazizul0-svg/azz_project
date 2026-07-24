@@ -1,0 +1,53 @@
+{
+  "nama_desa": "Kauman",
+  "kecamatan": "Ngoro",
+  "kabupaten": "Jombang",
+  "provinsi": "Jawa Timur",
+  "kode_pos": "61473",
+  "kode_kemendagri": "35.17.03.2004",
+  "kepala_desa": "Abdul Qohar",
+  "sekretaris_desa": "Ahmad Fauzi",
+  "tagline": "Desa Kauman Kampung Jamu Tradisional",
+  "deskripsi_singkat": "Desa Kauman adalah desa yang terletak di Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Dikenal sebagai Kampung Jamu Tradisional, desa ini memiliki potensi besar dalam produksi jamu herbal turun-temurun.",
+  "sejarah": "Desa Kauman merupakan salah satu desa tua di wilayah Kecamatan Ngoro, Kabupaten Jombang yang memiliki sejarah panjang. Nama 'Kauman' berasal dari kata 'Kaum' yang merujuk pada masyarakat yang religius dan memiliki tradisi keagamaan yang kuat. Desa ini telah lama dikenal sebagai pusat produksi jamu tradisional yang diwariskan secara turun-temurun oleh warganya. Sejak dahulu, para wanita desa ini telah mahir meracik berbagai jenis jamu menggunakan bahan-bahan alami seperti temulawak, kunir, kencur, sinom, dan berbagai tanaman herbal lainnya. Kini, Desa Kauman terus berkembang dengan tetap mempertahankan warisan budaya dan kearifan lokal, sekaligus membuka diri terhadap kemajuan teknologi dan modernisasi.",
+  "visi": "Terwujudnya Desa Kauman yang Mandiri, Sejahtera, dan Berbudaya Berbasis Potensi Lokal",
+  "misi": [
+    "Meningkatkan kualitas pelayanan publik yang transparan dan akuntabel",
+    "Mengembangkan potensi ekonomi lokal melalui pengembangan usaha jamu tradisional dan UMKM",
+    "Membangun infrastruktur desa yang memadai untuk menunjang aktivitas masyarakat",
+    "Meningkatkan kualitas sumber daya manusia melalui pendidikan dan pelatihan",
+    "Melestarikan budaya dan tradisi lokal sebagai identitas desa",
+    "Mengembangkan wisata desa berbasis alam dan budaya"
+  ],
+  "luas_wilayah": "235 Ha",
+  "jumlah_dusun": 4,
+  "dusun": [
+    "Dusun Kauman",
+    "Dusun Krenggan",
+    "Dusun Tegalan",
+    "Dusun Sedati"
+  ],
+  "batas_utara": "Desa Rejoagung",
+  "batas_selatan": "Desa Genukwatu",
+  "batas_timur": "Desa Ngoro",
+  "batas_barat": "Desa Ngoro",
+  "koordinat": {
+    "lat": -7.6285,
+    "lng": 112.3921
+  },
+  "kontak": {
+    "email": "desaKauman@jombangkab.go.id",
+    "telepon": "(0321) 123456",
+    "whatsapp": "6285123456789",
+    "alamat": "Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473",
+    "jam_operasional": "Senin - Jumat: 08.00 - 15.00 WIB",
+    "fonnte_token": "QDhfxGAPdxmj4uQYQuFv"
+  },
+  "sosmed": {
+    "facebook": "https://facebook.com/desakauman",
+    "instagram": "https://instagram.com/desakauman",
+    "youtube": "https://youtube.com/@desakauman"
+  },
+  "sambutan_kades": "HALO GAIS",
+  "foto_kades": "/uploads/1784394283861.jpeg"
+}

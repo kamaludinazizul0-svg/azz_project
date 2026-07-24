@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Kelola APBDesa - Admin</title><link rel="icon" href="/images/logo.png" /><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/admin/css/admin.css" /></head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div><nav class="sidebar-nav"><div class="sidebar-section-label">Umum</div><a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a><div class="sidebar-section-label">Konten</div><a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Slider</a><a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a><a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri</a><a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing</a>
+      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
+      
+      <div class="sidebar-section-label">Layanan Publik</div>
+      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a><div class="sidebar-section-label">Profil</div><a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil</a><a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat</a><a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Penduduk</a><div class="sidebar-section-label">Keuangan</div><a href="/admin/apbdesa.html" class="sidebar-link active"><span class="icon">💰</span> APBDesa</a><a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> IDM</a><a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> PPID</a><div class="sidebar-section-label">Pengaturan</div><a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a></nav><div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Admin</span><span class="role">Admin</span></div></div><div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:.78rem">🌐</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪</button></div></div></aside>
+  <main class="admin-main">
+    <div class="topbar"><div class="topbar-left"><div class="topbar-title">Kelola APBDesa</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div></div>
+    <div class="page-content">
+      <div class="page-header-admin"><div><h1>💰 Kelola APBDesa</h1><p>Anggaran Pendapatan dan Belanja Desa</p></div><button class="btn-admin btn-primary-admin" onclick="saveAll()">💾 Simpan Semua</button></div>
+
+      <!-- Umum -->
+      <div class="admin-card" style="margin-bottom:24px"><div class="admin-card-header"><h3>📋 Informasi Umum</h3></div><div class="admin-card-body">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <div class="form-group"><label class="form-label">Tahun Anggaran</label><input type="number" id="fTahun" class="form-control" value="2024" /></div>
+          <div class="form-group"><label class="form-label">Total Anggaran (Rp)</label><input type="text" id="fTotalAnggaran" class="form-control" readonly style="background:#f5f5f5" /></div>
+          <div class="form-group"><label class="form-label">Total Realisasi (Rp)</label><input type="text" id="fTotalRealisasi" class="form-control" readonly style="background:#f5f5f5" /></div>
+        </div>
+      </div></div>
+
+      <!-- Pendapatan -->
+      <div class="admin-card" style="margin-bottom:24px"><div class="admin-card-header"><h3>📥 Rincian Pendapatan</h3><button class="btn-admin btn-light btn-sm-admin" onclick="addRow('pendapatan')">➕ Tambah</button></div><div class="admin-card-body">
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Sumber</th><th>Anggaran (Rp)</th><th>Realisasi (Rp)</th><th style="width:60px">Aksi</th></tr></thead><tbody id="tbPendapatan"></tbody></table></div>
+      </div></div>
+
+      <!-- Belanja -->
+      <div class="admin-card" style="margin-bottom:24px"><div class="admin-card-header"><h3>📤 Rincian Belanja</h3><button class="btn-admin btn-light btn-sm-admin" onclick="addRow('belanja')">➕ Tambah</button></div><div class="admin-card-body">
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Bidang</th><th>Anggaran (Rp)</th><th>Realisasi (Rp)</th><th style="width:60px">Aksi</th></tr></thead><tbody id="tbBelanja"></tbody></table></div>
+      </div></div>
+
+      <!-- Pembiayaan -->
+      <div class="admin-card" style="margin-bottom:24px"><div class="admin-card-header"><h3>🔄 Rincian Pembiayaan</h3></div><div class="admin-card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <div>
+            <h4 style="margin-bottom:12px;color:var(--text-dark)">Penerimaan Pembiayaan</h4>
+            <div class="form-group"><label class="form-label">Rencana (Rp)</label><input type="text" id="fTerimaAng" class="form-control" oninput="this.value=formatDots(this.value)" /></div>
+            <div class="form-group"><label class="form-label">Realisasi (Rp)</label><input type="text" id="fTerimaReal" class="form-control" oninput="this.value=formatDots(this.value)" /></div>
+          </div>
+          <div>
+            <h4 style="margin-bottom:12px;color:var(--text-dark)">Pengeluaran Pembiayaan</h4>
+            <div class="form-group"><label class="form-label">Rencana (Rp)</label><input type="text" id="fKeluarAng" class="form-control" oninput="this.value=formatDots(this.value)" /></div>
+            <div class="form-group"><label class="form-label">Realisasi (Rp)</label><input type="text" id="fKeluarReal" class="form-control" oninput="this.value=formatDots(this.value)" /></div>
+          </div>
+        </div>
+      </div></div>
+
+      <!-- Riwayat -->
+      <div class="admin-card"><div class="admin-card-header"><h3>📊 Riwayat Tahunan</h3><button class="btn-admin btn-light btn-sm-admin" onclick="addRiwayat()">➕ Tambah</button></div><div class="admin-card-body">
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Tahun</th><th>Anggaran (Rp)</th><th>Realisasi (Rp)</th><th style="width:60px">Aksi</th></tr></thead><tbody id="tbRiwayat"></tbody></table></div>
+      </div></div>
+
+      <div style="margin-top:24px;text-align:center"><button class="btn-admin btn-primary-admin" onclick="saveAll()" style="padding:14px 48px;font-size:1rem">💾 Simpan Semua Perubahan</button></div>
+    </div>
+  </main>
+</div>
+<script src="/admin/js/admin.js"></script>
+<script>
+let apbData={};
+document.addEventListener('DOMContentLoaded',loadData);
+
+function formatDots(v) {
+  if (v === undefined || v === null || v === '') return '';
+  if (typeof v === 'number') {
+    let parts = v.toFixed(2).split('.');
+    if (parts[1] === '00') parts.pop();
+    v = parts.join(',');
+  } else {
+    v = v.toString();
+  }
+  let str = v.replace(/[^0-9,]/g, '');
+  let parts = str.split(',');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  if (parts.length > 2) parts = [parts[0], parts.slice(1).join('')];
+  return parts.join(',');
+}
+function unformat(v) {
+  if (v === undefined || v === null || v === '') return 0;
+  let str = v.toString().replace(/\./g, '').replace(',', '.');
+  return parseFloat(str) || 0;
+}
+
+async function loadData(){
+  apbData=await adminFetch('/apbdesa')||{};
+  document.getElementById('fTahun').value=apbData.tahun||2024;
+  document.getElementById('fTotalAnggaran').value=formatDots(apbData.total_anggaran||0);
+  document.getElementById('fTotalRealisasi').value=formatDots(apbData.total_realisasi||0);
+  renderRows('pendapatan',apbData.pendapatan?.rincian||[]);
+  renderRows('belanja',apbData.belanja?.rincian||[]);
+  renderRiwayat(apbData.riwayat||[]);
+  if(apbData.pembiayaan){
+    document.getElementById('fTerimaAng').value = formatDots(apbData.pembiayaan.penerimaan?.jumlah || 0);
+    document.getElementById('fTerimaReal').value = formatDots(apbData.pembiayaan.penerimaan?.realisasi || 0);
+    document.getElementById('fKeluarAng').value = formatDots(apbData.pembiayaan.pengeluaran?.jumlah || 0);
+    document.getElementById('fKeluarReal').value = formatDots(apbData.pembiayaan.pengeluaran?.realisasi || 0);
+  }
+}
+
+function calcTotals() {
+  let ang = 0;
+  let real = 0;
+  document.querySelectorAll('.belanja-main [data-field="jumlah"]').forEach(el => ang += unformat(el.value));
+  document.querySelectorAll('.belanja-main [data-field="realisasi"]').forEach(el => real += unformat(el.value));
+  document.getElementById('fTotalAnggaran').value = formatDots(ang);
+  document.getElementById('fTotalRealisasi').value = formatDots(real);
+}
+
+function renderRows(type,data){
+  const tb=document.getElementById(type==='pendapatan'?'tbPendapatan':'tbBelanja');
+  if(type==='pendapatan'){
+    tb.innerHTML=data.map((r,i)=>`<tr><td><input type="text" class="form-control" value="${r.nama}" data-type="${type}" data-idx="${i}" data-field="nama" style="min-width:200px" /></td><td><input type="text" class="form-control" value="${formatDots(r.jumlah)}" oninput="this.value=formatDots(this.value); calcTotals();" data-type="${type}" data-idx="${i}" data-field="jumlah" /></td><td><input type="text" class="form-control" value="${formatDots(r.realisasi)}" oninput="this.value=formatDots(this.value); calcTotals();" data-type="${type}" data-idx="${i}" data-field="realisasi" /></td><td><button class="btn-admin btn-danger btn-sm-admin" onclick="removeRow('${type}',${i}); setTimeout(calcTotals, 100);">🗑️</button></td></tr>`).join('');
+  } else {
+    let html = '';
+    data.forEach((r, i) => {
+      html += `<tr class="belanja-main" style="background:#f9f9f9;font-weight:600">
+        <td><input type="text" class="form-control" value="${r.nama}" data-idx="${i}" data-field="nama" style="min-width:200px" /></td>
+        <td><input type="text" class="form-control" value="${formatDots(r.jumlah)}" oninput="this.value=formatDots(this.value); calcTotals();" data-idx="${i}" data-field="jumlah" /></td>
+        <td><input type="text" class="form-control" value="${formatDots(r.realisasi)}" oninput="this.value=formatDots(this.value); calcTotals();" data-idx="${i}" data-field="realisasi" /></td>
+        <td style="white-space:nowrap">
+          <button class="btn-admin btn-danger btn-sm-admin" onclick="removeRow('${type}',${i}); setTimeout(calcTotals, 100);" title="Hapus Bidang">🗑️</button>
+          <button class="btn-admin btn-primary-admin btn-sm-admin" onclick="addSubRow(${i})" title="Tambah Sub Bidang" style="padding:4px 8px;font-size:0.8rem">➕ Sub</button>
+        </td>
+      </tr>`;
+      if(r.sub_bidang && r.sub_bidang.length > 0){
+        r.sub_bidang.forEach((sub, j) => {
+          html += `<tr class="belanja-sub">
+            <td style="padding-left:24px;border-left:2px solid #ddd"><input type="text" class="form-control" value="${sub.nama}" data-idx="${i}" data-subidx="${j}" data-field="nama" style="min-width:180px;font-size:0.9em" /></td>
+            <td><input type="text" class="form-control" value="${formatDots(sub.jumlah)}" oninput="this.value=formatDots(this.value);" data-idx="${i}" data-subidx="${j}" data-field="jumlah" style="font-size:0.9em" /></td>
+            <td><input type="text" class="form-control" value="${formatDots(sub.realisasi)}" oninput="this.value=formatDots(this.value);" data-idx="${i}" data-subidx="${j}" data-field="realisasi" style="font-size:0.9em" /></td>
+            <td><button class="btn-admin btn-danger btn-sm-admin" onclick="removeSubRow(${i},${j})" style="padding:4px 8px;font-size:0.8rem">🗑️</button></td>
+          </tr>`;
+        });
+      }
+    });
+    tb.innerHTML = html;
+  }
+  calcTotals();
+}
+
+function addSubRow(idx) {
+  collectData();
+  if(!apbData.belanja.rincian[idx].sub_bidang) apbData.belanja.rincian[idx].sub_bidang = [];
+  apbData.belanja.rincian[idx].sub_bidang.push({nama:'Sub Bidang Baru', jumlah:0, realisasi:0});
+  renderRows('belanja', apbData.belanja.rincian);
+}
+
+function removeSubRow(idx, subIdx) {
+  collectData();
+  apbData.belanja.rincian[idx].sub_bidang.splice(subIdx, 1);
+  renderRows('belanja', apbData.belanja.rincian);
+}
+
+function renderRiwayat(data){
+  document.getElementById('tbRiwayat').innerHTML=data.map((r,i)=>`<tr><td><input type="number" class="form-control" value="${r.tahun}" data-riwayat="${i}" data-field="tahun" /></td><td><input type="text" class="form-control" value="${formatDots(r.anggaran)}" oninput="this.value=formatDots(this.value)" data-riwayat="${i}" data-field="anggaran" /></td><td><input type="text" class="form-control" value="${formatDots(r.realisasi)}" oninput="this.value=formatDots(this.value)" data-riwayat="${i}" data-field="realisasi" /></td><td><button class="btn-admin btn-danger btn-sm-admin" onclick="removeRiwayat(${i})">🗑️</button></td></tr>`).join('');
+}
+function addRow(type){
+  collectData();
+  const arr=type==='pendapatan'?(apbData.pendapatan?.rincian||[]):(apbData.belanja?.rincian||[]);
+  arr.push({nama: type==='pendapatan'?'Sumber Baru':'Bidang Baru',jumlah:0,realisasi:0, sub_bidang: []});
+  if(type==='pendapatan'){if(!apbData.pendapatan)apbData.pendapatan={rincian:arr};else apbData.pendapatan.rincian=arr;}
+  else{if(!apbData.belanja)apbData.belanja={rincian:arr};else apbData.belanja.rincian=arr;}
+  renderRows(type,arr);
+}
+function removeRow(type,idx){
+  collectData();
+  const arr=type==='pendapatan'?apbData.pendapatan.rincian:apbData.belanja.rincian;
+  arr.splice(idx,1);
+  renderRows(type,arr);
+}
+function addRiwayat(){
+  collectData();
+  if(!apbData.riwayat)apbData.riwayat=[];
+  apbData.riwayat.push({tahun:2023,anggaran:0,realisasi:0});
+  renderRiwayat(apbData.riwayat);
+}
+function removeRiwayat(idx){
+  collectData();
+  apbData.riwayat.splice(idx,1);
+  renderRiwayat(apbData.riwayat);
+}
+
+function collectData(){
+  apbData.tahun=parseInt(document.getElementById('fTahun').value);
+  apbData.total_anggaran=unformat(document.getElementById('fTotalAnggaran').value);
+  apbData.total_realisasi=unformat(document.getElementById('fTotalRealisasi').value);
+  
+  if (document.getElementById('tbPendapatan').innerHTML) {
+    document.querySelectorAll('[data-type="pendapatan"]').forEach(el=>{const i=el.dataset.idx;const f=el.dataset.field;apbData.pendapatan.rincian[i][f]=f==='nama'?el.value:unformat(el.value);});
+  }
+  
+  if (document.getElementById('tbBelanja').innerHTML) {
+    document.querySelectorAll('.belanja-main [data-field]').forEach(el=>{
+      const i=el.dataset.idx; const f=el.dataset.field;
+      apbData.belanja.rincian[i][f]=f==='nama'?el.value:unformat(el.value);
+    });
+    document.querySelectorAll('.belanja-sub [data-field]').forEach(el=>{
+      const i=el.dataset.idx; const j=el.dataset.subidx; const f=el.dataset.field;
+      if (apbData.belanja.rincian[i].sub_bidang && apbData.belanja.rincian[i].sub_bidang[j]) {
+        apbData.belanja.rincian[i].sub_bidang[j][f]=f==='nama'?el.value:unformat(el.value);
+      }
+    });
+  }
+  
+  if (document.getElementById('tbRiwayat').innerHTML) {
+    document.querySelectorAll('[data-riwayat]').forEach(el=>{const i=el.dataset.riwayat;const f=el.dataset.field;apbData.riwayat[i][f]=f==='tahun'?parseInt(el.value)||0:unformat(el.value);});
+  }
+  
+  apbData.pembiayaan = {
+    penerimaan: {
+      jumlah: unformat(document.getElementById('fTerimaAng').value),
+      realisasi: unformat(document.getElementById('fTerimaReal').value)
+    },
+    pengeluaran: {
+      jumlah: unformat(document.getElementById('fKeluarAng').value),
+      realisasi: unformat(document.getElementById('fKeluarReal').value)
+    }
+  };
+}
+
+async function saveAll(){collectData();const r=await adminFetch('/apbdesa',{method:'PUT',body:JSON.stringify(apbData)});if(r)showToast('Data APBDesa berhasil disimpan');}
+</script>
+</body></html>

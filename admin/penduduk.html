@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Data Penduduk - Admin</title><link rel="icon" href="/images/logo.png" /><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/admin/css/admin.css" />
+<style>
+.admin-table-row-hover:hover {
+  background-color: #f1f5f9;
+}
+</style>
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div><nav class="sidebar-nav"><div class="sidebar-section-label">Umum</div><a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a><div class="sidebar-section-label">Konten</div><a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Slider</a><a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a><a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri</a><a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing</a>
+      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
+      
+      <div class="sidebar-section-label">Layanan Publik</div>
+      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a><div class="sidebar-section-label">Profil</div><a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil</a><a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat</a><a href="/admin/penduduk.html" class="sidebar-link active"><span class="icon">📊</span> Penduduk</a><div class="sidebar-section-label">Keuangan</div><a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a><a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> IDM</a><a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> PPID</a><div class="sidebar-section-label">Pengaturan</div><a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a></nav><div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Admin</span><span class="role">Admin</span></div></div><div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:.78rem">🌐</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪</button></div></div></aside>
+  <main class="admin-main">
+    <div class="topbar"><div class="topbar-left"><div class="topbar-title">Data Kependudukan</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div></div>
+    <div class="page-content">
+      <div class="page-header-admin"><div><h1>📊 Data Kependudukan</h1><p>Kelola statistik penduduk desa</p></div><button class="btn-admin btn-primary-admin" onclick="saveAll()">💾 Simpan Semua</button></div>
+
+      <!-- Statistik Umum (Auto dari DB) -->
+      <div class="admin-card" style="margin-bottom:24px"><div class="admin-card-header"><h3>👥 Statistik Umum (Otomatis)</h3></div><div class="admin-card-body">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+          <div class="form-group"><label class="form-label">Jumlah Penduduk</label><input type="number" id="fJmlPenduduk" class="form-control" readonly style="background:#f1f5f9" /></div>
+          <div class="form-group"><label class="form-label">Jumlah KK</label><input type="number" id="fJmlKK" class="form-control" readonly style="background:#f1f5f9" /></div>
+          <div class="form-group"><label class="form-label">Laki-laki</label><input type="number" id="fLaki" class="form-control" readonly style="background:#f1f5f9" /></div>
+          <div class="form-group"><label class="form-label">Perempuan</label><input type="number" id="fPerempuan" class="form-control" readonly style="background:#f1f5f9" /></div>
+        </div>
+      </div></div>
+
+      <!-- Database Penduduk -->
+      <div class="admin-card" style="margin-bottom:24px">
+        <div class="admin-card-header">
+          <h3>📂 Database Penduduk Asli</h3>
+          <div style="display:flex;gap:10px;">
+             <input type="text" id="searchPenduduk" class="form-control" placeholder="Cari Nama / NIK..." oninput="debounceSearch()" style="width:250px;">
+          </div>
+        </div>
+        <div class="admin-card-body">
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width:50px">No</th>
+                  <th>Nama Lengkap</th>
+                  <th>NIK</th>
+                  <th>Tmp / Tgl Lahir</th>
+                  <th>No. KK</th>
+                  <th>Alamat</th>
+                </tr>
+              </thead>
+              <tbody id="tbPendudukDb">
+                <tr><td colspan="6" style="text-align:center">Loading data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+            <span id="pageInfo">Menampilkan halaman 1</span>
+            <div style="display:flex;gap:8px;">
+               <button class="btn-admin btn-light btn-sm-admin" onclick="prevPage()">⬅️ Sebelumnya</button>
+               <button class="btn-admin btn-light btn-sm-admin" onclick="nextPage()">Selanjutnya ➡️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Detail Warga -->
+      <div id="wargaModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+        <div class="admin-card" style="width:100%; max-width:600px; margin:20px; max-height:90vh; overflow-y:auto; position:relative;">
+          <div class="admin-card-header" style="position:sticky; top:0; background:white; z-index:10;">
+            <h3>📄 Detail Data Warga</h3>
+            <button class="btn-admin btn-light btn-sm-admin" onclick="closeWargaModal()">❌ Tutup</button>
+          </div>
+          <div class="admin-card-body" id="wargaModalBody" style="padding:24px;">
+            <!-- Content will be injected here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Editable Tables -->
+      <div id="editableSections"></div>
+
+      <div style="text-align:center;margin-top:24px"><button class="btn-admin btn-primary-admin" onclick="saveAll()" style="padding:14px 48px;font-size:1rem">💾 Simpan Semua Perubahan</button></div>
+    </div>
+  </main>
+</div>
+<script src="/admin/js/admin.js"></script>
+<script>
+let pendData={};
+const sections = [
+  {key:'kelompok_umur', title:'👶 Kelompok Umur', icon:''},
+  {key:'pendidikan', title:'🎓 Pendidikan', icon:''},
+  {key:'pekerjaan', title:'💼 Pekerjaan', icon:''},
+  {key:'agama', title:'🕌 Agama', icon:''}
+];
+
+document.addEventListener('DOMContentLoaded',loadData);
+
+async function loadData(){
+  pendData = await adminFetch('/penduduk') || {};
+  const s = pendData.statistik || {};
+  document.getElementById('fJmlPenduduk').value = s.jumlah_penduduk || 0;
+  document.getElementById('fJmlKK').value = s.jumlah_kk || 0;
+  document.getElementById('fLaki').value = s.laki_laki || 0;
+  document.getElementById('fPerempuan').value = s.perempuan || 0;
+  
+  renderSections();
+  if (pendData.data) {
+     renderDbTableData(pendData.data, pendData.total);
+  } else {
+     fetchDbTable();
+  }
+}
+
+let currentPage = 1;
+let currentSearch = '';
+let searchTimeout;
+let totalDataCount = 0;
+let currentDbData = [];
+
+function debounceSearch() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    currentSearch = document.getElementById('searchPenduduk').value;
+    currentPage = 1;
+    fetchDbTable();
+  }, 500);
+}
+
+async function fetchDbTable() {
+  const tb = document.getElementById('tbPendudukDb');
+  tb.innerHTML = '<tr><td colspan="6" style="text-align:center">Loading data...</td></tr>';
+  const res = await adminFetch(`/penduduk?page=${currentPage}&limit=10&search=${encodeURIComponent(currentSearch)}`);
+  if(res && res.data) {
+     renderDbTableData(res.data, res.total);
+  }
+}
+
+function renderDbTableData(data, total) {
+  totalDataCount = total;
+  currentDbData = data;
+  const tb = document.getElementById('tbPendudukDb');
+  if(!data || data.length === 0) {
+    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#64748b;">Tidak ada data penduduk yang ditemukan.</td></tr>';
+    document.getElementById('pageInfo').innerText = `Total: ${total} data`;
+    return;
+  }
+  
+  tb.innerHTML = data.map((d, i) => `
+    <tr onclick="showWargaDetail(${i})" style="cursor:pointer;" class="admin-table-row-hover" title="Klik untuk melihat detail lengkap">
+      <td>${(currentPage-1)*10 + i + 1}</td>
+      <td><strong>${d.nama_lengkap}</strong></td>
+      <td><span style="font-family:monospace;background:#f1f5f9;padding:2px 6px;border-radius:4px;color:#0f172a">${d.nik}</span></td>
+      <td>${d.tempat_lahir}, ${d.tanggal_lahir}</td>
+      <td>${d.no_kk}</td>
+      <td><div style="max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${d.alamat}</div></td>
+    </tr>
+  `).join('');
+  
+  const totalPages = Math.ceil(total / 10) || 1;
+  document.getElementById('pageInfo').innerText = `Halaman ${currentPage} dari ${totalPages} (Total: ${total} Penduduk)`;
+}
+
+function prevPage() {
+  if(currentPage > 1) {
+    currentPage--;
+    fetchDbTable();
+  }
+}
+
+function nextPage() {
+  const totalPages = Math.ceil(totalDataCount / 10);
+  if(currentPage < totalPages) {
+    currentPage++;
+    fetchDbTable();
+  }
+}
+
+function showWargaDetail(index) {
+  const d = currentDbData[index];
+  if (!d) return;
+  
+  const html = `
+    <div style="display:grid; grid-template-columns: 150px 1fr; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+      <div style="color:var(--text-muted); font-size:0.9rem;">Nomor KK</div>
+      <div style="font-weight:600; font-family:monospace; font-size:1.1rem;">${d.no_kk}</div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">NIK</div>
+      <div style="font-weight:600; font-family:monospace; font-size:1.1rem;">${d.nik}</div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">Nama Lengkap</div>
+      <div style="font-weight:700; font-size:1.2rem; color:var(--primary);">${d.nama_lengkap}</div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">Tempat, Tgl Lahir</div>
+      <div>${d.tempat_lahir}, ${d.tanggal_lahir}</div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">Jenis Kelamin</div>
+      <div>${d.jenis_kelamin === 'Lk' ? 'Laki-laki' : 'Perempuan'}</div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">Agama</div>
+      <div>${d.agama}</div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">Pendidikan</div>
+      <div>${d.pendidikan}</div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">Pekerjaan</div>
+      <div>${d.pekerjaan}</div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">Status Hubungan</div>
+      <div><span style="background:var(--primary-light); color:var(--primary); padding:2px 8px; border-radius:4px; font-size:0.85rem; font-weight:600;">${d.shdk}</span></div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">Nama Ayah</div>
+      <div>${d.nama_ayah}</div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">Nama Ibu</div>
+      <div>${d.nama_ibu}</div>
+      
+      <div style="color:var(--text-muted); font-size:0.9rem;">Alamat Lengkap</div>
+      <div style="line-height:1.5;">${d.alamat}</div>
+    </div>
+  `;
+  
+  document.getElementById('wargaModalBody').innerHTML = html;
+  document.getElementById('wargaModal').style.display = 'flex';
+}
+
+function closeWargaModal() {
+  document.getElementById('wargaModal').style.display = 'none';
+}
+
+function renderSections(){
+  const container=document.getElementById('editableSections');
+  container.innerHTML=sections.map(sec=>{
+    const data=pendData[sec.key]||[];
+    return `<div class="admin-card" style="margin-bottom:24px">
+      <div class="admin-card-header">
+        <h3>${sec.title}</h3>
+        <span style="font-size: 0.8rem; color: var(--text-muted); background: #f1f5f9; padding: 4px 8px; border-radius: 4px;">Otomatis dari Database</span>
+      </div>
+      <div class="admin-card-body">
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Label</th>
+                <th style="width:150px">Jumlah</th>
+              </tr>
+            </thead>
+            <tbody id="tb_${sec.key}">
+              ${data.length === 0 ? '<tr><td colspan="2" style="text-align:center;color:#64748b;">Belum ada data</td></tr>' : ''}
+              ${data.map((r)=>`
+                <tr>
+                  <td><strong>${r.label}</strong></td>
+                  <td>${r.jumlah}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function saveAll(){
+  alert('Statistik kependudukan (Agama, Pendidikan, dll) sekarang dihitung otomatis dari tabel Database dan tidak perlu disimpan manual.');
+}
+</script>
+</body></html>

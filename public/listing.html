@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listing UMKM & Produk Desa - Desa Kauman</title>
+  <meta name="description" content="Daftar produk UMKM dan usaha lokal Desa Kauman, Kampung Jamu Tradisional Ngoro Jombang." />
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<nav class="navbar"><div class="nav-container">
+  <a href="/" class="nav-brand"><img src="/images/logo.png" alt="Logo" class="nav-logo" /><div class="nav-title"><span class="desa-name">Desa Kauman</span><span class="desa-loc">Kab. Jombang, Jawa Timur</span></div></a>
+  <div class="nav-menu">
+    <a href="/index.html" class="nav-link">🏠 Beranda</a><a href="/profil.html" class="nav-link">📋 Profil Desa</a><a href="/infografis.html" class="nav-link">📊 Infografis</a><a href="/idm.html" class="nav-link">🏆 IDM</a><a href="/berita.html" class="nav-link">📰 Berita</a><a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link active">🏪 Listing</a><a href="/belanja.html" class="nav-link">💰 APBDesa</a><a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'" >✉️ Layanan Surat</a>
+  </div>
+  <div class="nav-burger" id="navBurger"><span></span><span></span><span></span></div>
+</div></nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">🏠 Beranda</a><a href="/profil.html" class="nav-link">📋 Profil</a><a href="/infografis.html" class="nav-link">📊 Infografis</a><a href="/idm.html" class="nav-link">🏆 IDM</a><a href="/berita.html" class="nav-link">📰 Berita</a><a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a><a href="/belanja.html" class="nav-link">💰 APBDesa</a><a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
+</div>
+
+<div class="page-header"><div class="container">
+  <div class="breadcrumb"><a href="/">🏠 Beranda</a> / <span>Listing UMKM</span></div>
+  <h1>Listing UMKM & Produk Desa</h1>
+  <p>Produk unggulan dan usaha masyarakat Desa Kauman — Kampung Jamu Tradisional</p>
+</div></div>
+
+<section class="section"><div class="container">
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" data-kat="Semua">Semua</button>
+    <button class="filter-tab" data-kat="Jamu Tradisional">🌿 Jamu Tradisional</button>
+    <button class="filter-tab" data-kat="Wisata">🏞️ Wisata</button>
+    <button class="filter-tab" data-kat="Kerajinan">🎨 Kerajinan</button>
+  </div>
+  <div class="listing-grid" id="listingGrid">
+    <div class="card listing-card skeleton" style="height:400px"></div>
+    <div class="card listing-card skeleton" style="height:400px"></div>
+    <div class="card listing-card skeleton" style="height:400px"></div>
+  </div>
+</div></section>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Detail Produk</div>
+      <button class="modal-close" onclick="document.getElementById('detailModal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" />
+          <div class="footer-logo-text">
+            <span class="name" data-desa-nama>Desa Kauman</span>
+            <span class="loc">Kec. Ngoro, Kab. Jombang</span>
+          </div>
+        </div>
+        <p class="footer-desc">Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional yang terus berkembang menuju desa digital.</p>
+        <div class="footer-sosmed">
+          <a href="#" data-sosmed-fb title="Facebook">f</a>
+          <a href="#" data-sosmed-ig title="Instagram">ig</a>
+          <a href="#" data-sosmed-yt title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">MENU</h4>
+        <div class="footer-links">
+          <a href="/index.html">→ Beranda</a>
+          <a href="/profil.html">→ Profil Desa</a>
+          <a href="/infografis.html">→ Infografis</a>
+          <a href="/idm.html">→ IDM</a>
+          <a href="/berita.html">→ Berita</a>
+          <a href="/galeri.html">→ Galeri</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">LAYANAN</h4>
+        <div class="footer-links">
+          <a href="/listing.html">→ Listing UMKM</a>
+          <a href="/belanja.html">→ APBDesa</a>
+          <a href="/ppid.html">→ PPID</a>
+          <a href="/pengaduan.html">→ Pengaduan</a>
+          <a href="/admin">→ Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">KONTAK</h4>
+        <div class="footer-contact">
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span data-desa-telp>(0321) 123456</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pemerintah Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script src="/js/api.js"></script>
+<script src="/js/main.js"></script>
+<script>
+let allListing = [];
+document.addEventListener('DOMContentLoaded', async () => {
+  allListing = await API.listing() || [];
+  renderListing(allListing);
+
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const kat = tab.dataset.kat;
+      renderListing(kat === 'Semua' ? allListing : allListing.filter(l => l.kategori === kat));
+    });
+  });
+});
+
+function formatWA(num) {
+  if (!num) return '';
+  let n = num.replace(/[^0-9]/g, '');
+  if (n.startsWith('0')) return '62' + n.substring(1);
+  return n;
+}
+
+function renderListing(data) {
+  const grid = document.getElementById('listingGrid');
+  if (!data.length) { grid.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-muted);grid-column:1/-1"><div style="font-size:3rem;margin-bottom:12px">📦</div><h3>Belum ada produk untuk kategori ini</h3></div>'; return; }
+  grid.innerHTML = data.map(l => `
+    <div class="card listing-card fade-in" onclick="showDetail(${l.id})" style="cursor:pointer">
+      <img class="card-img" src="${l.gambar}" alt="${l.nama}" onerror="this.src='${imgPlaceholder(l.kategori)}'" />
+      <div class="card-body">
+        <div class="card-kategori">${l.kategori}</div>
+        <div class="card-title">${l.nama}</div>
+        <div class="card-desc">${l.deskripsi}</div>
+        <div class="card-price">${l.harga}</div>
+        <div class="card-footer">
+          <a href="https://api.whatsapp.com/send?phone=${formatWA(l.kontak)}&text=${encodeURIComponent('Halo, saya tertarik dengan produk ' + l.nama + ' yang ada di website Desa Kauman.')}" target="_blank" class="btn btn-whatsapp btn-sm" onclick="event.stopPropagation()">💬 Hubungi</a>
+          <span style="font-size:0.8rem;color:var(--text-muted);margin-left:auto">👤 ${l.pemilik}</span>
+        </div>
+      </div>
+    </div>`).join('');
+  initScrollAnimations();
+}
+
+function showDetail(id) {
+  const l = allListing.find(x => x.id === id);
+  if (!l) return;
+  document.getElementById('modalTitle').textContent = l.nama;
+  document.getElementById('modalBody').innerHTML = `
+    <img src="${l.gambar}" alt="${l.nama}" onerror="this.src='${imgPlaceholder(l.kategori)}'" style="width:100%;height:280px;object-fit:cover;border-radius:var(--radius);margin-bottom:20px" />
+    <span style="display:inline-block;background:linear-gradient(135deg,var(--secondary),var(--secondary-light));color:#fff;padding:4px 14px;border-radius:100px;font-size:0.78rem;font-weight:700;margin-bottom:12px">${l.kategori}</span>
+    <h3 style="font-size:1.3rem;font-weight:700;margin-bottom:10px;color:var(--text-dark)">${l.nama}</h3>
+    <p style="color:var(--text-muted);line-height:1.8;margin-bottom:16px">${l.deskripsi}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;font-size:0.9rem">
+      <div><span style="color:var(--text-muted)">💰 Harga:</span><br><strong style="color:var(--primary);font-size:1rem">${l.harga}</strong></div>
+      <div><span style="color:var(--text-muted)">👤 Pemilik:</span><br><strong>${l.pemilik}</strong></div>
+      <div><span style="color:var(--text-muted)">📍 Alamat:</span><br><strong>${l.alamat}</strong></div>
+      <div><span style="color:var(--text-muted)">📜 Sertifikasi:</span><br><strong>${l.sertifikasi || '-'}</strong></div>
+    </div>
+    <a href="https://api.whatsapp.com/send?phone=${formatWA(l.kontak)}&text=${encodeURIComponent('Halo, saya tertarik dengan produk ' + l.nama + ' yang ada di website Desa Kauman.')}" target="_blank" class="btn btn-whatsapp btn-lg btn-block">💬 Hubungi via WhatsApp</a>`;
+  document.getElementById('detailModal').classList.add('open');
+}
+document.getElementById('detailModal').addEventListener('click', e => { if (e.target.id === 'detailModal') e.target.classList.remove('open'); });
+</script>
+</body>
+</html>

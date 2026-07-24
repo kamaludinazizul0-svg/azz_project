@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PPID - Keterbukaan Informasi Publik - Desa Kauman</title>
+  <meta name="description" content="PPID Desa Kauman - Pejabat Pengelola Informasi dan Dokumentasi. Akses dokumen publik dan permohonan informasi." />
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<nav class="navbar"><div class="nav-container">
+  <a href="/" class="nav-brand"><img src="/images/logo.png" alt="Logo" class="nav-logo" /><div class="nav-title"><span class="desa-name">Desa Kauman</span><span class="desa-loc">Kab. Jombang, Jawa Timur</span></div></a>
+  <div class="nav-menu">
+    <a href="/index.html" class="nav-link">🏠 Beranda</a><a href="/profil.html" class="nav-link">📋 Profil Desa</a><a href="/infografis.html" class="nav-link">📊 Infografis</a><a href="/idm.html" class="nav-link">🏆 IDM</a><a href="/berita.html" class="nav-link">📰 Berita</a><a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a><a href="/belanja.html" class="nav-link">💰 APBDesa</a><a href="/ppid.html" class="nav-link active">📂 PPID</a><a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'" >✉️ Layanan Surat</a>
+  </div>
+  <div class="nav-burger" id="navBurger"><span></span><span></span><span></span></div>
+</div></nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">🏠 Beranda</a><a href="/profil.html" class="nav-link">📋 Profil</a><a href="/infografis.html" class="nav-link">📊 Infografis</a><a href="/idm.html" class="nav-link">🏆 IDM</a><a href="/berita.html" class="nav-link">📰 Berita</a><a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a><a href="/belanja.html" class="nav-link">💰 APBDesa</a><a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
+</div>
+
+<div class="page-header"><div class="container">
+  <div class="breadcrumb"><a href="/">🏠 Beranda</a> / <span>PPID</span></div>
+  <h1>PPID — Keterbukaan Informasi Publik</h1>
+  <p>Pejabat Pengelola Informasi dan Dokumentasi Desa Kauman</p>
+</div></div>
+
+<!-- Penjelasan -->
+<section class="section"><div class="container">
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:40px;align-items:start" class="fade-in">
+    <div>
+      <div class="section-tag" style="margin-bottom:16px">📂 Tentang PPID</div>
+      <h2 class="section-title" style="text-align:left">Apa itu PPID?</h2>
+      <p style="color:var(--text-muted);line-height:1.9;margin-top:16px">PPID (Pejabat Pengelola Informasi dan Dokumentasi) adalah pejabat yang bertanggung jawab di bidang penyimpanan, pendokumentasian, penyediaan, dan/atau pelayanan informasi publik di lingkungan Pemerintah Desa Kauman. Berdasarkan UU No. 14 Tahun 2008 tentang Keterbukaan Informasi Publik, setiap Badan Publik wajib menyediakan informasi publik yang terbuka dan dapat diakses oleh masyarakat.</p>
+      <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="background:var(--primary-pale);border-radius:var(--radius);padding:16px;text-align:center"><div style="font-size:1.5rem;margin-bottom:6px">📋</div><div style="font-weight:700;font-size:0.88rem;color:var(--primary)">Informasi Wajib</div><div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px">Berkala, Serta Merta, Setiap Saat</div></div>
+        <div style="background:#fff8e1;border-radius:var(--radius);padding:16px;text-align:center"><div style="font-size:1.5rem;margin-bottom:6px">📝</div><div style="font-weight:700;font-size:0.88rem;color:var(--secondary)">Permohonan Informasi</div><div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px">Masyarakat berhak meminta</div></div>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow);border:1px solid var(--border)">
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text-dark);margin-bottom:16px">📊 Ringkasan PPID</h3>
+      <div style="display:flex;flex-direction:column;gap:12px" id="ppidStats">
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">Total Dokumen</span><span id="totalDok" style="font-weight:700;color:var(--primary)">-</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">Pejabat PPID</span><span style="font-weight:600">Kepala Desa Kauman</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="color:var(--text-muted)">Dasar Hukum</span><span style="font-weight:600;font-size:0.85rem">UU No. 14/2008</span></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- Daftar Dokumen -->
+<section class="section section-alt"><div class="container">
+  <div class="section-header fade-in">
+    <div class="section-tag">📄 Dokumen Publik</div>
+    <h2 class="section-title">Daftar Informasi Publik</h2>
+  </div>
+  <div class="filter-tabs fade-in" id="ppidFilter">
+    <button class="filter-tab active" data-kat="Semua">Semua</button>
+    <button class="filter-tab" data-kat="Peraturan Desa">📜 Peraturan Desa</button>
+    <button class="filter-tab" data-kat="Laporan Keuangan">💰 Laporan Keuangan</button>
+    <button class="filter-tab" data-kat="Perencanaan">📋 Perencanaan</button>
+    <button class="filter-tab" data-kat="Aset Desa">🏠 Aset Desa</button>
+  </div>
+  <div class="table-wrap fade-in">
+    <table>
+      <thead><tr><th>No</th><th>Nama Dokumen</th><th>Kategori</th><th>Tanggal</th><th>Aksi</th></tr></thead>
+      <tbody id="ppidTable"><tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">⏳ Memuat...</td></tr></tbody>
+    </table>
+  </div>
+</div></section>
+
+<!-- Formulir Permohonan -->
+<section class="section"><div class="container">
+  <div style="max-width:800px;margin:0 auto;background:var(--primary-pale);border-radius:var(--radius-lg);padding:40px;text-align:center;box-shadow:var(--shadow)" class="fade-in">
+    <div style="font-size:3rem;margin-bottom:16px">📝</div>
+    <h2 class="section-title">Permohonan Informasi Publik</h2>
+    <p style="color:var(--text-muted);margin-bottom:24px">Masyarakat berhak mengajukan permohonan informasi publik sesuai dengan Undang-Undang Keterbukaan Informasi Publik (KIP).</p>
+    <a href="/permohonan-informasi.html" class="btn btn-primary btn-lg">Buat Permohonan Informasi</a>
+  </div>
+</div></section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" />
+          <div class="footer-logo-text">
+            <span class="name" data-desa-nama>Desa Kauman</span>
+            <span class="loc">Kec. Ngoro, Kab. Jombang</span>
+          </div>
+        </div>
+        <p class="footer-desc">Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional yang terus berkembang menuju desa digital.</p>
+        <div class="footer-sosmed">
+          <a href="#" data-sosmed-fb title="Facebook">f</a>
+          <a href="#" data-sosmed-ig title="Instagram">ig</a>
+          <a href="#" data-sosmed-yt title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">MENU</h4>
+        <div class="footer-links">
+          <a href="/index.html">→ Beranda</a>
+          <a href="/profil.html">→ Profil Desa</a>
+          <a href="/infografis.html">→ Infografis</a>
+          <a href="/idm.html">→ IDM</a>
+          <a href="/berita.html">→ Berita</a>
+          <a href="/galeri.html">→ Galeri</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">LAYANAN</h4>
+        <div class="footer-links">
+          <a href="/listing.html">→ Listing UMKM</a>
+          <a href="/belanja.html">→ APBDesa</a>
+          <a href="/ppid.html">→ PPID</a>
+          <a href="/pengaduan.html">→ Pengaduan</a>
+          <a href="/admin">→ Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">KONTAK</h4>
+        <div class="footer-contact">
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span data-desa-telp>(0321) 123456</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pemerintah Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script src="/js/api.js"></script>
+<script src="/js/main.js"></script>
+<script>
+let allDocs = [];
+document.addEventListener('DOMContentLoaded', async () => {
+  allDocs = await API.ppid() || [];
+  document.getElementById('totalDok').textContent = allDocs.length;
+  renderDocs(allDocs);
+  document.querySelectorAll('#ppidFilter .filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('#ppidFilter .filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const kat = tab.dataset.kat;
+      renderDocs(kat === 'Semua' ? allDocs : allDocs.filter(d => d.kategori === kat));
+    });
+  });
+});
+
+function renderDocs(data) {
+  const tb = document.getElementById('ppidTable');
+  if (!data.length) { tb.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">📂 Belum ada dokumen</td></tr>'; return; }
+  tb.innerHTML = data.map((d, i) => `<tr>
+    <td style="font-weight:600;color:var(--text-muted)">${i+1}</td>
+    <td><div style="font-weight:600;color:var(--text-dark)">${d.nama}</div><div style="font-size:0.8rem;color:var(--text-muted);margin-top:3px">${d.deskripsi}</div></td>
+    <td><span style="display:inline-block;background:var(--primary-pale);color:var(--primary);padding:3px 10px;border-radius:100px;font-size:0.75rem;font-weight:700">${d.kategori}</span></td>
+    <td style="font-size:0.85rem;color:var(--text-muted);white-space:nowrap">${formatDate(d.tanggal)}</td>
+    <td><a href="${d.file || '#'}" target="_blank" class="btn btn-primary btn-sm">📥 Unduh</a></td>
+  </tr>`).join('');
+}
+
+
+</script>
+</body>
+</html>

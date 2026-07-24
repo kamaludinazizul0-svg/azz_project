@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Profil Desa - Admin</title><link rel="icon" href="/images/logo.png" /><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/admin/css/admin.css" /><style>.tab-nav{display:flex;gap:4px;border-bottom:2px solid var(--border);margin-bottom:24px;flex-wrap:wrap}.tab-btn{padding:10px 20px;font-family:Outfit;font-size:.88rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}.tab-btn.active{color:var(--primary);border-color:var(--primary)}.tab-btn:hover{color:var(--primary)}.tab-content{display:none}.tab-content.active{display:block}</style></head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div><nav class="sidebar-nav"><div class="sidebar-section-label">Umum</div><a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a><div class="sidebar-section-label">Konten</div><a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Slider</a><a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a><a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri</a><a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing</a>
+      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
+      
+      <div class="sidebar-section-label">Layanan Publik</div>
+      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a><div class="sidebar-section-label">Profil</div><a href="/admin/profil-desa.html" class="sidebar-link active"><span class="icon">🏡</span> Profil</a><a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat</a><a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Penduduk</a><div class="sidebar-section-label">Keuangan</div><a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a><a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> IDM</a><a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> PPID</a><div class="sidebar-section-label">Pengaturan</div><a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a></nav><div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Admin</span><span class="role">Admin</span></div></div><div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:.78rem">🌐</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪</button></div></div></aside>
+  <main class="admin-main">
+    <div class="topbar"><div class="topbar-left"><div class="topbar-title">Profil Desa</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div></div>
+    <div class="page-content">
+      <div class="page-header-admin"><div><h1>🏡 Kelola Profil Desa</h1><p>Edit semua informasi profil desa</p></div></div>
+
+      <div class="admin-card">
+        <div class="admin-card-body">
+          <div class="tab-nav">
+            <button class="tab-btn active" onclick="showTab('umum')">📋 Info Umum</button>
+            <button class="tab-btn" onclick="showTab('sejarah')">📜 Sejarah</button>
+            <button class="tab-btn" onclick="showTab('visimisi')">🎯 Visi & Misi</button>
+            <button class="tab-btn" onclick="showTab('wilayah')">🗺️ Batas Wilayah</button>
+            <button class="tab-btn" onclick="showTab('kontak')">📞 Kontak & Sosmed</button>
+          </div>
+
+          <!-- Tab: Info Umum -->
+          <div class="tab-content active" id="tab-umum">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div class="form-group"><label class="form-label">Nama Desa</label><input type="text" id="fNamaDesa" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Kepala Desa</label><input type="text" id="fKepalaDesa" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Sekretaris Desa</label><input type="text" id="fSekretaris" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Kecamatan</label><input type="text" id="fKecamatan" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Kabupaten</label><input type="text" id="fKabupaten" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Provinsi</label><input type="text" id="fProvinsi" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Kode Pos</label><input type="text" id="fKodePos" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Kode Kemendagri</label><input type="text" id="fKodeKemendagri" class="form-control" /></div>
+            </div>
+            <div class="form-group"><label class="form-label">Tagline</label><input type="text" id="fTagline" class="form-control" /></div>
+            <div class="form-group"><label class="form-label">Deskripsi Singkat</label><textarea id="fDeskripsi" class="form-control" rows="3"></textarea></div>
+            <div class="form-group"><label class="form-label">Sambutan Kepala Desa</label><textarea id="fSambutan" class="form-control" rows="4"></textarea></div>
+            <div class="form-group"><label class="form-label">URL Foto Kepala Desa</label>
+              <div style="display:flex;gap:8px">
+                <input type="text" id="fFotoKades" class="form-control" placeholder="/images/kades.jpg" style="flex:1" />
+                <button class="btn-admin btn-light btn-sm-admin" onclick="const f=document.createElement('input');f.type='file';f.accept='image/*';f.onchange=()=>handleUploadUI(f,'fFotoKades');f.click()">📂 Upload</button>
+              </div>
+            </div>
+            <button class="btn-admin btn-primary-admin" onclick="saveTab('umum')">💾 Simpan Info Umum</button>
+          </div>
+
+          <!-- Tab: Sejarah -->
+          <div class="tab-content" id="tab-sejarah">
+            <div class="form-group"><label class="form-label">Sejarah Desa (teks panjang)</label><textarea id="fSejarah" class="form-control" rows="12"></textarea></div>
+            <button class="btn-admin btn-primary-admin" onclick="saveTab('sejarah')">💾 Simpan Sejarah</button>
+          </div>
+
+          <!-- Tab: Visi Misi -->
+          <div class="tab-content" id="tab-visimisi">
+            <div class="form-group"><label class="form-label">Visi</label><textarea id="fVisi" class="form-control" rows="3"></textarea></div>
+            <div class="form-group"><label class="form-label">Misi</label>
+              <div id="misiList"></div>
+              <button class="btn-admin btn-light btn-sm-admin" style="margin-top:8px" onclick="addMisi()">➕ Tambah Misi</button>
+            </div>
+            <button class="btn-admin btn-primary-admin" style="margin-top:16px" onclick="saveTab('visimisi')">💾 Simpan Visi & Misi</button>
+          </div>
+
+          <!-- Tab: Batas Wilayah -->
+          <div class="tab-content" id="tab-wilayah">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div class="form-group"><label class="form-label">Batas Utara</label><input type="text" id="fBatasUtara" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Batas Selatan</label><input type="text" id="fBatasSelatan" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Batas Timur</label><input type="text" id="fBatasTimur" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Batas Barat</label><input type="text" id="fBatasBarat" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Luas Wilayah</label><input type="text" id="fLuasWilayah" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Jumlah Dusun</label><input type="number" id="fJmlDusun" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Latitude</label><input type="text" id="fLat" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Longitude</label><input type="text" id="fLng" class="form-control" /></div>
+            </div>
+            <div class="form-group"><label class="form-label">Daftar Dusun (pisahkan koma)</label><input type="text" id="fDusun" class="form-control" placeholder="Dusun A, Dusun B, Dusun C" /></div>
+            <button class="btn-admin btn-primary-admin" onclick="saveTab('wilayah')">💾 Simpan Batas Wilayah</button>
+          </div>
+
+          <!-- Tab: Kontak & Sosmed -->
+          <div class="tab-content" id="tab-kontak">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div class="form-group"><label class="form-label">Email</label><input type="email" id="fEmail" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Telepon</label><input type="text" id="fTelepon" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">WhatsApp (62xxx)</label><input type="text" id="fWhatsapp" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Jam Operasional</label><input type="text" id="fJam" class="form-control" /></div>
+            </div>
+            <div class="form-group"><label class="form-label">Alamat Lengkap</label><textarea id="fAlamatLengkap" class="form-control" rows="2"></textarea></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+              <div class="form-group"><label class="form-label">Facebook URL</label><input type="text" id="fFacebook" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">Instagram URL</label><input type="text" id="fInstagram" class="form-control" /></div>
+              <div class="form-group"><label class="form-label">YouTube URL</label><input type="text" id="fYoutube" class="form-control" /></div>
+            </div>
+            <button class="btn-admin btn-primary-admin" onclick="saveTab('kontak')">💾 Simpan Kontak</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/admin/js/admin.js"></script>
+<script>
+let desaData={};
+document.addEventListener('DOMContentLoaded',loadData);
+
+function showTab(name){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',b.textContent.toLowerCase().includes(name.substring(0,3))));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+name)?.classList.add('active');
+  // Fix active button
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const tabs={umum:0,sejarah:1,visimisi:2,wilayah:3,kontak:4};
+  document.querySelectorAll('.tab-btn')[tabs[name]]?.classList.add('active');
+}
+
+async function loadData(){
+  desaData=await adminFetch('/desa')||{};
+  // Info Umum
+  document.getElementById('fNamaDesa').value=desaData.nama_desa||'';
+  document.getElementById('fKepalaDesa').value=desaData.kepala_desa||'';
+  document.getElementById('fSekretaris').value=desaData.sekretaris_desa||'';
+  document.getElementById('fKecamatan').value=desaData.kecamatan||'';
+  document.getElementById('fKabupaten').value=desaData.kabupaten||'';
+  document.getElementById('fProvinsi').value=desaData.provinsi||'';
+  document.getElementById('fKodePos').value=desaData.kode_pos||'';
+  document.getElementById('fKodeKemendagri').value=desaData.kode_kemendagri||'';
+  document.getElementById('fTagline').value=desaData.tagline||'';
+  document.getElementById('fDeskripsi').value=desaData.deskripsi_singkat||'';
+  document.getElementById('fSambutan').value=desaData.sambutan_kades||'';
+  document.getElementById('fFotoKades').value=desaData.foto_kades||'';
+  // Sejarah
+  document.getElementById('fSejarah').value=desaData.sejarah||'';
+  // Visi Misi
+  document.getElementById('fVisi').value=desaData.visi||'';
+  renderMisi();
+  // Wilayah
+  document.getElementById('fBatasUtara').value=desaData.batas_utara||'';
+  document.getElementById('fBatasSelatan').value=desaData.batas_selatan||'';
+  document.getElementById('fBatasTimur').value=desaData.batas_timur||'';
+  document.getElementById('fBatasBarat').value=desaData.batas_barat||'';
+  document.getElementById('fLuasWilayah').value=desaData.luas_wilayah||'';
+  document.getElementById('fJmlDusun').value=desaData.jumlah_dusun||'';
+  document.getElementById('fLat').value=desaData.koordinat?.lat||'';
+  document.getElementById('fLng').value=desaData.koordinat?.lng||'';
+  document.getElementById('fDusun').value=(desaData.dusun||[]).join(', ');
+  // Kontak
+  document.getElementById('fEmail').value=desaData.kontak?.email||'';
+  document.getElementById('fTelepon').value=desaData.kontak?.telepon||'';
+  document.getElementById('fWhatsapp').value=desaData.kontak?.whatsapp||'';
+  document.getElementById('fJam').value=desaData.kontak?.jam_operasional||'';
+  document.getElementById('fAlamatLengkap').value=desaData.kontak?.alamat||'';
+  document.getElementById('fFacebook').value=desaData.sosmed?.facebook||'';
+  document.getElementById('fInstagram').value=desaData.sosmed?.instagram||'';
+  document.getElementById('fYoutube').value=desaData.sosmed?.youtube||'';
+}
+
+function renderMisi(){
+  const list=document.getElementById('misiList');
+  const misi=desaData.misi||[];
+  list.innerHTML=misi.map((m,i)=>`<div style="display:flex;gap:8px;margin-bottom:8px;align-items:center"><span style="font-weight:700;color:var(--primary);min-width:24px">${i+1}.</span><input type="text" class="form-control" value="${m}" data-misi="${i}" style="flex:1" /><button class="btn-admin btn-danger btn-sm-admin" onclick="removeMisi(${i})">✕</button></div>`).join('');
+}
+function addMisi(){if(!desaData.misi)desaData.misi=[];desaData.misi.push('Misi baru');renderMisi();}
+function removeMisi(i){desaData.misi.splice(i,1);renderMisi();}
+function collectMisi(){desaData.misi=[];document.querySelectorAll('[data-misi]').forEach(el=>{desaData.misi[parseInt(el.dataset.misi)]=el.value;});}
+
+async function saveTab(tab){
+  collectMisi();
+  if(tab==='umum'){
+    desaData.nama_desa=document.getElementById('fNamaDesa').value;
+    desaData.kepala_desa=document.getElementById('fKepalaDesa').value;
+    desaData.sekretaris_desa=document.getElementById('fSekretaris').value;
+    desaData.kecamatan=document.getElementById('fKecamatan').value;
+    desaData.kabupaten=document.getElementById('fKabupaten').value;
+    desaData.provinsi=document.getElementById('fProvinsi').value;
+    desaData.kode_pos=document.getElementById('fKodePos').value;
+    desaData.kode_kemendagri=document.getElementById('fKodeKemendagri').value;
+    desaData.tagline=document.getElementById('fTagline').value;
+    desaData.deskripsi_singkat=document.getElementById('fDeskripsi').value;
+    desaData.sambutan_kades=document.getElementById('fSambutan').value;
+    desaData.foto_kades=document.getElementById('fFotoKades').value;
+  } else if(tab==='sejarah'){
+    desaData.sejarah=document.getElementById('fSejarah').value;
+  } else if(tab==='visimisi'){
+    desaData.visi=document.getElementById('fVisi').value;
+  } else if(tab==='wilayah'){
+    desaData.batas_utara=document.getElementById('fBatasUtara').value;
+    desaData.batas_selatan=document.getElementById('fBatasSelatan').value;
+    desaData.batas_timur=document.getElementById('fBatasTimur').value;
+    desaData.batas_barat=document.getElementById('fBatasBarat').value;
+    desaData.luas_wilayah=document.getElementById('fLuasWilayah').value;
+    desaData.jumlah_dusun=parseInt(document.getElementById('fJmlDusun').value);
+    desaData.koordinat={lat:parseFloat(document.getElementById('fLat').value),lng:parseFloat(document.getElementById('fLng').value)};
+    desaData.dusun=document.getElementById('fDusun').value.split(',').map(s=>s.trim()).filter(Boolean);
+  } else if(tab==='kontak'){
+    desaData.kontak={email:document.getElementById('fEmail').value,telepon:document.getElementById('fTelepon').value,whatsapp:document.getElementById('fWhatsapp').value,jam_operasional:document.getElementById('fJam').value,alamat:document.getElementById('fAlamatLengkap').value};
+    desaData.sosmed={facebook:document.getElementById('fFacebook').value,instagram:document.getElementById('fInstagram').value,youtube:document.getElementById('fYoutube').value};
+  }
+  const r=await adminFetch('/desa',{method:'PUT',body:JSON.stringify(desaData)});
+  if(r)showToast('Profil desa berhasil disimpan');
+}
+</script>
+</body></html>

@@ -1,0 +1,506 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IDM - Indeks Desa Membangun | Desa Kauman</title>
+  <meta name="description" content="Indeks Desa Membangun (IDM) Desa Kauman - Skor, Status, dan Komponen IDM." />
+  <link rel="icon" href="/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .idm-page-score-card {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: #fff;
+      border-radius: var(--radius-xl);
+      padding: 52px 48px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .idm-page-score-card::before {
+      content: '';
+      position: absolute;
+      width: 380px; height: 380px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      top: -140px; right: -100px;
+      pointer-events: none;
+    }
+    .idm-page-score-card::after {
+      content: '';
+      position: absolute;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      bottom: -60px; left: -60px;
+      pointer-events: none;
+    }
+    .idm-year-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      padding: 5px 18px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+    .idm-big-score {
+      font-size: clamp(4rem, 10vw, 7rem);
+      font-weight: 800;
+      color: var(--secondary-light);
+      line-height: 1;
+      margin-bottom: 12px;
+      letter-spacing: -2px;
+    }
+    .idm-big-status {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 8px 28px;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .idm-page-desc {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      max-width: 500px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+    .idm-komponen-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .idm-komp-card {
+      background: rgba(255,255,255,0.1);
+      border-radius: var(--radius-lg);
+      padding: 24px 16px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .idm-komp-card .komp-icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .idm-komp-card .komp-label { font-size: 0.78rem; opacity: 0.8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .idm-komp-card .komp-key { font-size: 0.72rem; opacity: 0.6; margin-bottom: 10px; }
+    .idm-komp-card .komp-score { font-size: 2rem; font-weight: 800; color: var(--secondary-light); margin-bottom: 10px; }
+    .komp-progress-bar { height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; overflow: hidden; }
+    .komp-progress-fill { height: 100%; border-radius: 3px; background: var(--secondary-light); transition: width 1.2s ease; }
+    .komponen-list { display: flex; flex-direction: column; gap: 16px; }
+    .komponen-row { display: grid; grid-template-columns: 1fr 140px 60px; align-items: center; gap: 16px; }
+    .komponen-row-label { font-size: 0.88rem; color: var(--text-body); font-weight: 500; }
+    .komponen-row-val { font-size: 0.88rem; font-weight: 700; color: var(--primary); text-align: right; }
+    .bar-track { height: 10px; background: var(--bg-section); border-radius: 5px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--primary-light), var(--primary)); transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    .chart-section-card { background: #fff; border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+    .chart-section-title { font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 24px; padding-bottom: 14px; border-bottom: 2px solid var(--primary-pale); display: flex; align-items: center; gap: 8px; }
+    .indicator-tab { padding: 8px 20px; border-radius: 100px; border: 2px solid var(--border); background: #fff; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: 'Outfit', sans-serif; }
+    .indicator-tab:hover, .indicator-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .indicator-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .indicator-panel { display: none; }
+    .indicator-panel.active { display: block; }
+    .score-badge { display: inline-block; padding: 3px 12px; border-radius: 100px; font-size: 0.78rem; font-weight: 700; }
+    .score-badge.high { background: var(--primary-pale); color: var(--primary); }
+    .score-badge.mid  { background: #fff8e1; color: #f57f17; }
+    .score-badge.low  { background: #fce4ec; color: #c62828; }
+    .info-box { background: var(--primary-pale); border-left: 4px solid var(--primary); border-radius: var(--radius); padding: 20px 24px; }
+    .info-box h4 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .info-box p { font-size: 0.9rem; color: var(--text-body); line-height: 1.7; margin-bottom: 8px; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .status-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 20px; }
+    .status-item { background: #fff; border-radius: var(--radius-sm); padding: 12px 16px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
+    .status-item .s-label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
+    .status-item .s-val { font-size: 0.85rem; font-weight: 700; color: var(--text-dark); }
+    .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+    .mid-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; margin-bottom: 24px; }
+    @media (max-width: 768px) {
+      .idm-komponen-grid { grid-template-columns: 1fr; }
+      .idm-page-score-card { padding: 36px 24px 28px; }
+      .komponen-row { grid-template-columns: 1fr; gap: 6px; }
+      .komponen-row-val { text-align: left; }
+      .mid-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-brand">
+      <img src="/images/logo.png" alt="Logo Desa Kauman" class="nav-logo" />
+      <div class="nav-title">
+        <span class="desa-name" data-desa-nama>Desa Kauman</span>
+        <span class="desa-loc">Kab. Jombang, Jawa Timur</span>
+      </div>
+    </a>
+    <div class="nav-menu">
+      <a href="/index.html" class="nav-link">&#x1F3E0; Beranda</a>
+      <a href="/profil.html" class="nav-link">&#x1F4CB; Profil Desa</a>
+      <a href="/infografis.html" class="nav-link">&#x1F4CA; Infografis</a>
+      <a href="/idm.html" class="nav-link active">&#x1F3C6; IDM</a>
+      <a href="/berita.html" class="nav-link">&#x1F4F0; Berita</a>
+      <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">&#x1F3EA; Listing</a>
+      <a href="/belanja.html" class="nav-link">&#x1F4B0; APBDesa</a>
+      <a href="/ppid.html" class="nav-link">&#x1F4C2; PPID</a>
+      <a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'" >✉️ Layanan Surat</a>
+    </div>
+    <div class="nav-burger" id="navBurger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">&#x1F3E0; Beranda</a>
+  <a href="/profil.html" class="nav-link">&#x1F4CB; Profil Desa</a>
+  <a href="/infografis.html" class="nav-link">&#x1F4CA; Infografis</a>
+  <a href="/idm.html" class="nav-link">&#x1F3C6; IDM</a>
+  <a href="/berita.html" class="nav-link">&#x1F4F0; Berita</a>
+  <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">&#x1F3EA; Listing</a>
+  <a href="/belanja.html" class="nav-link">&#x1F4B0; APBDesa</a>
+  <a href="/ppid.html" class="nav-link">&#x1F4C2; PPID</a>
+  <a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
+</div>
+
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/index.html">&#x1F3E0; Beranda</a>
+      <span>&#x203A;</span>
+      <span>IDM</span>
+    </div>
+    <h1>&#x1F3C6; Indeks Desa Membangun</h1>
+    <p>Capaian dan tren pembangunan Desa Kauman berdasarkan Indeks Desa Membangun (IDM)</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <div class="idm-page-score-card fade-in">
+      <div class="idm-year-badge">&#x1F4C5; Tahun <span id="idmTahun">2024</span></div>
+      <div class="idm-big-score" id="idmBigScore">0.8342</div>
+      <div class="idm-big-status" id="idmBigStatus">Desa Mandiri</div>
+      <p class="idm-page-desc">Desa Kauman berhasil mencapai status <strong>Desa Mandiri</strong>, menunjukkan komitmen penuh dalam pembangunan yang berkelanjutan dan inklusif.</p>
+      <div class="idm-komponen-grid">
+        <div class="idm-komp-card">
+          <div class="komp-icon">&#x1F3D8;&#xFE0F;</div>
+          <div class="komp-label">Indeks Ketahanan Sosial</div>
+          <div class="komp-key">IKS</div>
+          <div class="komp-score" id="iksVal">0.8521</div>
+          <div class="komp-progress-bar"><div class="komp-progress-fill" id="iksBar" style="width:85.21%"></div></div>
+        </div>
+        <div class="idm-komp-card">
+          <div class="komp-icon">&#x1F4BC;</div>
+          <div class="komp-label">Indeks Ketahanan Ekonomi</div>
+          <div class="komp-key">IKE</div>
+          <div class="komp-score" id="ikeVal">0.7985</div>
+          <div class="komp-progress-bar"><div class="komp-progress-fill" id="ikeBar" style="width:79.85%"></div></div>
+        </div>
+        <div class="idm-komp-card">
+          <div class="komp-icon">&#x1F33F;</div>
+          <div class="komp-label">Indeks Ketahanan Lingkungan</div>
+          <div class="komp-key">IKL</div>
+          <div class="komp-score" id="iklVal">0.8520</div>
+          <div class="komp-progress-bar"><div class="komp-progress-fill" id="iklBar" style="width:85.20%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mid-grid fade-in">
+      <div class="chart-section-card">
+        <div class="chart-section-title">&#x1F4C8; Tren Skor IDM</div>
+        <canvas id="idmTrenChart" height="220"></canvas>
+      </div>
+      <div class="chart-section-card">
+        <div class="chart-section-title">&#x1F4CA; Komponen IDM</div>
+        <div class="komponen-list" id="komponenList">
+          <div class="skeleton" style="height:40px;border-radius:8px"></div>
+          <div class="skeleton" style="height:40px;border-radius:8px"></div>
+          <div class="skeleton" style="height:40px;border-radius:8px"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-section-card fade-in" style="margin-bottom:24px">
+      <div class="chart-section-title">&#x1F4CB; Indikator Sub-Komponen IDM</div>
+      <div class="indicator-tabs">
+        <button class="indicator-tab active" data-tab="iks">&#x1F3D8;&#xFE0F; IKS - Sosial</button>
+        <button class="indicator-tab" data-tab="ike">&#x1F4BC; IKE - Ekonomi</button>
+        <button class="indicator-tab" data-tab="ikl">&#x1F33F; IKL - Lingkungan</button>
+      </div>
+      <div class="indicator-panel active" id="panel-iks">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th style="width:40px">#</th><th>Indikator</th><th style="width:120px">Skor</th><th style="width:120px">Status</th></tr></thead>
+            <tbody id="iksTbody"><tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="indicator-panel" id="panel-ike">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th style="width:40px">#</th><th>Indikator</th><th style="width:120px">Skor</th><th style="width:120px">Status</th></tr></thead>
+            <tbody id="ikeTbody"><tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="indicator-panel" id="panel-ikl">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th style="width:40px">#</th><th>Indikator</th><th style="width:120px">Skor</th><th style="width:120px">Status</th></tr></thead>
+            <tbody id="iklTbody"><tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-in">
+      <div class="info-box">
+        <h4>&#x2139;&#xFE0F; Apa itu Indeks Desa Membangun (IDM)?</h4>
+        <p><strong>Indeks Desa Membangun (IDM)</strong> adalah indeks komposit yang dibentuk dari 3 indeks: Indeks Ketahanan Sosial (IKS), Indeks Ketahanan Ekonomi (IKE), dan Indeks Ketahanan Lingkungan (IKL). IDM merupakan instrumen untuk mengukur tingkat perkembangan desa dan hasilnya digunakan sebagai rujukan untuk menentukan intervensi pembangunan desa.</p>
+        <p>IDM dikembangkan untuk mendukung kebijakan dan intervensi pemerintah yang lebih efektif dalam membangun dan mengembangkan desa sesuai dengan karakter dan potensinya masing-masing.</p>
+        <div class="status-legend">
+          <div class="status-item">
+            <span class="s-label"><span class="status-dot" style="background:#c62828"></span>Sangat Tertinggal</span>
+            <span class="s-val">IDM &lt; 0,4907</span>
+          </div>
+          <div class="status-item">
+            <span class="s-label"><span class="status-dot" style="background:#f57f17"></span>Tertinggal</span>
+            <span class="s-val">0,4907 &ndash; 0,5989</span>
+          </div>
+          <div class="status-item">
+            <span class="s-label"><span class="status-dot" style="background:#ffb300"></span>Berkembang</span>
+            <span class="s-val">0,5989 &ndash; 0,7072</span>
+          </div>
+          <div class="status-item">
+            <span class="s-label"><span class="status-dot" style="background:#00acc1"></span>Maju</span>
+            <span class="s-val">0,7072 &ndash; 0,8155</span>
+          </div>
+          <div class="status-item">
+            <span class="s-label"><span class="status-dot" style="background:#2e7d32"></span>Mandiri</span>
+            <span class="s-val">IDM &ge; 0,8155</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" />
+          <div class="footer-logo-text">
+            <span class="name" data-desa-nama>Desa Kauman</span>
+            <span class="loc">Kec. Ngoro, Kab. Jombang</span>
+          </div>
+        </div>
+        <p class="footer-desc">Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional yang terus berkembang menuju desa digital.</p>
+        <div class="footer-sosmed">
+          <a href="#" data-sosmed-fb title="Facebook">f</a>
+          <a href="#" data-sosmed-ig title="Instagram">ig</a>
+          <a href="#" data-sosmed-yt title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">MENU</h4>
+        <div class="footer-links">
+          <a href="/index.html">→ Beranda</a>
+          <a href="/profil.html">→ Profil Desa</a>
+          <a href="/infografis.html">→ Infografis</a>
+          <a href="/idm.html">→ IDM</a>
+          <a href="/berita.html">→ Berita</a>
+          <a href="/galeri.html">→ Galeri</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">LAYANAN</h4>
+        <div class="footer-links">
+          <a href="/listing.html">→ Listing UMKM</a>
+          <a href="/belanja.html">→ APBDesa</a>
+          <a href="/ppid.html">→ PPID</a>
+          <a href="/pengaduan.html">→ Pengaduan</a>
+          <a href="/admin">→ Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">KONTAK</h4>
+        <div class="footer-contact">
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span data-desa-telp>(0321) 123456</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pemerintah Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop">&#x2191;</button>
+
+<script src="/js/api.js"></script>
+<script src="/js/main.js"></script>
+<script>
+const IKS_FALLBACK = [
+  { nama: 'Kesehatan', skor: 0.867 },
+  { nama: 'Pendidikan', skor: 0.841 },
+  { nama: 'Modal Sosial', skor: 0.820 },
+  { nama: 'Permukiman', skor: 0.880 },
+];
+const IKE_FALLBACK = [
+  { nama: 'Keragaman Produksi Masyarakat Desa', skor: 0.750 },
+  { nama: 'Akses Pusat Perdagangan dan Pasar', skor: 0.820 },
+  { nama: 'Akses Logistik', skor: 0.810 },
+  { nama: 'Akses Perbankan dan Lembaga Keuangan', skor: 0.780 },
+  { nama: 'Lembaga Ekonomi', skor: 0.830 },
+  { nama: 'Keterbukaan Wilayah', skor: 0.800 },
+];
+const IKL_FALLBACK = [
+  { nama: 'Kualitas Lingkungan Hidup', skor: 0.870 },
+  { nama: 'Potensi Rawan Bencana', skor: 0.820 },
+  { nama: 'Tanggap Bencana', skor: 0.866 },
+];
+
+function getScoreBadge(val) {
+  if (val >= 0.8) return '<span class="score-badge high">' + val.toFixed(4) + '</span>';
+  if (val >= 0.6) return '<span class="score-badge mid">' + val.toFixed(4) + '</span>';
+  return '<span class="score-badge low">' + val.toFixed(4) + '</span>';
+}
+function getStatusLabel(val) {
+  if (val >= 0.8155) return '<span class="score-badge high">Mandiri</span>';
+  if (val >= 0.7072) return '<span class="score-badge mid">Maju</span>';
+  if (val >= 0.5989) return '<span class="score-badge" style="background:#fff8e1;color:#f57f17">Berkembang</span>';
+  return '<span class="score-badge low">Tertinggal</span>';
+}
+function renderIndicatorTable(tbodyId, items) {
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody || !items || !items.length) return;
+  tbody.innerHTML = items.map(function(item, i) {
+    return '<tr><td>' + (i+1) + '</td><td>' + item.nama + '</td><td>' + getScoreBadge(item.skor) + '</td><td>' + getStatusLabel(item.skor) + '</td></tr>';
+  }).join('');
+}
+function renderKomponenList(items) {
+  var el = document.getElementById('komponenList');
+  if (!el) return;
+  el.innerHTML = items.map(function(item) {
+    return '<div class="komponen-row"><div class="komponen-row-label">' + item.icon + ' ' + item.label + '</div><div class="komponen-row-bar"><div class="bar-track"><div class="bar-fill" style="width:' + (item.val * 100).toFixed(2) + '%"></div></div></div><div class="komponen-row-val">' + (item.val * 100).toFixed(1) + '%</div></div>';
+  }).join('');
+}
+var trenChart = null;
+function renderTrenChart(riwayat) {
+  var ctx = document.getElementById('idmTrenChart');
+  if (!ctx || !riwayat || !riwayat.length) return;
+  var labels = riwayat.map(function(r) { return r.tahun; });
+  var data   = riwayat.map(function(r) { return r.skor; });
+  if (trenChart) trenChart.destroy();
+  trenChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Skor IDM',
+        data: data,
+        borderColor: '#4caf50',
+        backgroundColor: 'rgba(76,175,80,0.12)',
+        pointBackgroundColor: '#2e7d32',
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        fill: true,
+        tension: 0.4,
+        borderWidth: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(c) { return 'Skor IDM: ' + c.parsed.y.toFixed(4); } } }
+      },
+      scales: {
+        y: { min: 0.5, max: 1.0, ticks: { callback: function(v) { return v.toFixed(2); }, font: { family: 'Outfit', size: 11 } }, grid: { color: 'rgba(0,0,0,0.06)' } },
+        x: { ticks: { font: { family: 'Outfit', size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+var FALLBACK_RIWAYAT = [
+  { tahun: 2020, skor: 0.7320 },
+  { tahun: 2021, skor: 0.7685 },
+  { tahun: 2022, skor: 0.7991 },
+  { tahun: 2023, skor: 0.8108 },
+  { tahun: 2024, skor: 0.8342 },
+];
+document.addEventListener('DOMContentLoaded', async function() {
+  document.querySelectorAll('.indicator-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.indicator-tab').forEach(function(t) { t.classList.remove('active'); });
+      document.querySelectorAll('.indicator-panel').forEach(function(p) { p.classList.remove('active'); });
+      tab.classList.add('active');
+      var panel = document.getElementById('panel-' + tab.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+  var idm = await API.idm();
+  if (idm) {
+    document.getElementById('idmTahun').textContent = idm.tahun || '2024';
+    document.getElementById('idmBigScore').textContent = idm.skor.toFixed(4);
+    document.getElementById('idmBigStatus').textContent = idm.status || 'Desa Mandiri';
+    document.getElementById('iksVal').textContent = idm.iks.toFixed(4);
+    document.getElementById('ikeVal').textContent = idm.ike.toFixed(4);
+    document.getElementById('iklVal').textContent = idm.ikl.toFixed(4);
+    document.getElementById('iksBar').style.width = (idm.iks * 100).toFixed(2) + '%';
+    document.getElementById('ikeBar').style.width = (idm.ike * 100).toFixed(2) + '%';
+    document.getElementById('iklBar').style.width = (idm.ikl * 100).toFixed(2) + '%';
+    renderKomponenList([
+      { icon: '&#x1F3D8;&#xFE0F;', label: 'Indeks Ketahanan Sosial (IKS)', val: idm.iks },
+      { icon: '&#x1F4BC;', label: 'Indeks Ketahanan Ekonomi (IKE)', val: idm.ike },
+      { icon: '&#x1F33F;', label: 'Indeks Ketahanan Lingkungan (IKL)', val: idm.ikl },
+    ]);
+    renderTrenChart(idm.riwayat && idm.riwayat.length ? idm.riwayat : FALLBACK_RIWAYAT.map(function(r) { if (r.tahun == (idm.tahun || 2024)) r.skor = idm.skor; return r; }));
+    renderIndicatorTable('iksTbody', (idm.indikator && idm.indikator.iks) ? idm.indikator.iks : IKS_FALLBACK);
+    renderIndicatorTable('ikeTbody', (idm.indikator && idm.indikator.ike) ? idm.indikator.ike : IKE_FALLBACK);
+    renderIndicatorTable('iklTbody', (idm.indikator && idm.indikator.ikl) ? idm.indikator.ikl : IKL_FALLBACK);
+  } else {
+    renderKomponenList([
+      { icon: '&#x1F3D8;&#xFE0F;', label: 'Indeks Ketahanan Sosial (IKS)', val: 0.8521 },
+      { icon: '&#x1F4BC;', label: 'Indeks Ketahanan Ekonomi (IKE)', val: 0.7985 },
+      { icon: '&#x1F33F;', label: 'Indeks Ketahanan Lingkungan (IKL)', val: 0.8520 },
+    ]);
+    renderTrenChart(FALLBACK_RIWAYAT);
+    renderIndicatorTable('iksTbody', IKS_FALLBACK);
+    renderIndicatorTable('ikeTbody', IKE_FALLBACK);
+    renderIndicatorTable('iklTbody', IKL_FALLBACK);
+  }
+  initScrollAnimations();
+});
+</script>
+</body>
+</html>

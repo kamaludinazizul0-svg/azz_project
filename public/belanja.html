@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APBDesa - Anggaran Pendapatan dan Belanja Desa | Desa Kauman</title>
+  <meta name="description" content="Transparansi anggaran APBDesa Kauman - pendapatan, belanja, dan realisasi anggaran desa." />
+  <link rel="icon" href="/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .apb-section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--primary-pale);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .apb-table-section {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .apb-card-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+    .apb-card-icon.green { background: var(--primary-pale); }
+    .apb-card-icon.orange { background: #fff3e0; }
+    .apb-card-icon.blue { background: #e0f7fa; }
+    .apb-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; }
+    .pct-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .pct-badge.good { background: var(--primary-pale); color: var(--primary); }
+    .pct-badge.mid  { background: #fff8e1; color: #f57f17; }
+    .pct-badge.low  { background: #fce4ec; color: #c62828; }
+    .table-progress { width: 100%; min-width: 80px; }
+    .tp-bar { height: 6px; background: var(--bg-section); border-radius: 3px; overflow: hidden; margin-top: 3px; }
+    .tp-fill { height: 100%; border-radius: 3px; background: var(--primary); transition: width 1s ease; }
+    .tp-fill.orange { background: var(--secondary); }
+    .chart-card { background: #fff; border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+    .chart-card .chart-title { font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--primary-pale); }
+    .tahun-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      padding: 4px 16px;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 768px) {
+      .apb-table-section { padding: 16px; }
+      table { font-size: 0.82rem; }
+      th, td { padding: 10px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-brand">
+      <img src="/images/logo.png" alt="Logo Desa Kauman" class="nav-logo" />
+      <div class="nav-title">
+        <span class="desa-name" data-desa-nama>Desa Kauman</span>
+        <span class="desa-loc">Kab. Jombang, Jawa Timur</span>
+      </div>
+    </a>
+    <div class="nav-menu">
+      <a href="/index.html" class="nav-link">&#x1F3E0; Beranda</a>
+      <a href="/profil.html" class="nav-link">&#x1F4CB; Profil Desa</a>
+      <a href="/infografis.html" class="nav-link">&#x1F4CA; Infografis</a>
+      <a href="/idm.html" class="nav-link">&#x1F3C6; IDM</a>
+      <a href="/berita.html" class="nav-link">&#x1F4F0; Berita</a>
+      <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">&#x1F3EA; Listing</a>
+      <a href="/belanja.html" class="nav-link active">&#x1F4B0; APBDesa</a>
+      <a href="/ppid.html" class="nav-link">&#x1F4C2; PPID</a>
+      <a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'" >✉️ Layanan Surat</a>
+    </div>
+    <div class="nav-burger" id="navBurger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">&#x1F3E0; Beranda</a>
+  <a href="/profil.html" class="nav-link">&#x1F4CB; Profil Desa</a>
+  <a href="/infografis.html" class="nav-link">&#x1F4CA; Infografis</a>
+  <a href="/idm.html" class="nav-link">&#x1F3C6; IDM</a>
+  <a href="/berita.html" class="nav-link">&#x1F4F0; Berita</a>
+  <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">&#x1F3EA; Listing</a>
+  <a href="/belanja.html" class="nav-link">&#x1F4B0; APBDesa</a>
+  <a href="/ppid.html" class="nav-link">&#x1F4C2; PPID</a>
+  <a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
+</div>
+
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/index.html">&#x1F3E0; Beranda</a>
+      <span>&#x203A;</span>
+      <span>APBDesa</span>
+    </div>
+    <h1>&#x1F4B0; APBDesa Kauman</h1>
+    <p>Anggaran Pendapatan dan Belanja Desa &mdash; Transparansi pengelolaan keuangan desa untuk masyarakat</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Summary Cards -->
+    <div class="apb-summary fade-in" id="apbSummary">
+      <div class="apb-card income">
+        <div class="apb-card-icon green">&#x1F4B5;</div>
+        <div class="apb-label">Total Anggaran</div>
+        <div class="apb-amount" id="totalAnggaran">Rp 0</div>
+        <div class="apb-sub">Tahun Anggaran <span id="tahunAnggaran">2024</span></div>
+      </div>
+      <div class="apb-card expense">
+        <div class="apb-card-icon orange">&#x1F4CA;</div>
+        <div class="apb-label">Total Realisasi</div>
+        <div class="apb-amount" id="totalRealisasi">Rp 0</div>
+        <div class="apb-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="realisasiBar" style="width:0%"></div>
+          </div>
+          <div class="progress-label">
+            <span>Realisasi</span>
+            <span id="realisasiPct">0%</span>
+          </div>
+        </div>
+      </div>
+      <div class="apb-card balance">
+        <div class="apb-card-icon blue">&#x1F3AF;</div>
+        <div class="apb-label">Persentase Realisasi</div>
+        <div class="apb-amount" id="pctRealisasi" style="color:var(--accent)">0%</div>
+        <div class="apb-sub" id="statusRealisasi">Memuat data...</div>
+      </div>
+    </div>
+
+    <!-- Pendapatan Table -->
+    <div class="apb-table-section fade-in">
+      <div class="apb-section-title">&#x1F4E5; Rincian Pendapatan Desa</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Sumber Pendapatan</th>
+              <th>Rencana (Rp)</th>
+              <th>Realisasi (Rp)</th>
+              <th>Lebih/Kurang (Rp)</th>
+              <th>%</th>
+              <th style="width:120px">Progress</th>
+            </tr>
+          </thead>
+          <tbody id="pendapatanTbody">
+            <tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted)">
+              <div class="skeleton" style="height:14px;width:60%;margin:8px auto"></div>
+              <div class="skeleton" style="height:14px;width:75%;margin:8px auto"></div>
+              <div class="skeleton" style="height:14px;width:50%;margin:8px auto"></div>
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Belanja Table -->
+    <div class="apb-table-section fade-in">
+      <div class="apb-section-title">&#x1F4E4; Rincian Belanja Desa</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Bidang / Sub Bidang</th>
+              <th>Rencana (Rp)</th>
+              <th>Realisasi (Rp)</th>
+              <th>Lebih/Kurang (Rp)</th>
+              <th>%</th>
+              <th style="width:120px">Progress</th>
+            </tr>
+          </thead>
+          <tbody id="belanjaTbody">
+            <tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted)">
+              <div class="skeleton" style="height:14px;width:60%;margin:8px auto"></div>
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pembiayaan Table -->
+    <div class="apb-table-section fade-in">
+      <div class="apb-section-title">&#x1F504; Ringkasan Pembiayaan & SILPA</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Uraian</th>
+              <th>Rencana (Rp)</th>
+              <th>Realisasi (Rp)</th>
+            </tr>
+          </thead>
+          <tbody id="pembiayaanTbody">
+            <tr><td colspan="3" style="text-align:center;padding:24px;color:var(--text-muted)">
+              <div class="skeleton" style="height:14px;width:60%;margin:8px auto"></div>
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bar Chart: Riwayat Anggaran vs Realisasi -->
+    <div class="chart-card fade-in">
+      <div class="chart-title">&#x1F4C8; Riwayat Anggaran vs Realisasi APBDesa</div>
+      <canvas id="riwayatChart" height="100"></canvas>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" />
+          <div class="footer-logo-text">
+            <span class="name" data-desa-nama>Desa Kauman</span>
+            <span class="loc">Kec. Ngoro, Kab. Jombang</span>
+          </div>
+        </div>
+        <p class="footer-desc">Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional yang terus berkembang menuju desa digital.</p>
+        <div class="footer-sosmed">
+          <a href="#" data-sosmed-fb title="Facebook">f</a>
+          <a href="#" data-sosmed-ig title="Instagram">ig</a>
+          <a href="#" data-sosmed-yt title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">MENU</h4>
+        <div class="footer-links">
+          <a href="/index.html">→ Beranda</a>
+          <a href="/profil.html">→ Profil Desa</a>
+          <a href="/infografis.html">→ Infografis</a>
+          <a href="/idm.html">→ IDM</a>
+          <a href="/berita.html">→ Berita</a>
+          <a href="/galeri.html">→ Galeri</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">LAYANAN</h4>
+        <div class="footer-links">
+          <a href="/listing.html">→ Listing UMKM</a>
+          <a href="/belanja.html">→ APBDesa</a>
+          <a href="/ppid.html">→ PPID</a>
+          <a href="/pengaduan.html">→ Pengaduan</a>
+          <a href="/admin">→ Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">KONTAK</h4>
+        <div class="footer-contact">
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span data-desa-telp>(0321) 123456</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pemerintah Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop">&#x2191;</button>
+
+<script src="/js/api.js"></script>
+<script src="/js/main.js"></script>
+<script>
+// ===== BELANJA PAGE LOGIC =====
+var FALLBACK_APB = {
+  tahun: 2024,
+  total_anggaran: 1850000000,
+  total_realisasi: 1628500000,
+  pendapatan: {
+    rincian: [
+      { sumber: 'Dana Desa (DD)', anggaran: 900000000, realisasi: 832000000 },
+      { sumber: 'Alokasi Dana Desa (ADD)', anggaran: 450000000, realisasi: 418000000 },
+      { sumber: 'Bagian Hasil Pajak & Retribusi', anggaran: 200000000, realisasi: 185000000 },
+      { sumber: 'Pendapatan Asli Desa (PADes)', anggaran: 150000000, realisasi: 132500000 },
+      { sumber: 'Bantuan Keuangan Provinsi/Kab', anggaran: 150000000, realisasi: 61000000 },
+    ]
+  },
+  belanja: {
+    rincian: [
+      { bidang: 'Bidang Penyelenggaraan Pemerintahan', anggaran: 420000000, realisasi: 398000000 },
+      { bidang: 'Bidang Pembangunan Desa', anggaran: 680000000, realisasi: 605000000 },
+      { bidang: 'Bidang Pemberdayaan Masyarakat', anggaran: 280000000, realisasi: 240000000 },
+      { bidang: 'Bidang Penanggulangan Bencana', anggaran: 120000000, realisasi: 98000000 },
+      { bidang: 'Bidang Pembinaan Kemasyarakatan', anggaran: 200000000, realisasi: 165000000 },
+      { bidang: 'Bidang Tak Terduga', anggaran: 150000000, realisasi: 122500000 },
+    ]
+  },
+  riwayat: [
+    { tahun: 2020, anggaran: 1320000000, realisasi: 1180000000 },
+    { tahun: 2021, anggaran: 1450000000, realisasi: 1290000000 },
+    { tahun: 2022, anggaran: 1620000000, realisasi: 1450000000 },
+    { tahun: 2023, anggaran: 1740000000, realisasi: 1560000000 },
+    { tahun: 2024, anggaran: 1850000000, realisasi: 1628500000 },
+  ]
+};
+
+function pct(real, ang) {
+  if (!ang) return 0;
+  return Math.min(100, Math.round((real / ang) * 100));
+}
+function pctBadge(p) {
+  if (p >= 80) return '<span class="pct-badge good">' + p + '%</span>';
+  if (p >= 60) return '<span class="pct-badge mid">' + p + '%</span>';
+  return '<span class="pct-badge low">' + p + '%</span>';
+}
+function barFillClass(p) {
+  if (p >= 80) return '';
+  if (p >= 60) return ' orange';
+  return ' orange';
+}
+
+function renderPendapatanTable(rincian) {
+  var tbody = document.getElementById('pendapatanTbody');
+  if (!tbody || !rincian || !rincian.length) return;
+  var total_ang = 0, total_real = 0;
+  rincian.forEach(function(r) { total_ang += (r.anggaran || r.jumlah || 0); total_real += (r.realisasi || 0); });
+  tbody.innerHTML = rincian.map(function(r, i) {
+    var sumber = r.sumber || r.nama || '';
+    var anggaran = r.anggaran || r.jumlah || 0;
+    var realisasi = r.realisasi || 0;
+    var p = pct(realisasi, anggaran);
+    var lebihKurang = anggaran - realisasi;
+    return '<tr>' +
+      '<td>' + (i+1) + '</td>' +
+      '<td>' + sumber + '</td>' +
+      '<td style="white-space:nowrap">' + formatRupiah(anggaran) + '</td>' +
+      '<td style="white-space:nowrap">' + formatRupiah(realisasi) + '</td>' +
+      '<td style="white-space:nowrap">' + (lebihKurang === 0 ? '-' : formatRupiah(lebihKurang)) + '</td>' +
+      '<td>' + pctBadge(p) + '</td>' +
+      '<td><div class="table-progress"><div class="tp-bar"><div class="tp-fill" style="width:' + p + '%"></div></div></td>' +
+    '</tr>';
+  }).join('') +
+  '<tr style="background:var(--primary-pale);font-weight:700">' +
+    '<td colspan="2">Total Pendapatan</td>' +
+    '<td style="white-space:nowrap">' + formatRupiah(total_ang) + '</td>' +
+    '<td style="white-space:nowrap">' + formatRupiah(total_real) + '</td>' +
+    '<td style="white-space:nowrap">' + formatRupiah(total_ang - total_real) + '</td>' +
+    '<td>' + pctBadge(pct(total_real, total_ang)) + '</td>' +
+    '<td><div class="tp-bar"><div class="tp-fill" style="width:' + pct(total_real, total_ang) + '%"></div></div></td>' +
+  '</tr>';
+}
+
+function renderBelanjaTable(rincian) {
+  var tbody = document.getElementById('belanjaTbody');
+  if (!tbody || !rincian || !rincian.length) return;
+  var total_ang = 0, total_real = 0;
+  rincian.forEach(function(r) { total_ang += (r.anggaran || r.jumlah || 0); total_real += (r.realisasi || 0); });
+  
+  var html = '';
+  rincian.forEach(function(r, i) {
+    var bidang = r.bidang || r.nama || '';
+    var anggaran = r.anggaran || r.jumlah || 0;
+    var realisasi = r.realisasi || 0;
+    var p = pct(realisasi, anggaran);
+    var lebihKurang = anggaran - realisasi;
+    
+    html += '<tr style="background:#f9f9f9;font-weight:600">' +
+      '<td>' + (i+1) + '</td>' +
+      '<td>' + bidang + '</td>' +
+      '<td style="white-space:nowrap">' + formatRupiah(anggaran) + '</td>' +
+      '<td style="white-space:nowrap">' + formatRupiah(realisasi) + '</td>' +
+      '<td style="white-space:nowrap">' + (lebihKurang === 0 ? '-' : formatRupiah(lebihKurang)) + '</td>' +
+      '<td>' + pctBadge(p) + '</td>' +
+      '<td><div class="table-progress"><div class="tp-bar"><div class="tp-fill orange" style="width:' + p + '%"></div></div></td>' +
+    '</tr>';
+    
+    if (r.sub_bidang && r.sub_bidang.length > 0) {
+      r.sub_bidang.forEach(function(sub, j) {
+        var subAnggaran = sub.anggaran || sub.jumlah || 0;
+        var subRealisasi = sub.realisasi || 0;
+        var subP = pct(subRealisasi, subAnggaran);
+        var subLebihKurang = subAnggaran - subRealisasi;
+        
+        html += '<tr style="font-size:0.9em">' +
+          '<td></td>' +
+          '<td style="padding-left:20px;color:#555">- ' + (sub.nama || '') + '</td>' +
+          '<td style="white-space:nowrap">' + formatRupiah(subAnggaran) + '</td>' +
+          '<td style="white-space:nowrap">' + formatRupiah(subRealisasi) + '</td>' +
+          '<td style="white-space:nowrap">' + (subLebihKurang === 0 ? '-' : formatRupiah(subLebihKurang)) + '</td>' +
+          '<td>' + pctBadge(subP) + '</td>' +
+          '<td><div class="table-progress"><div class="tp-bar"><div class="tp-fill orange" style="width:' + subP + '%"></div></div></td>' +
+        '</tr>';
+      });
+    }
+  });
+  
+  html += '<tr style="background:#fff3e0;font-weight:700">' +
+    '<td colspan="2">Total Belanja</td>' +
+    '<td style="white-space:nowrap">' + formatRupiah(total_ang) + '</td>' +
+    '<td style="white-space:nowrap">' + formatRupiah(total_real) + '</td>' +
+    '<td style="white-space:nowrap">' + formatRupiah(total_ang - total_real) + '</td>' +
+    '<td>' + pctBadge(pct(total_real, total_ang)) + '</td>' +
+    '<td><div class="tp-bar"><div class="tp-fill orange" style="width:' + pct(total_real, total_ang) + '%"></div></div></td>' +
+  '</tr>';
+  
+  tbody.innerHTML = html;
+}
+
+function formatRupiahAkuntansi(num) {
+  if (num < 0) {
+    return 'Rp (' + formatRupiah(Math.abs(num)).replace('Rp ', '') + ')';
+  }
+  return formatRupiah(num);
+}
+
+function renderPembiayaanTable(pendapatanTotal, belanjaTotal, pembiayaan) {
+  var tbody = document.getElementById('pembiayaanTbody');
+  if (!tbody) return;
+  var html = '';
+  
+  var surplusAng = pendapatanTotal.anggaran - belanjaTotal.anggaran;
+  var surplusReal = pendapatanTotal.realisasi - belanjaTotal.realisasi;
+  
+  var trmAng = pembiayaan?.penerimaan?.jumlah || 0;
+  var trmReal = pembiayaan?.penerimaan?.realisasi || 0;
+  
+  var klrAng = pembiayaan?.pengeluaran?.jumlah || 0;
+  var klrReal = pembiayaan?.pengeluaran?.realisasi || 0;
+  
+  var nettoAng = trmAng - klrAng;
+  var nettoReal = trmReal - klrReal;
+  
+  var silpaAng = surplusAng + nettoAng;
+  var silpaReal = surplusReal + nettoReal;
+  
+  html += '<tr style="background:#e3f2fd;font-weight:700">' +
+    '<td>SURPLUS / (DEFISIT)</td>' +
+    '<td style="white-space:nowrap">' + formatRupiahAkuntansi(surplusAng) + '</td>' +
+    '<td style="white-space:nowrap">' + formatRupiahAkuntansi(surplusReal) + '</td>' +
+  '</tr>';
+  
+  html += '<tr style="font-weight:700;color:var(--primary)">' +
+    '<td colspan="3">PEMBIAYAAN</td>' +
+  '</tr>';
+  
+  html += '<tr>' +
+    '<td style="padding-left:24px">Penerimaan Pembiayaan</td>' +
+    '<td style="white-space:nowrap">' + formatRupiahAkuntansi(trmAng) + '</td>' +
+    '<td style="white-space:nowrap">' + formatRupiahAkuntansi(trmReal) + '</td>' +
+  '</tr>';
+  
+  html += '<tr>' +
+    '<td style="padding-left:24px">Pengeluaran Pembiayaan</td>' +
+    '<td style="white-space:nowrap">' + formatRupiahAkuntansi(klrAng) + '</td>' +
+    '<td style="white-space:nowrap">' + formatRupiahAkuntansi(klrReal) + '</td>' +
+  '</tr>';
+  
+  html += '<tr style="background:#f1f8e9;font-weight:700">' +
+    '<td>PEMBIAYAAN NETTO</td>' +
+    '<td style="white-space:nowrap">' + formatRupiahAkuntansi(nettoAng) + '</td>' +
+    '<td style="white-space:nowrap">' + formatRupiahAkuntansi(nettoReal) + '</td>' +
+  '</tr>';
+  
+  html += '<tr style="background:#fff3e0;font-weight:700">' +
+    '<td>SISA LEBIH PEMBIAYAAN ANGGARAN (SILPA)</td>' +
+    '<td style="white-space:nowrap">' + formatRupiahAkuntansi(silpaAng) + '</td>' +
+    '<td style="white-space:nowrap">' + formatRupiahAkuntansi(silpaReal) + '</td>' +
+  '</tr>';
+  
+  tbody.innerHTML = html;
+}
+
+var riwayatChart = null;
+function renderRiwayatChart(riwayat) {
+  var ctx = document.getElementById('riwayatChart');
+  if (!ctx || !riwayat || !riwayat.length) return;
+  var labels = riwayat.map(function(r) { return r.tahun; });
+  var anggaranData = riwayat.map(function(r) { return r.anggaran; });
+  var realisasiData = riwayat.map(function(r) { return r.realisasi; });
+  if (riwayatChart) riwayatChart.destroy();
+  riwayatChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Anggaran',
+          data: anggaranData,
+          backgroundColor: 'rgba(46,125,50,0.25)',
+          borderColor: '#2e7d32',
+          borderWidth: 2,
+          borderRadius: 6,
+        },
+        {
+          label: 'Realisasi',
+          data: realisasiData,
+          backgroundColor: 'rgba(245,127,23,0.85)',
+          borderColor: '#f57f17',
+          borderWidth: 2,
+          borderRadius: 6,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top', labels: { font: { family: 'Outfit' } } },
+        tooltip: {
+          callbacks: {
+            label: function(c) { return c.dataset.label + ': ' + formatRupiah(c.parsed.y); }
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: function(v) { return 'Rp ' + (v / 1000000).toFixed(0) + ' Jt'; },
+            font: { family: 'Outfit', size: 11 }
+          },
+          grid: { color: 'rgba(0,0,0,0.06)' }
+        },
+        x: { ticks: { font: { family: 'Outfit', size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function populateSummary(data) {
+  var totalAng = data.total_anggaran;
+  var totalReal = data.total_realisasi;
+  var p = pct(totalReal, totalAng);
+  document.getElementById('tahunAnggaran').textContent = data.tahun || '2024';
+  document.getElementById('totalAnggaran').textContent = formatRupiah(totalAng);
+  document.getElementById('totalRealisasi').textContent = formatRupiah(totalReal);
+  document.getElementById('pctRealisasi').textContent = p + '%';
+  document.getElementById('realisasiPct').textContent = p + '%';
+  document.getElementById('realisasiBar').style.width = p + '%';
+  document.getElementById('statusRealisasi').textContent = p >= 90 ? 'Sangat Baik' : p >= 75 ? 'Baik' : p >= 60 ? 'Cukup' : 'Perlu Ditingkatkan';
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+  var apb = await API.apbdesa();
+  var data = apb || FALLBACK_APB;
+  
+  var pendRincian = (data.pendapatan && data.pendapatan.rincian) ? data.pendapatan.rincian : FALLBACK_APB.pendapatan.rincian;
+  var belRincian  = (data.belanja   && data.belanja.rincian)   ? data.belanja.rincian   : FALLBACK_APB.belanja.rincian;
+  
+  var calcTotalAng = 0;
+  var calcTotalReal = 0;
+  var calcTotalBelAng = 0;
+  var calcTotalBelReal = 0;
+  pendRincian.forEach(function(r) { calcTotalAng += (r.anggaran || r.jumlah || 0); calcTotalReal += (r.realisasi || 0); });
+  belRincian.forEach(function(r) { calcTotalBelAng += (r.anggaran || r.jumlah || 0); calcTotalBelReal += (r.realisasi || 0); });
+  
+  data.total_anggaran = calcTotalBelAng;
+  data.total_realisasi = calcTotalBelReal;
+  
+  populateSummary(data);
+  
+  renderPendapatanTable(pendRincian);
+  renderBelanjaTable(belRincian);
+  renderPembiayaanTable(
+    { anggaran: calcTotalAng, realisasi: calcTotalReal },
+    { anggaran: calcTotalBelAng, realisasi: calcTotalBelReal },
+    data.pembiayaan
+  );
+  
+  renderRiwayatChart(data.riwayat || FALLBACK_APB.riwayat);
+  initScrollAnimations();
+});
+</script>
+</body>
+</html>

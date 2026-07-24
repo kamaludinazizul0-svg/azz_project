@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengaduan Masyarakat - Desa Kauman</title>
+  <meta name="description" content="Layanan Pengaduan Masyarakat Desa Kauman." />
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<nav class="navbar"><div class="nav-container">
+  <a href="/" class="nav-brand"><img src="/images/logo.png" alt="Logo" class="nav-logo" /><div class="nav-title"><span class="desa-name">Desa Kauman</span><span class="desa-loc">Kab. Jombang, Jawa Timur</span></div></a>
+  <div class="nav-menu">
+    <a href="/index.html" class="nav-link">🏠 Beranda</a><a href="/profil.html" class="nav-link">📋 Profil Desa</a><a href="/infografis.html" class="nav-link">📊 Infografis</a><a href="/idm.html" class="nav-link">🏆 IDM</a><a href="/berita.html" class="nav-link">📰 Berita</a><a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a><a href="/belanja.html" class="nav-link">💰 APBDesa</a><a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'" >✉️ Layanan Surat</a>
+  </div>
+  <div class="nav-burger" id="navBurger"><span></span><span></span><span></span></div>
+</div></nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">🏠 Beranda</a><a href="/profil.html" class="nav-link">📋 Profil</a><a href="/infografis.html" class="nav-link">📊 Infografis</a><a href="/idm.html" class="nav-link">🏆 IDM</a><a href="/berita.html" class="nav-link">📰 Berita</a><a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a><a href="/belanja.html" class="nav-link">💰 APBDesa</a><a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
+</div>
+
+<div class="page-header"><div class="container">
+  <div class="breadcrumb"><a href="/">🏠 Beranda</a> / <span>Pengaduan Masyarakat</span></div>
+  <h1>Layanan Pengaduan Masyarakat</h1>
+  <p>Sampaikan laporan, keluhan, atau aspirasi Anda secara online</p>
+</div></div>
+
+<!-- Formulir Pengaduan -->
+<section class="section"><div class="container">
+  <div class="section-header fade-in">
+    <div class="section-tag">📢 Pengaduan</div>
+    <h2 class="section-title">Formulir Pengaduan</h2>
+    <p class="section-subtitle">Identitas Anda akan kami jaga kerahasiaannya.</p>
+  </div>
+  <div style="max-width:700px;margin:0 auto;background:#fff;border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow);border:1px solid var(--border)" class="fade-in">
+    <form id="pengaduanForm" onsubmit="submitPengaduan(event)">
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-weight:600;font-size:0.88rem;margin-bottom:6px">Nama Lengkap *</label>
+        <input type="text" id="pengNama" required style="width:100%;padding:11px 16px;border:2px solid var(--border);border-radius:8px;font-family:Outfit;font-size:0.92rem;outline:none" placeholder="Sesuai KTP" />
+      </div>
+      <div style="margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <label style="display:block;font-weight:600;font-size:0.88rem;margin-bottom:6px">NIK *</label>
+          <input type="text" id="pengNik" required pattern="[0-9]{16}" title="NIK harus 16 digit angka" style="width:100%;padding:11px 16px;border:2px solid var(--border);border-radius:8px;font-family:Outfit;font-size:0.92rem;outline:none" placeholder="16 Digit Angka" />
+        </div>
+        <div>
+          <label style="display:block;font-weight:600;font-size:0.88rem;margin-bottom:6px">No. HP/WhatsApp *</label>
+          <input type="text" id="pengNoHp" required style="width:100%;padding:11px 16px;border:2px solid var(--border);border-radius:8px;font-family:Outfit;font-size:0.92rem;outline:none" placeholder="08xxxxxxxxxx" />
+        </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-weight:600;font-size:0.88rem;margin-bottom:6px">Kategori Pengaduan *</label>
+        <select id="pengKategori" required style="width:100%;padding:11px 16px;border:2px solid var(--border);border-radius:8px;font-family:Outfit;font-size:0.92rem;outline:none;background:#fff">
+          <option value="">-- Pilih Kategori --</option>
+          <option value="Infrastruktur & Fasilitas Umum">Infrastruktur & Fasilitas Umum</option>
+          <option value="Pelayanan Aparatur Desa">Pelayanan Aparatur Desa</option>
+          <option value="Ketertiban & Keamanan">Ketertiban & Keamanan</option>
+          <option value="Bantuan Sosial">Bantuan Sosial</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-weight:600;font-size:0.88rem;margin-bottom:6px">Isi Laporan / Pengaduan *</label>
+        <textarea id="pengIsi" required rows="4" style="width:100%;padding:11px 16px;border:2px solid var(--border);border-radius:8px;font-family:Outfit;font-size:0.92rem;outline:none;resize:vertical" placeholder="Jelaskan detail kejadian, lokasi, atau keluhan Anda..."></textarea>
+      </div>
+      <div style="margin-bottom:32px">
+        <label style="display:block;font-weight:600;font-size:0.88rem;margin-bottom:6px">Bukti Foto / Dokumen Pendukung (Opsional)</label>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="pengLampiran" style="flex:1;padding:11px 16px;border:2px solid var(--border);border-radius:8px;font-family:Outfit;font-size:0.92rem;outline:none;background:#f9f9f9" placeholder="Tidak ada file terpilih..." readonly />
+          <button type="button" class="btn btn-secondary" onclick="const f=document.createElement('input');f.type='file';f.accept='image/*,.pdf';f.onchange=async()=>{this.textContent='Mengunggah...';const fd=new FormData();fd.append('file',f.files[0]);try{const r=await fetch('/api/upload',{method:'POST',body:fd});const d=await r.json();if(d.url) document.getElementById('pengLampiran').value=d.url; else throw new Error();}catch(e){alert('Gagal mengunggah');}this.textContent='📂 Upload Foto';};f.click()" style="padding:0 20px">📂 Upload Foto</button>
+        </div>
+      </div>
+      <button type="submit" id="btnSubmitPengaduan" class="btn btn-primary btn-lg btn-block" style="background:#d32f2f">📢 Kirim Pengaduan</button>
+    </form>
+    <div id="successMsgPengaduan" style="display:none;text-align:center;padding:20px;">
+      <div style="font-size:4rem;margin-bottom:16px">✅</div>
+      <h3 style="font-size:1.5rem;font-weight:700;color:var(--text-dark);margin-bottom:12px">Pengaduan Berhasil Dikirim!</h3>
+      <p style="color:var(--text-muted);line-height:1.6">Terima kasih atas partisipasi Anda. Laporan Anda telah kami terima dan akan segera ditindaklanjuti oleh Pemerintah Desa Kauman.</p>
+      <button onclick="location.reload()" class="btn btn-outline" style="margin-top:24px;cursor:pointer">Buat Pengaduan Lain</button>
+    </div>
+  </div>
+</div></section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" />
+          <div class="footer-logo-text">
+            <span class="name" data-desa-nama>Desa Kauman</span>
+            <span class="loc">Kec. Ngoro, Kab. Jombang</span>
+          </div>
+        </div>
+        <p class="footer-desc">Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional yang terus berkembang menuju desa digital.</p>
+        <div class="footer-sosmed">
+          <a href="#" data-sosmed-fb title="Facebook">f</a>
+          <a href="#" data-sosmed-ig title="Instagram">ig</a>
+          <a href="#" data-sosmed-yt title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">MENU</h4>
+        <div class="footer-links">
+          <a href="/index.html">→ Beranda</a>
+          <a href="/profil.html">→ Profil Desa</a>
+          <a href="/infografis.html">→ Infografis</a>
+          <a href="/idm.html">→ IDM</a>
+          <a href="/berita.html">→ Berita</a>
+          <a href="/galeri.html">→ Galeri</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">LAYANAN</h4>
+        <div class="footer-links">
+          <a href="/listing.html">→ Listing UMKM</a>
+          <a href="/belanja.html">→ APBDesa</a>
+          <a href="/ppid.html">→ PPID</a>
+          <a href="/pengaduan.html">→ Pengaduan</a>
+          <a href="/admin">→ Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">KONTAK</h4>
+        <div class="footer-contact">
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span data-desa-telp>(0321) 123456</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pemerintah Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script src="/js/api.js"></script>
+<script src="/js/main.js"></script>
+<script>
+async function submitPengaduan(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnSubmitPengaduan');
+  btn.disabled = true;
+  btn.textContent = 'Mengirim...';
+
+  const payload = {
+    nama: document.getElementById('pengNama').value,
+    nik: document.getElementById('pengNik').value,
+    no_hp: document.getElementById('pengNoHp').value,
+    kategori: document.getElementById('pengKategori').value,
+    isi: document.getElementById('pengIsi').value,
+    lampiran: document.getElementById('pengLampiran').value
+  };
+
+  const res = await API.postPengaduan(payload);
+  if(res) {
+    document.getElementById('pengaduanForm').style.display = 'none';
+    document.getElementById('successMsgPengaduan').style.display = 'block';
+  } else {
+    alert('Gagal mengirim pengaduan. Cek koneksi Anda.');
+    btn.disabled = false;
+    btn.textContent = '📢 Kirim Pengaduan';
+  }
+}
+</script>
+</body>
+</html>

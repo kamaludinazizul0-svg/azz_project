@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layanan Surat - Desa Kauman</title>
+  <meta name="description" content="Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional. Pusat informasi pemerintahan, berita, dan potensi desa." />
+  <meta name="keywords" content="Desa Kauman, Ngoro, Jombang, Jawa Timur, Kampung Jamu, website desa" />
+  <link rel="icon" href="/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-brand">
+      <img src="/images/logo.png" alt="Logo Desa Kauman" class="nav-logo" />
+      <div class="nav-title">
+        <span class="desa-name" data-desa-nama>Desa Kauman</span>
+        <span class="desa-loc">Kab. Jombang, Jawa Timur</span>
+      </div>
+    </a>
+    <div class="nav-menu">
+      <a href="/index.html" class="nav-link">🏠 Beranda</a>
+      <a href="/profil.html" class="nav-link">📋 Profil Desa</a>
+      <a href="/infografis.html" class="nav-link">📊 Infografis</a>
+      <a href="/idm.html" class="nav-link">🏆 IDM</a>
+      <a href="/berita.html" class="nav-link">📰 Berita</a>
+      <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a>
+      <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
+      <a href="/ppid.html" class="nav-link">📂 PPID</a>
+      <a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" >✉️ Layanan Surat</a>
+    </div>
+    <div class="nav-burger" id="navBurger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">🏠 Beranda</a>
+  <a href="/profil.html" class="nav-link">📋 Profil Desa</a>
+  <a href="/infografis.html" class="nav-link">📊 Infografis</a>
+  <a href="/idm.html" class="nav-link">🏆 IDM</a>
+  <a href="/berita.html" class="nav-link">📰 Berita</a>
+  <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a>
+  <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
+  <a href="/ppid.html" class="nav-link">📂 PPID</a>
+  <a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
+</div>
+
+
+<section class="section" style="padding-top:120px">
+  <div class="container" style="max-width:700px">
+    <div class="section-header fade-in text-center">
+      <div class="section-tag">Layanan Publik</div>
+      <h2 class="section-title">Permohonan Surat Online</h2>
+      <p class="section-subtitle">Ajukan permohonan surat pengantar secara online.</p>
+    </div>
+    <div class="admin-card fade-in" style="padding:32px">
+      <form id="suratForm" onsubmit="submitSurat(event)">
+        <div class="form-group">
+          <label class="form-label" style="font-weight:600;margin-bottom:8px;display:block">Nama Lengkap Sesuai KTP *</label>
+          <input type="text" id="sNama" class="form-control" style="width:100%;padding:12px" required />
+        </div>
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label" style="font-weight:600;margin-bottom:8px;display:block">Nomor Induk Kependudukan (NIK) *</label>
+          <input type="text" id="sNik" class="form-control" style="width:100%;padding:12px" pattern="[0-9]{16}" title="NIK harus 16 digit angka" required />
+        </div>
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label" style="font-weight:600;margin-bottom:8px;display:block">Nomor WhatsApp / HP Aktif *</label>
+          <input type="text" id="sWa" class="form-control" style="width:100%;padding:12px" placeholder="Misal: 081234567890" required />
+        </div>
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label" style="font-weight:600;margin-bottom:8px;display:block">Alamat Lengkap *</label>
+          <textarea id="sAlamat" class="form-control" style="width:100%;padding:12px" rows="2" placeholder="Masukkan alamat sesuai domisili..." required></textarea>
+        </div>
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label" style="font-weight:600;margin-bottom:8px;display:block">Jenis Surat yang Dimohon *</label>
+          <select id="sJenis" class="form-control" style="width:100%;padding:12px" required>
+            <option value="">-- Pilih Jenis Surat --</option>
+            <option value="Surat Pengantar Domisili">Surat Pengantar Domisili</option>
+            <option value="Surat Pengantar SKCK">Surat Pengantar SKCK</option>
+            <option value="Surat Keterangan Usaha">Surat Keterangan Usaha (SKU)</option>
+            <option value="Surat Keterangan Tidak Mampu">Surat Keterangan Tidak Mampu (SKTM)</option>
+            <option value="Surat Keterangan Belum Menikah">Surat Keterangan Belum Menikah</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label" style="font-weight:600;margin-bottom:8px;display:block">Tujuan / Keperluan Membuat Surat</label>
+          <textarea id="sKeperluan" class="form-control" style="width:100%;padding:12px" rows="3" placeholder="Misal: Untuk melengkapi berkas melamar pekerjaan..."></textarea>
+        </div>
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label" style="font-weight:600;margin-bottom:8px;display:block">Upload Foto KTP (Gambar/PDF) *</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="sLampiranKtp" class="form-control" placeholder="URL file KTP akan muncul di sini..." style="flex:1;padding:12px" required readonly />
+            <button type="button" class="btn-hero btn-hero-secondary" onclick="const f=document.createElement('input');f.type='file';f.accept='image/*,.pdf';f.onchange=async()=>{this.textContent='Mengunggah...';const fd=new FormData();fd.append('file',f.files[0]);try{const r=await fetch('/api/upload',{method:'POST',body:fd});const d=await r.json();if(d.url) document.getElementById('sLampiranKtp').value=d.url; else throw new Error();}catch(e){alert('Gagal mengunggah');}this.textContent='📂 Upload KTP';};f.click()" style="border:none;cursor:pointer;padding:0 24px">📂 Upload KTP</button>
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px">Wajib melampirkan foto/scan KTP asli.</p>
+        </div>
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label" style="font-weight:600;margin-bottom:8px;display:block">Upload Surat Pengantar RT / Dokumen Pendukung (Gambar/PDF) *</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="sLampiran" class="form-control" placeholder="URL file akan muncul di sini..." style="flex:1;padding:12px" required readonly />
+            <button type="button" class="btn-hero btn-hero-secondary" onclick="const f=document.createElement('input');f.type='file';f.accept='image/*,.pdf,.doc,.docx';f.onchange=async()=>{this.textContent='Mengunggah...';const fd=new FormData();fd.append('file',f.files[0]);try{const r=await fetch('/api/upload',{method:'POST',body:fd});const d=await r.json();if(d.url) document.getElementById('sLampiran').value=d.url; else throw new Error();}catch(e){alert('Gagal mengunggah');}this.textContent='📂 Upload Surat RT';};f.click()" style="border:none;cursor:pointer;padding:0 24px">📂 Upload Surat RT</button>
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px">Wajib melampirkan foto/scan Surat Pengantar dari RT/RW setempat (Gambar/PDF/Word).</p>
+        </div>
+        <div style="margin-top:32px">
+          <button type="submit" class="btn-hero btn-hero-primary" style="width:100%;justify-content:center;border:none;cursor:pointer" id="btnSubmitSurat">Kirim Permohonan Surat ✉️</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" />
+          <div class="footer-logo-text">
+            <span class="name" data-desa-nama>Desa Kauman</span>
+            <span class="loc">Kec. Ngoro, Kab. Jombang</span>
+          </div>
+        </div>
+        <p class="footer-desc">Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional yang terus berkembang menuju desa digital.</p>
+        <div class="footer-sosmed">
+          <a href="#" data-sosmed-fb title="Facebook">f</a>
+          <a href="#" data-sosmed-ig title="Instagram">ig</a>
+          <a href="#" data-sosmed-yt title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">MENU</h4>
+        <div class="footer-links">
+          <a href="/index.html">→ Beranda</a>
+          <a href="/profil.html">→ Profil Desa</a>
+          <a href="/infografis.html">→ Infografis</a>
+          <a href="/idm.html">→ IDM</a>
+          <a href="/berita.html">→ Berita</a>
+          <a href="/galeri.html">→ Galeri</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">LAYANAN</h4>
+        <div class="footer-links">
+          <a href="/listing.html">→ Listing UMKM</a>
+          <a href="/belanja.html">→ APBDesa</a>
+          <a href="/ppid.html">→ PPID</a>
+          <a href="/pengaduan.html">→ Pengaduan</a>
+          <a href="/admin">→ Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">KONTAK</h4>
+        <div class="footer-contact">
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span data-desa-telp>(0321) 123456</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pemerintah Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script src="/js/api.js"></script>
+<script src="/js/main.js"></script>
+<script>
+// ===== BERANDA PAGE LOGIC =====
+document.addEventListener('DOMContentLoaded', async () => {
+
+  // Load Slider
+  const sliderRes = await API.slider();
+  if (sliderRes && sliderRes.length > 0) {
+    const heroSlides = document.getElementById('heroSlides');
+    sliderRes.sort((a, b) => a.urutan - b.urutan);
+    heroSlides.innerHTML = sliderRes.map((s, i) => `
+      <div class="hero-slide ${i === 0 ? 'active' : ''}">
+        <img src="${s.gambar || '/images/hero1.jpg'}" alt="${s.judul}" onerror="this.src='/images/hero1.jpg'" />
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          ${s.subjudul ? `<div class="hero-badge">${s.subjudul}</div>` : ''}
+          <h1 class="hero-title">${s.judul}</h1>
+          <div class="hero-actions">
+            ${s.link ? `<a href="${s.link}" class="btn-hero btn-hero-primary">Selengkapnya</a>` : ''}
+          </div>
+        </div>
+      </div>
+    `).join('');
+    
+    // Generate dots dynamically
+    const dotsContainer = document.querySelector('.hero-dots');
+    if (dotsContainer) {
+      dotsContainer.innerHTML = sliderRes.map((s, i) => `
+        <div class="hero-dot ${i === 0 ? 'active' : ''}" data-slide="${i}"></div>
+      `).join('');
+    }
+
+    // Initialize slider logic
+    if (typeof initHeroSlider === 'function') initHeroSlider();
+  }
+
+  // Load IDM
+  const idm = await API.idm();
+  if (idm) {
+    document.getElementById('idmScore').textContent = idm.skor.toFixed(4);
+    document.getElementById('idmStatus').textContent = idm.status;
+    document.getElementById('iksScore').textContent = idm.iks.toFixed(4);
+    document.getElementById('ikeScore').textContent = idm.ike.toFixed(4);
+    document.getElementById('iklScore').textContent = idm.ikl.toFixed(4);
+  }
+
+  // Load stats
+  const penduduk = await API.penduduk();
+  if (penduduk) {
+    const { jumlah_penduduk, jumlah_kk } = penduduk.statistik;
+    animateCounter(document.getElementById('statPenduduk'), jumlah_penduduk);
+    animateCounter(document.getElementById('statKK'), jumlah_kk);
+  }
+
+  // Load desa desc
+  const desa = await API.desa();
+  if (desa) {
+    const descEl = document.getElementById('desaDeskripsi');
+    if (descEl) descEl.textContent = desa.deskripsi_singkat;
+  }
+
+  // Load berita
+  const beritaRes = await API.berita({ limit: 3 });
+  const beritaGrid = document.getElementById('beritaGrid');
+  if (beritaRes?.data?.length) {
+    beritaGrid.innerHTML = beritaRes.data.map(b => `
+      <a href="/berita-detail.html?slug=${b.slug}" class="card berita-card fade-in" style="display:block;text-decoration:none;color:inherit;">
+        <img class="card-img" src="${b.gambar || '/images/hero1.jpg'}" alt="${b.judul}" onerror="this.src='${imgPlaceholder(b.kategori)}'" />
+        <div class="card-body">
+          <div class="card-kategori">${b.kategori}</div>
+          <div class="card-title">${b.judul}</div>
+          <div class="card-summary">${b.ringkasan}</div>
+          <div class="card-meta">
+            <span class="date">📅 ${formatDate(b.tanggal)}</span>
+            <span class="views">👁️ ${b.dilihat || 0}</span>
+          </div>
+        </div>
+      </a>
+    `).join('');
+    initScrollAnimations();
+  }
+
+  // Load listing (3 items)
+  const listingData = await API.listing();
+  const listingGrid = document.getElementById('listingGrid');
+  if (listingData?.length) {
+    const items = listingData.slice(0, 3);
+    listingGrid.innerHTML = items.map(l => `
+      <div class="card listing-card fade-in">
+        <img class="card-img" src="${l.gambar || '/images/jamu.jpg'}" alt="${l.nama}" onerror="this.src='${imgPlaceholder(l.kategori)}'" />
+        <div class="card-body">
+          <div class="card-kategori">${l.kategori}</div>
+          <div class="card-title">${l.nama}</div>
+          <div class="card-desc">${l.deskripsi}</div>
+          <div class="card-price">${l.harga}</div>
+          <div class="card-footer">
+            <a href="https://api.whatsapp.com/send?phone=${(l.kontak?.replace(/[^0-9]/g,'')||'').replace(/^0/,'62')}&text=${encodeURIComponent('Halo, saya tertarik dengan produk ' + l.nama + ' yang ada di website Desa Kauman.')}" target="_blank" class="btn btn-whatsapp btn-sm">💬 Hubungi</a>
+            <span style="font-size:0.8rem;color:var(--text-muted);margin-left:auto">👤 ${l.pemilik}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    initScrollAnimations();
+  }
+
+  // Load perangkat (show first 4 chief positions)
+  const perangkatData = await API.perangkat();
+  const perangkatGrid = document.getElementById('perangkatGrid');
+  if (perangkatData?.length) {
+    const items = perangkatData.slice(0, 4);
+    perangkatGrid.innerHTML = items.map(p => `
+      <div class="perangkat-card fade-in">
+        <div class="perangkat-foto">
+          <img src="${p.foto}" alt="${p.nama}" onerror="this.outerHTML='<div class=perangkat-foto style=display:flex;align-items:center;justify-content:center;font-size:3rem>👤</div>'" />
+        </div>
+        <div class="perangkat-nama">${p.nama}</div>
+        <div class="perangkat-jabatan">${p.jabatan}</div>
+      </div>
+    `).join('');
+    initScrollAnimations();
+  }
+
+  // Init maps
+  initMaps(desa);
+});
+
+function initMaps(desa) {
+  const coords = desa?.koordinat || { lat: -7.6285, lng: 112.3921 };
+
+  // Main map
+  const mapEl = document.getElementById('map');
+  if (mapEl) {
+    const query = "Kantor+Desa+Kauman,+Ngoro,+Jombang,+Jawa+Timur";
+    mapEl.innerHTML = `<div style="position:relative; width:100%; height:100%;">
+      <iframe width="100%" height="100%" style="border:0; border-radius:8px;" loading="lazy" allowfullscreen src="https://maps.google.com/maps?q=${query}&hl=id&z=16&output=embed"></iframe>
+      <a href="https://maps.google.com/maps?q=${query}" target="_blank" style="position:absolute; bottom:15px; left:50%; transform:translateX(-50%); background:#0d6efd; padding:10px 20px; border-radius:30px; box-shadow:0 4px 10px rgba(0,0,0,0.3); font-weight:bold; color:#fff; text-decoration:none; font-size:14px; z-index:10; display:flex; align-items:center; gap:8px; transition:0.3s;" onmouseover="this.style.background='#0b5ed7';this.style.transform='translateX(-50%) translateY(-3px)'" onmouseout="this.style.background='#0d6efd';this.style.transform='translateX(-50%) translateY(0)'"><i class="fas fa-map-marker-alt"></i> Buka Google Maps</a>
+    </div>`;
+  }
+
+  // Kontak map
+  const mapKontakEl = document.getElementById('mapKontak');
+  if (mapKontakEl) {
+    const query = "Kantor+Desa+Kauman,+Ngoro,+Jombang,+Jawa+Timur";
+    mapKontakEl.innerHTML = `<div style="position:relative; width:100%; height:100%;">
+      <iframe width="100%" height="100%" style="border:0; border-radius:8px;" loading="lazy" allowfullscreen src="https://maps.google.com/maps?q=${query}&hl=id&z=16&output=embed"></iframe>
+      <a href="https://maps.google.com/maps?q=${query}" target="_blank" style="position:absolute; bottom:15px; left:50%; transform:translateX(-50%); background:#0d6efd; padding:10px 20px; border-radius:30px; box-shadow:0 4px 10px rgba(0,0,0,0.3); font-weight:bold; color:#fff; text-decoration:none; font-size:14px; z-index:10; display:flex; align-items:center; gap:8px; transition:0.3s;" onmouseover="this.style.background='#0b5ed7';this.style.transform='translateX(-50%) translateY(-3px)'" onmouseout="this.style.background='#0d6efd';this.style.transform='translateX(-50%) translateY(0)'"><i class="fas fa-map-marker-alt"></i> Buka Google Maps</a>
+    </div>`;
+  }
+}
+</script>
+
+<script>
+async function submitSurat(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnSubmitSurat');
+  btn.disabled = true;
+  btn.textContent = 'Mengirim...';
+  const payload = {
+    nama: document.getElementById('sNama').value,
+    nik: document.getElementById('sNik').value,
+    alamat: document.getElementById('sAlamat').value,
+    no_wa: document.getElementById('sWa').value,
+    jenis_surat: document.getElementById('sJenis').value,
+    keperluan: document.getElementById('sKeperluan').value,
+    lampiran_ktp: document.getElementById('sLampiranKtp').value,
+    lampiran: document.getElementById('sLampiran').value
+  };
+  const res = await API.postSurat(payload);
+  if(res) {
+    // Generate WhatsApp link
+    let adminPhone = '6281234567890'; // default if not found
+    try {
+      const desa = await API.desa();
+      if (desa?.kontak?.telepon) {
+        adminPhone = desa.kontak.telepon.replace(/[^0-9]/g, '');
+        if (adminPhone.startsWith('0')) adminPhone = '62' + adminPhone.slice(1);
+      }
+    } catch(err) { console.error('Gagal mengambil kontak desa', err); }
+    
+    const msg = `Halo Admin Desa Kauman,\n\nSaya telah mengajukan permohonan surat melalui website.\n\n*Nama:* ${payload.nama}\n*NIK:* ${payload.nik}\n*Jenis Surat:* ${payload.jenis_surat}\n*Keperluan:* ${payload.keperluan}\n\nMohon segera diproses. Terima kasih.`;
+    const waLink = `https://wa.me/${adminPhone}?text=${encodeURIComponent(msg)}`;
+    window.open(waLink, '_blank');
+
+    document.getElementById('suratForm').innerHTML = '<div style="text-align:center;padding:20px"><div style="font-size:4rem;margin-bottom:16px">✅</div><h3 style="font-size:1.5rem;font-weight:700;color:var(--text-dark);margin-bottom:12px">Permohonan Berhasil Terkirim!</h3><p style="color:var(--text-muted);line-height:1.6">Permohonan surat Anda sedang kami proses.</p><button onclick="location.reload()" class="btn-hero btn-hero-secondary" style="margin-top:24px;border:none;cursor:pointer">Buat Permohonan Lain</button></div>';
+  } else {
+    alert('Gagal mengirim permohonan. Cek koneksi Anda.');
+    btn.disabled = false;
+    btn.textContent = 'Kirim Permohonan Surat ✉️';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layanan Surat - Admin Desa Kauman</title>
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/css/admin.css" />
+  <style>
+    @media print {
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; }
+      #printArea { position: absolute; left: 0; top: 0; width: 100%; }
+      .admin-layout { display: block; }
+      .sidebar, .topbar { display: none; }
+    }
+    .surat-print { display:none; background:#fff; color:#000; padding:40px; font-family:'Times New Roman', Times, serif; }
+    @media print { .surat-print { display:block; } }
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Umum</div>
+      <a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      
+      <div class="sidebar-section-label">Konten Website</div>
+      <a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Hero Slider</a>
+      <a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a>
+      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
+      <a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri Foto</a>
+      <a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing UMKM</a>
+      
+      <div class="sidebar-section-label">Layanan Publik</div>
+      <a href="/admin/surat.html" class="sidebar-link active"><span class="icon">✉️</span> Layanan Surat</a>
+      
+      <div class="sidebar-section-label">Profil Desa</div>
+      <a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil Desa</a>
+      <a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat Desa</a>
+      <a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Data Penduduk</a>
+      
+      <div class="sidebar-section-label">Keuangan & Administrasi</div>
+      <a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a>
+      <a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> Data IDM</a>
+      <a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> Dokumen PPID</a>
+      
+      <div class="sidebar-section-label">Pengaturan</div>
+      <a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Administrator</span><span class="role">Admin</span></div></div>
+      <div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:0.78rem">🌐 Website</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪 Keluar</button></div>
+    </div>
+  </aside>
+  <main class="admin-main">
+    <div class="topbar">
+      <div class="topbar-left"><div class="topbar-title">Layanan Surat</div><div class="topbar-breadcrumb"><span>Admin</span> / <span>Layanan Surat</span></div></div>
+      <div class="topbar-right"><a href="/layanan-surat.html" target="_blank" class="topbar-btn topbar-view-site">🌐 Lihat Form Website</a></div>
+    </div>
+    <div class="page-content">
+      <div class="page-header-admin">
+        <div><h1>✉️ Layanan Surat Online</h1><p>Kelola dan setujui permohonan surat masuk dari warga</p></div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-header"><h3>Permohonan Masuk</h3>
+          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari nama atau NIK..." style="max-width:250px" oninput="filterData()" />
+        </div>
+        <div class="admin-card-body"><div class="admin-table-wrap">
+          <table class="admin-table"><thead><tr><th>Tanggal Masuk</th><th>Nama Pemohon</th><th>NIK</th><th>Jenis Surat</th><th>Lampiran</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="dataTable"><tr><td colspan="6" style="text-align:center;padding:40px">⏳ Memuat...</td></tr></tbody></table>
+        </div></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal Edit Status -->
+<div class="admin-modal-overlay" id="formModal">
+  <div class="admin-modal" style="max-width:500px">
+    <div class="admin-modal-header"><span class="admin-modal-title">Detail Permohonan Surat</span><button class="modal-close-btn" onclick="closeModal('formModal')">✕</button></div>
+    <div class="admin-modal-body">
+      <div style="background:var(--bg-color);padding:16px;border-radius:12px;margin-bottom:20px;font-size:0.9rem">
+        <table style="width:100%;font-size:0.9rem">
+          <tr><td style="width:120px;padding:4px 0;color:var(--text-muted)">Nama</td><td>: <span id="detNama" style="font-weight:600"></span></td></tr>
+          <tr><td style="padding:4px 0;color:var(--text-muted)">NIK</td><td>: <span id="detNik"></span></td></tr>
+          <tr><td style="padding:4px 0;color:var(--text-muted)">No. WA</td><td>: <span id="detWa"></span></td></tr>
+          <tr><td style="padding:4px 0;color:var(--text-muted)">Alamat</td><td>: <span id="detAlamat"></span></td></tr>
+          <tr><td style="padding:4px 0;color:var(--text-muted)">Jenis Surat</td><td>: <span id="detJenis"></span></td></tr>
+          <tr><td style="padding:4px 0;color:var(--text-muted)">Tujuan/Keperluan</td><td>: <span id="detKeperluan"></span></td></tr>
+          <tr><td style="padding:4px 0;color:var(--text-muted)">Tanggal Masuk</td><td>: <span id="detTgl"></span></td></tr>
+        </table>
+        <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:16px"><span style="color:var(--text-muted);display:block;margin-bottom:8px;font-weight:600">Dokumen Lampiran KTP:</span><div id="previewLampiranKtpContainer" style="background:#f9f9f9;border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center;min-height:100px;display:flex;align-items:center;justify-content:center"><span style="color:var(--text-muted)">Memuat lampiran KTP...</span></div></div>
+        <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:16px"><span style="color:var(--text-muted);display:block;margin-bottom:8px;font-weight:600">Dokumen Lampiran Pengantar RT:</span><div id="previewLampiranContainer" style="background:#f9f9f9;border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center;min-height:100px;display:flex;align-items:center;justify-content:center"><span style="color:var(--text-muted)">Memuat lampiran RT...</span></div></div>
+      </div>
+      
+      <form id="dataForm" onsubmit="saveData(event)">
+        <input type="hidden" id="editId" />
+        <div class="form-group"><label class="form-label">Ubah Status</label>
+          <select id="fStatus" class="form-control">
+            <option value="Menunggu">⏳ Menunggu Pemeriksaan</option>
+            <option value="Disetujui">✅ Disetujui / Selesai</option>
+            <option value="Ditolak">❌ Ditolak (Data Tidak Valid)</option>
+          </select>
+        </div>
+        <div class="form-group" id="grpUploadHasil" style="background:#f0f9ff;padding:12px;border-radius:8px;border:1px solid #bae6fd">
+          <label class="form-label" style="color:#0369a1;font-weight:600">Upload Hasil Surat (Word/PDF)</label>
+          <p style="font-size:0.8rem;color:#0ea5e9;margin-bottom:8px">File yang diupload akan <b>dikirim otomatis</b> ke WhatsApp pemohon.</p>
+          <div style="display:flex;gap:8px">
+            <input type="file" class="form-control" accept=".pdf,.doc,.docx" onchange="uploadHasilSurat(this)" style="flex:1" />
+          </div>
+          <input type="hidden" id="fHasilSurat" />
+          <div id="linkHasil" style="margin-top:8px;font-size:0.85rem;word-break:break-all"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Keterangan / Catatan Admin</label><textarea id="fCatatan" class="form-control" rows="2" placeholder="Misal: Silakan ambil di balai desa..."></textarea></div>
+        
+        <div class="admin-modal-footer" style="padding:16px 0 0;border-top:1px solid var(--border)">
+          <button type="button" class="btn-admin btn-light" onclick="hubungiWa()" id="btnWa" style="background-color:#25D366;color:#fff;border:none;margin-right:8px;display:none">💬 Chat WA</button>
+          <button type="button" class="btn-admin btn-light" onclick="printSurat()" id="btnPrint" style="margin-right:auto">🖨️ Cetak Surat</button>
+          <button type="button" class="btn-admin btn-light" onclick="closeModal('formModal')">Batal</button>
+          <button type="submit" class="btn-admin btn-primary-admin">💾 Simpan Status</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Universal Preview -->
+<div class="admin-modal-overlay" id="previewModal">
+  <div class="admin-modal" style="max-width:800px;width:95%">
+    <div class="admin-modal-header"><span class="admin-modal-title">Preview Lampiran</span><button class="modal-close-btn" onclick="closeModal('previewModal')">✕</button></div>
+    <div class="admin-modal-body" style="padding:16px;background:#f5f5f5;">
+      <div id="universalPreviewContainer" style="text-align:center;min-height:300px;display:flex;align-items:center;justify-content:center"></div>
+    </div>
+  </div>
+</div>
+
+<div id="printArea" class="surat-print"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+let allData = [];
+document.addEventListener('DOMContentLoaded', loadData);
+
+async function loadData() {
+  allData = await adminFetch('/surat') || [];
+  renderTable();
+}
+
+function filterData() { renderTable(); }
+
+function renderTable() {
+  const tbody = document.getElementById('dataTable');
+  const term = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = allData.filter(d => (d.nama||'').toLowerCase().includes(term) || (d.nik||'').includes(term));
+  
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted)">Belum ada permohonan surat masuk.</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = filtered.map((d) => {
+    let statusClass = 'badge bg-amber-100 text-amber-800';
+    if(d.status === 'Disetujui') statusClass = 'badge bg-green-100 text-green-800';
+    if(d.status === 'Ditolak') statusClass = 'badge bg-red-100 text-red-800';
+
+    return `
+    <tr>
+      <td style="white-space:nowrap;font-size:0.85rem;color:var(--text-muted)">${new Date(d.created_at).toLocaleString('id-ID')}</td>
+      <td style="font-weight:600">${d.nama}</td>
+      <td>${d.nik}</td>
+      <td>${d.jenis_surat}</td>
+      <td>
+        ${d.lampiran_ktp ? `<button onclick="openPreview('${d.lampiran_ktp}')" class="badge bg-blue-100 text-blue-800" style="text-decoration:none;margin-bottom:4px;display:inline-block;border:none;cursor:pointer">🖼️ KTP</button><br>` : ''}
+        ${d.lampiran ? `<button onclick="openPreview('${d.lampiran}')" class="badge bg-blue-100 text-blue-800" style="text-decoration:none;display:inline-block;border:none;cursor:pointer">📄 Surat RT</button>` : '-'}
+      </td>
+      <td><span class="${statusClass}">${d.status}</span></td>
+      <td>
+        <button class="btn-admin btn-light btn-sm-admin" onclick="openEdit(${d.id})">🔍 Proses</button>
+        <button class="btn-admin btn-danger btn-sm-admin" onclick="deleteData(${d.id})">🗑️</button>
+      </td>
+    </tr>
+  `}).join('');
+}
+
+function openPreview(url) {
+  const cont = document.getElementById('universalPreviewContainer');
+  cont.innerHTML = '⏳ Memuat...';
+  openModal('previewModal');
+  const ext = url.toLowerCase().split('.').pop();
+  if(ext === 'pdf') {
+    cont.innerHTML = `<iframe src="${url}" style="width:100%;height:600px;border:none;border-radius:4px"></iframe>`;
+  } else if (ext === 'docx') {
+    fetch(url).then(r => r.arrayBuffer()).then(buf => mammoth.convertToHtml({arrayBuffer: buf})).then(res => {
+      cont.innerHTML = `<div style="background:#fff;padding:40px;text-align:left;height:600px;overflow-y:auto;border-radius:4px;border:1px solid #ddd;color:#333;width:100%">${res.value}</div>`;
+    }).catch(e => {
+      cont.innerHTML = `<div style="color:red">Gagal memuat file Word. File mungkin rusak.</div>`;
+    });
+  } else if (ext === 'doc') {
+    cont.innerHTML = `<div style="color:var(--text-muted)">File dengan format <b>.doc</b> (format lama) tidak dapat dipreview langsung di browser.<br><br>Untuk melihatnya, silakan <a href="${url}" target="_blank" class="btn-admin btn-primary-admin" style="display:inline-block;margin-top:16px;text-decoration:none">Unduh File Word</a><br><br><i>Saran: Minta warga gunakan format <b>.docx</b> atau <b>.pdf</b> agar bisa langsung tampil.</i></div>`;
+  } else {
+    cont.innerHTML = `<img src="${url}" style="max-width:100%;max-height:600px;border-radius:4px;object-fit:contain" />`;
+  }
+}
+
+let currentSurat = null;
+function openEdit(id) {
+  const d = allData.find(x => x.id == id);
+  if(!d) return;
+  currentSurat = d;
+  document.getElementById('editId').value = d.id;
+  document.getElementById('detNama').textContent = d.nama;
+  document.getElementById('detNik').textContent = d.nik;
+  document.getElementById('detWa').textContent = d.no_wa || '-';
+  document.getElementById('detAlamat').textContent = d.alamat || '-';
+  document.getElementById('detJenis').textContent = d.jenis_surat;
+  document.getElementById('detKeperluan').textContent = d.keperluan || '-';
+
+  const renderLampiran = (url, contId) => {
+    const cont = document.getElementById(contId);
+    if(url) {
+      cont.style.display = 'block';
+      const ext = url.toLowerCase().split('.').pop();
+      if(ext === 'pdf') {
+        cont.innerHTML = `<iframe src="${url}" style="width:100%;height:350px;border:none;border-radius:4px"></iframe>`;
+      } else if (ext === 'docx') {
+        cont.innerHTML = `<div style="text-align:center;padding:20px;">⏳ Memuat file Word...</div>`;
+        fetch(url)
+          .then(r => r.arrayBuffer())
+          .then(buf => mammoth.convertToHtml({arrayBuffer: buf}))
+          .then(res => {
+            cont.innerHTML = `<div style="background:#fff;padding:20px;text-align:left;height:350px;overflow-y:auto;border-radius:4px;border:1px solid #ddd;color:#333;">${res.value}</div>`;
+          })
+          .catch(e => {
+            cont.innerHTML = `<div style="color:red;padding:20px">Gagal memuat file Word. <a href="${url}" target="_blank">Download file</a></div>`;
+          });
+      } else if (ext === 'doc') {
+        cont.innerHTML = `<div style="padding:20px;color:var(--text-muted)">File .doc lawas tidak bisa dipreview. <a href="${url}" target="_blank" class="btn-admin btn-primary-admin" style="text-decoration:none;display:inline-block;margin-top:8px">📄 Download File Word</a></div>`;
+      } else {
+        cont.innerHTML = `<a href="${url}" target="_blank"><img src="${url}" style="max-width:100%;max-height:350px;border-radius:4px;object-fit:contain" /></a>`;
+      }
+    } else {
+      cont.style.display = 'none';
+    }
+  };
+
+  renderLampiran(d.lampiran_ktp, 'previewLampiranKtpContainer');
+  renderLampiran(d.lampiran, 'previewLampiranContainer');
+  document.getElementById('detTgl').textContent = new Date(d.created_at).toLocaleString('id-ID');
+  
+  document.getElementById('fStatus').value = d.status || 'Menunggu';
+  document.getElementById('fCatatan').value = d.catatan || '';
+  
+  document.getElementById('fHasilSurat').value = d.hasil_surat || '';
+  document.getElementById('linkHasil').innerHTML = d.hasil_surat ? `<a href="${d.hasil_surat}" target="_blank">📄 Lihat File Hasil Saat Ini</a>` : '';
+  
+  document.getElementById('btnPrint').style.display = (d.status === 'Disetujui') ? 'block' : 'none';
+  document.getElementById('btnWa').style.display = d.no_wa ? 'inline-block' : 'none';
+  
+  openModal('formModal');
+}
+
+function hubungiWa() {
+  if(!currentSurat || !currentSurat.no_wa) return;
+  // Bersihkan nomor (hilangkan selain angka)
+  let phone = currentSurat.no_wa.replace(/\D/g, '');
+  // Ubah awalan 0 menjadi 62
+  if (phone.startsWith('0')) phone = '62' + phone.substring(1);
+  
+  let msgString = `Halo Bpk/Ibu ${currentSurat.nama},\nKami dari Admin Desa Kauman ingin menginformasikan terkait permohonan surat Anda (${currentSurat.jenis_surat}) yang diajukan pada ${new Date(currentSurat.created_at).toLocaleDateString('id-ID')}.\n\n`;
+  
+  // Jika file hasil surat sudah ada
+  const currentFile = document.getElementById('fHasilSurat').value;
+  if (currentFile) {
+    const fullUrl = window.location.origin + currentFile;
+    msgString = `Halo Bpk/Ibu ${currentSurat.nama},\n\nPermohonan surat Anda (${currentSurat.jenis_surat}) telah Selesai diproses dan disetujui.\nSilakan unduh dokumen hasil surat melalui tautan berikut:\n\n${fullUrl}\n\nTerima kasih.\n-- Admin Desa Kauman`;
+  }
+  
+  const msg = encodeURIComponent(msgString);
+  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+}
+
+async function uploadHasilSurat(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  
+  // Ubah tampilan saat loading
+  const originalLink = document.getElementById('linkHasil').innerHTML;
+  document.getElementById('linkHasil').innerHTML = '⏳ <i>Mengunggah file...</i>';
+  input.disabled = true;
+  
+  // uploadFile function dari admin.js
+  const res = await uploadFile(file);
+  
+  input.disabled = false;
+  if (res && res.url) {
+    document.getElementById('fHasilSurat').value = res.url;
+    document.getElementById('linkHasil').innerHTML = `<a href="${res.url}" target="_blank" style="color:#16a34a;font-weight:bold;text-decoration:none">✅ File berhasil diunggah (Lihat)</a>`;
+    showToast('File hasil surat berhasil diunggah');
+  } else {
+    document.getElementById('linkHasil').innerHTML = originalLink;
+  }
+}
+
+async function saveData(e) {
+  e.preventDefault();
+  const id = document.getElementById('editId').value;
+  const payload = {
+    status: document.getElementById('fStatus').value,
+    catatan: document.getElementById('fCatatan').value,
+    hasil_surat: document.getElementById('fHasilSurat').value
+  };
+  const res = await adminFetch(`/surat/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+  if(res) {
+    showToast('Status surat berhasil diperbarui!');
+    closeModal('formModal');
+    loadData();
+  }
+}
+
+async function deleteData(id) {
+  if(!confirm('Hapus permohonan surat ini secara permanen?')) return;
+  const res = await adminFetch(`/surat/${id}`, { method: 'DELETE' });
+  if(res) {
+    showToast('Permohonan dihapus');
+    loadData();
+  }
+}
+
+function printSurat() {
+  if(!currentSurat) return;
+  const printArea = document.getElementById('printArea');
+  
+  // Format tanggal surat
+  const tgl = new Date().toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'});
+  
+  printArea.innerHTML = `
+    <div style="text-align:center;border-bottom:3px solid #000;padding-bottom:20px;margin-bottom:30px">
+      <h2 style="margin:0;font-size:24px">PEMERINTAH KABUPATEN JOMBANG</h2>
+      <h3 style="margin:5px 0 0;font-size:20px">KECAMATAN NGORO</h3>
+      <h1 style="margin:5px 0 0;font-size:28px">KANTOR KEPALA DESA KAUMAN</h1>
+      <p style="margin:5px 0 0;font-size:14px">Jl. Kauman No. 01, Ngoro, Jombang - Kode Pos: 61473</p>
+    </div>
+    
+    <div style="text-align:center;margin-bottom:30px">
+      <h3 style="margin:0;text-decoration:underline;text-transform:uppercase">${currentSurat.jenis_surat}</h3>
+      <p style="margin:5px 0 0">Nomor: 470 / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / 415.XX / ${new Date().getFullYear()}</p>
+    </div>
+    
+    <p style="text-align:justify;line-height:1.6">Yang bertanda tangan di bawah ini, Kepala Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, menerangkan dengan sebenarnya bahwa:</p>
+    
+    <table style="width:100%;margin:20px 0 20px 30px;line-height:1.6">
+      <tr><td style="width:200px">Nama Lengkap</td><td style="width:10px">:</td><td><strong>${currentSurat.nama}</strong></td></tr>
+      <tr><td>NIK</td><td>:</td><td>${currentSurat.nik}</td></tr>
+      <tr><td>Alamat</td><td>:</td><td>${currentSurat.alamat || '-'}</td></tr>
+      <tr><td>Keperluan</td><td>:</td><td>${currentSurat.keperluan || '-'}</td></tr>
+    </table>
+    
+    <p style="text-align:justify;line-height:1.6">Orang tersebut benar-benar penduduk Desa Kauman dan surat keterangan ini dibuat untuk melengkapi persyaratan administrasi yang bersangkutan.</p>
+    <p style="text-align:justify;line-height:1.6">Demikian surat keterangan ini dibuat agar dapat dipergunakan sebagaimana mestinya.</p>
+    
+    <div style="margin-top:60px;float:right;text-align:center;width:300px">
+      <p style="margin:0 0 80px">Kauman, ${tgl}<br>Kepala Desa Kauman</p>
+      <p style="margin:0;font-weight:bold;text-decoration:underline">________________________</p>
+    </div>
+  `;
+  window.print();
+}
+</script>
+</body></html>

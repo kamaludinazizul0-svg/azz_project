@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Galeri Foto - Admin</title><link rel="icon" href="/images/logo.png" /><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/admin/css/admin.css" /></head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div><nav class="sidebar-nav"><div class="sidebar-section-label">Umum</div><a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a><div class="sidebar-section-label">Konten</div><a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Slider</a><a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a><a href="/admin/galeri.html" class="sidebar-link active"><span class="icon">📷</span> Galeri</a><a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing</a>
+      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
+      
+      <div class="sidebar-section-label">Layanan Publik</div>
+      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a><div class="sidebar-section-label">Profil</div><a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil</a><a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat</a><a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Penduduk</a><div class="sidebar-section-label">Keuangan</div><a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a><a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> IDM</a><a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> PPID</a><div class="sidebar-section-label">Pengaturan</div><a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a></nav><div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Admin</span><span class="role">Admin</span></div></div><div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:.78rem">🌐</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪</button></div></div></aside>
+  <main class="admin-main">
+    <div class="topbar"><div class="topbar-left"><div class="topbar-title">Galeri Foto</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div></div>
+    <div class="page-content">
+      <div class="page-header-admin"><div><h1>📷 Galeri Foto</h1><p>Kelola foto dan gambar desa</p></div><button class="btn-admin btn-primary-admin" onclick="openAdd()">➕ Tambah Foto</button></div>
+      <div id="galeriGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px"></div>
+    </div>
+  </main>
+</div>
+<div class="admin-modal-overlay" id="formModal"><div class="admin-modal"><div class="admin-modal-header"><span class="admin-modal-title">Tambah Foto</span><button class="modal-close-btn" onclick="closeModal('formModal')">✕</button></div><div class="admin-modal-body"><form id="dataForm" onsubmit="saveData(event)">
+  <div class="form-group"><label class="form-label">Judul *</label><input type="text" id="fJudul" class="form-control" required /></div>
+  <div class="form-group"><label class="form-label">URL Gambar *</label>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="fGambar" class="form-control" required placeholder="/images/galeri/..." style="flex:1" />
+      <div style="position:relative;overflow:hidden;flex-shrink:0">
+        <button type="button" class="btn-admin btn-light" style="pointer-events:none">📁 Upload</button>
+        <input type="file" accept="image/*" style="position:absolute;top:0;left:0;opacity:0;width:100%;height:100%;cursor:pointer" onchange="handleUploadUI(this, 'fGambar')" />
+      </div>
+    </div>
+  </div>
+  <div class="form-group"><label class="form-label">Deskripsi</label><textarea id="fDeskripsi" class="form-control" rows="2"></textarea></div>
+  <div class="admin-modal-footer" style="padding:16px 0 0;border-top:1px solid var(--border)"><button type="button" class="btn-admin btn-light" onclick="closeModal('formModal')">Batal</button><button type="submit" class="btn-admin btn-primary-admin">💾 Simpan</button></div>
+</form></div></div></div>
+<script src="/admin/js/admin.js"></script>
+<script>
+let allData=[];
+document.addEventListener('DOMContentLoaded',loadData);
+async function loadData(){allData=await adminFetch('/galeri')||[];const g=document.getElementById('galeriGrid');
+  if(!allData.length){g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-muted)" class="empty-state"><div class="icon">📷</div><h3>Belum ada foto</h3><p>Klik "Tambah Foto" untuk mulai</p></div>';return;}
+  g.innerHTML=allData.map(f=>`<div class="admin-card" style="overflow:hidden;position:relative;group">
+    <img src="${f.gambar}" style="width:100%;height:200px;object-fit:cover" onerror="this.src='/images/hero1.jpg'" />
+    <div style="padding:16px"><div style="font-weight:600;font-size:.92rem;margin-bottom:4px">${f.judul}</div><div style="font-size:.8rem;color:var(--text-muted)">${f.deskripsi||''}</div></div>
+    <button onclick="hapus(${f.id})" class="btn-admin btn-danger btn-sm-admin" style="position:absolute;top:8px;right:8px">🗑️</button>
+  </div>`).join('');}
+function openAdd(){document.getElementById('dataForm').reset();openModal('formModal');}
+async function saveData(e){e.preventDefault();const body={judul:document.getElementById('fJudul').value,gambar:document.getElementById('fGambar').value,deskripsi:document.getElementById('fDeskripsi').value};const r=await adminFetch('/galeri',{method:'POST',body:JSON.stringify(body)});if(r){showToast('Foto ditambahkan');closeModal('formModal');loadData();}}
+function hapus(id){confirmDialog('Hapus foto ini?',async()=>{await adminFetch(`/galeri/${id}`,{method:'DELETE'});showToast('Foto dihapus');loadData();});}
+</script>
+</body></html>

@@ -1,0 +1,41 @@
+[
+  {
+    "id": 5,
+    "nama": "Sempol",
+    "kategori": "Lainnya",
+    "deskripsi": "Destinasi wisata alam berbasis sungai yang dikelola oleh BUMDes Kauman Sejahtera. Menawarkan keindahan alam pedesaan yang asri dengan berbagai fasilitas lengkap.",
+    "harga": "5000",
+    "kontak": "082134224830",
+    "alamat": "Dusun Ngagel, Desa Kauman",
+    "gambar": "/uploads/1784640243130.jpeg",
+    "pemilik": "FAINA ",
+    "sertifikasi": "-",
+    "aktif": true
+  },
+  {
+    "id": 6,
+    "nama": "Jamu Pahitan Pak Wahid",
+    "kategori": "Jamu Tradisional",
+    "deskripsi": "Jamu pahitan dari daun sambiloto dan bahan herbal lainnya. Berkhasiat untuk menjaga stamina, mengurangi kadar gula darah, dan menjaga kesehatan tubuh secara menyeluruh.",
+    "harga": "Rp 7.000 - Rp 20.000",
+    "kontak": "085678901234",
+    "alamat": "Dusun Kauman RT 04 RW 02",
+    "gambar": "/images/listing/jamu-pahitan.jpg",
+    "pemilik": "Wahid",
+    "sertifikasi": "Proses PIRT",
+    "aktif": true
+  },
+  {
+    "nama": "MIAYAM",
+    "kategori": "Lainnya",
+    "harga": "",
+    "deskripsi": "MIAYAM DANDI",
+    "pemilik": "DANDI",
+    "kontak": "085604731861",
+    "alamat": "Dusun Ngagel, Desa Kauman",
+    "gambar": "/uploads/1784801942965.jpeg",
+    "sertifikasi": "",
+    "id": 1784801944682,
+    "aktif": true
+  }
+]

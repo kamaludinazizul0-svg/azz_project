@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "judul": "Selamat Datang di Website Resmi Desa Kauman",
+    "subjudul": "Kampung Jamu Tradisional - Sumber Informasi Desa Kauman",
+    "gambar": "/uploads/1784606150349.jpeg",
+    "link": "/",
+    "aktif": true,
+    "urutan": 2
+  },
+  {
+    "judul": "KKN 2026",
+    "subjudul": "KKN JOSJIS",
+    "gambar": "/uploads/1784342794029.jpeg",
+    "link": "/",
+    "urutan": 1,
+    "id": 1784342803007,
+    "aktif": true
+  }
+]

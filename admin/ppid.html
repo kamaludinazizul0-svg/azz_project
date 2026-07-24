@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Kelola PPID - Admin</title><link rel="icon" href="/images/logo.png" /><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/admin/css/admin.css" /></head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div><nav class="sidebar-nav"><div class="sidebar-section-label">Umum</div><a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a><div class="sidebar-section-label">Konten</div><a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Slider</a><a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a><a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri</a><a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing</a>
+      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
+      
+      <div class="sidebar-section-label">Layanan Publik</div>
+      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a><div class="sidebar-section-label">Profil</div><a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil</a><a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat</a><a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Penduduk</a><div class="sidebar-section-label">Keuangan</div><a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a><a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> IDM</a><a href="/admin/ppid.html" class="sidebar-link active"><span class="icon">📂</span> PPID</a><div class="sidebar-section-label">Pengaturan</div><a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a></nav><div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Admin</span><span class="role">Admin</span></div></div><div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:.78rem">🌐</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪</button></div></div></aside>
+  <main class="admin-main">
+    <div class="topbar"><div class="topbar-left"><div class="topbar-title">Kelola Dokumen PPID</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div></div>
+    <div class="page-content">
+      <div class="page-header-admin"><div><h1>📂 Dokumen PPID</h1><p>Kelola dokumen informasi publik</p></div><button class="btn-admin btn-primary-admin" onclick="openAdd()">➕ Tambah Dokumen</button></div>
+      <div class="admin-card"><div class="admin-card-body"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>No</th><th>Nama Dokumen</th><th>Kategori</th><th>Tanggal</th><th>Aksi</th></tr></thead><tbody id="dataTable"><tr><td colspan="5" style="text-align:center;padding:40px">⏳ Memuat...</td></tr></tbody></table></div></div></div>
+    </div>
+  </main>
+</div>
+<div class="admin-modal-overlay" id="formModal"><div class="admin-modal"><div class="admin-modal-header"><span class="admin-modal-title" id="modalTitle">Tambah Dokumen</span><button class="modal-close-btn" onclick="closeModal('formModal')">✕</button></div><div class="admin-modal-body"><form id="dataForm" onsubmit="saveData(event)"><input type="hidden" id="editId" />
+  <div class="form-group"><label class="form-label">Nama Dokumen *</label><input type="text" id="fNama" class="form-control" required /></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="form-group"><label class="form-label">Kategori</label><select id="fKategori" class="form-control"><option>Peraturan Desa</option><option>Laporan Keuangan</option><option>Perencanaan</option><option>Aset Desa</option></select></div>
+    <div class="form-group"><label class="form-label">Tanggal</label><input type="date" id="fTanggal" class="form-control" /></div>
+  </div>
+  <div class="form-group"><label class="form-label">Deskripsi</label><textarea id="fDeskripsi" class="form-control" rows="2"></textarea></div>
+  <div class="form-group"><label class="form-label">URL File</label>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="fFile" class="form-control" placeholder="/uploads/dokumen/..." style="flex:1" />
+      <div style="position:relative;overflow:hidden;flex-shrink:0">
+        <button type="button" class="btn-admin btn-light" style="pointer-events:none">📁 Upload Dokumen</button>
+        <input type="file" accept="*" style="position:absolute;top:0;left:0;opacity:0;width:100%;height:100%;cursor:pointer" onchange="handleUploadUI(this, 'fFile')" />
+      </div>
+    </div>
+  </div>
+  <div class="admin-modal-footer" style="padding:16px 0 0;border-top:1px solid var(--border)"><button type="button" class="btn-admin btn-light" onclick="closeModal('formModal')">Batal</button><button type="submit" class="btn-admin btn-primary-admin">💾 Simpan</button></div>
+</form></div></div></div>
+<script src="/admin/js/admin.js"></script>
+<script>
+let allData=[];
+document.addEventListener('DOMContentLoaded',loadData);
+async function loadData(){allData=await adminFetch('/ppid')||[];const t=document.getElementById('dataTable');if(!allData.length){t.innerHTML='<tr><td colspan="5" style="text-align:center;padding:40px">Belum ada dokumen</td></tr>';return;}t.innerHTML=allData.map((d,i)=>`<tr><td>${i+1}</td><td><div style="font-weight:600">${d.nama}</div><div style="font-size:.8rem;color:var(--text-muted);margin-top:2px">${d.deskripsi||''}</div></td><td><span class="badge badge-info">${d.kategori}</span></td><td style="white-space:nowrap;font-size:.85rem">${formatDate(d.tanggal)}</td><td><div style="display:flex;gap:6px"><button class="btn-admin btn-warning btn-sm-admin" onclick="openEdit(${d.id})">✏️</button><button class="btn-admin btn-danger btn-sm-admin" onclick="hapus(${d.id})">🗑️</button></div></td></tr>`).join('');}
+function openAdd(){document.getElementById('modalTitle').textContent='Tambah Dokumen';document.getElementById('dataForm').reset();document.getElementById('editId').value='';document.getElementById('fTanggal').value=new Date().toISOString().split('T')[0];openModal('formModal');}
+function openEdit(id){const d=allData.find(x=>x.id===id);if(!d)return;document.getElementById('modalTitle').textContent='Edit Dokumen';document.getElementById('editId').value=d.id;document.getElementById('fNama').value=d.nama;document.getElementById('fKategori').value=d.kategori;document.getElementById('fTanggal').value=d.tanggal;document.getElementById('fDeskripsi').value=d.deskripsi||'';document.getElementById('fFile').value=d.file||'';openModal('formModal');}
+async function saveData(e){e.preventDefault();const id=document.getElementById('editId').value;const body={nama:document.getElementById('fNama').value,kategori:document.getElementById('fKategori').value,tanggal:document.getElementById('fTanggal').value,deskripsi:document.getElementById('fDeskripsi').value,file:document.getElementById('fFile').value};const r=id?await adminFetch(`/ppid/${id}`,{method:'PUT',body:JSON.stringify(body)}):await adminFetch('/ppid',{method:'POST',body:JSON.stringify(body)});if(r){showToast('Dokumen berhasil disimpan');closeModal('formModal');loadData();}}
+function hapus(id){confirmDialog('Hapus dokumen ini?',async()=>{await adminFetch(`/ppid/${id}`,{method:'DELETE'});showToast('Dokumen dihapus');loadData();});}
+</script>
+</body></html>

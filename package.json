@@ -1,0 +1,22 @@
+{
+  "name": "desa-kauman-website",
+  "version": "1.0.0",
+  "description": "Website Resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon --ignore server/data/ --ignore server/uploads/ server/server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.23.1",
+    "puppeteer": "^25.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

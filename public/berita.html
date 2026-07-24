@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Berita Desa Kauman - Kecamatan Ngoro, Kabupaten Jombang</title>
+  <meta name="description" content="Berita terbaru Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Informasi pemerintahan, prestasi, pariwisata, UMKM, infrastruktur, dan kesehatan desa." />
+  <link rel="icon" href="/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .berita-page-section { padding: 60px 0 80px; }
+    .berita-toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:32px; flex-wrap:wrap; }
+    .berita-count { font-size:0.9rem; color:var(--text-muted); font-weight:500; }
+    .berita-count strong { color:var(--primary); }
+    .berita-search-wrap { display:flex; align-items:center; gap:8px; background:#fff; border:1.5px solid var(--border); border-radius:100px; padding:8px 18px; transition:var(--transition); }
+    .berita-search-wrap:focus-within { border-color:var(--primary); box-shadow:0 0 0 3px rgba(46,125,50,0.1); }
+    .berita-search-wrap input { border:none; outline:none; font-family:'Outfit',sans-serif; font-size:0.88rem; color:var(--text-dark); background:transparent; width:200px; }
+    .berita-search-wrap input::placeholder { color:var(--text-light); }
+    .berita-empty { text-align:center; padding:80px 20px; color:var(--text-muted); }
+    .berita-empty .empty-icon { font-size:4rem; margin-bottom:16px; }
+    .berita-empty h3 { font-size:1.2rem; font-weight:700; color:var(--text-dark); margin-bottom:8px; }
+    .berita-grid-wrap { min-height:400px; }
+    .berita-grid a.berita-card { display:block; text-decoration:none; color:inherit; }
+    .skeleton-card { height:360px; border-radius:var(--radius-lg); }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-brand">
+      <img src="/images/logo.png" alt="Logo Desa Kauman" class="nav-logo" />
+      <div class="nav-title">
+        <span class="desa-name" data-desa-nama>Desa Kauman</span>
+        <span class="desa-loc">Kab. Jombang, Jawa Timur</span>
+      </div>
+    </a>
+    <div class="nav-menu">
+      <a href="/index.html" class="nav-link">🏠 Beranda</a>
+      <a href="/profil.html" class="nav-link">📋 Profil Desa</a>
+      <a href="/infografis.html" class="nav-link">📊 Infografis</a>
+      <a href="/idm.html" class="nav-link">🏆 IDM</a>
+      <a href="/berita.html" class="nav-link active">📰 Berita</a>
+      <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a>
+      <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
+      <a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'" >✉️ Layanan Surat</a>
+    </div>
+    <div class="nav-burger" id="navBurger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">🏠 Beranda</a>
+  <a href="/profil.html" class="nav-link">📋 Profil Desa</a>
+  <a href="/infografis.html" class="nav-link">📊 Infografis</a>
+  <a href="/idm.html" class="nav-link">🏆 IDM</a>
+  <a href="/berita.html" class="nav-link">📰 Berita</a>
+  <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a>
+  <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
+  <a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
+</div>
+
+<!-- ===== PAGE HEADER ===== -->
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/index.html">🏠 Beranda</a>
+      <span>�</span>
+      <span>Berita</span>
+    </div>
+    <h1>📰 Berita Desa Kauman</h1>
+    <p>Informasi terbaru seputar kegiatan, pembangunan, dan kehidupan masyarakat Desa Kauman</p>
+  </div>
+</div>
+
+<!-- ===== BERITA SECTION ===== -->
+<section class="berita-page-section">
+  <div class="container">
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" data-kategori="Semua">Semua</button>
+      <button class="filter-tab" data-kategori="Pemerintahan">?🏛️ Pemerintahan</button>
+      <button class="filter-tab" data-kategori="Prestasi">🏆 Prestasi</button>
+      <button class="filter-tab" data-kategori="Pariwisata">🏞️ Pariwisata</button>
+      <button class="filter-tab" data-kategori="UMKM">🏪 UMKM</button>
+      <button class="filter-tab" data-kategori="Infrastruktur">🏗️ Infrastruktur</button>
+      <button class="filter-tab" data-kategori="Kesehatan">🏥 Kesehatan</button>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="berita-toolbar">
+      <div class="berita-count" id="beritaCount">Memuat berita...</div>
+      <div class="berita-search-wrap">
+        <span>??</span>
+        <input type="text" id="searchInput" placeholder="Cari berita..." autocomplete="off" />
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="berita-grid-wrap">
+      <div class="berita-grid" id="beritaGrid">
+        <div class="card berita-card skeleton skeleton-card"></div>
+        <div class="card berita-card skeleton skeleton-card"></div>
+        <div class="card berita-card skeleton skeleton-card"></div>
+        <div class="card berita-card skeleton skeleton-card"></div>
+        <div class="card berita-card skeleton skeleton-card"></div>
+        <div class="card berita-card skeleton skeleton-card"></div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" />
+          <div class="footer-logo-text">
+            <span class="name" data-desa-nama>Desa Kauman</span>
+            <span class="loc">Kec. Ngoro, Kab. Jombang</span>
+          </div>
+        </div>
+        <p class="footer-desc">Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional yang terus berkembang menuju desa digital.</p>
+        <div class="footer-sosmed">
+          <a href="#" data-sosmed-fb title="Facebook">f</a>
+          <a href="#" data-sosmed-ig title="Instagram">ig</a>
+          <a href="#" data-sosmed-yt title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">MENU</h4>
+        <div class="footer-links">
+          <a href="/index.html">→ Beranda</a>
+          <a href="/profil.html">→ Profil Desa</a>
+          <a href="/infografis.html">→ Infografis</a>
+          <a href="/idm.html">→ IDM</a>
+          <a href="/berita.html">→ Berita</a>
+          <a href="/galeri.html">→ Galeri</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">LAYANAN</h4>
+        <div class="footer-links">
+          <a href="/listing.html">→ Listing UMKM</a>
+          <a href="/belanja.html">→ APBDesa</a>
+          <a href="/ppid.html">→ PPID</a>
+          <a href="/pengaduan.html">→ Pengaduan</a>
+          <a href="/admin">→ Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">KONTAK</h4>
+        <div class="footer-contact">
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span data-desa-telp>(0321) 123456</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pemerintah Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop">?</button>
+
+<script src="/js/api.js"></script>
+<script src="/js/main.js"></script>
+<script>
+// ===== BERITA PAGE LOGIC =====
+const LIMIT_PER_PAGE = 6;
+
+var state = {
+  allBerita: [],
+  filtered: [],
+  kategori: 'Semua',
+  searchQuery: '',
+  currentPage: 1,
+  isLoading: false,
+};
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderBeritaCard(b) {
+  var gambar = b.gambar || imgPlaceholder(b.kategori || 'Berita');
+  return '<a href="/berita-detail.html?slug=' + encodeURIComponent(b.slug) + '" class="card berita-card fade-in">'
+    + '<img class="card-img" src="' + gambar + '" alt="' + escHtml(b.judul) + '" loading="lazy" onerror="this.src=\'' + imgPlaceholder(b.kategori || 'Berita') + '\'" />'
+    + '<div class="card-body">'
+    + '<div class="card-kategori">' + escHtml(b.kategori) + '</div>'
+    + '<div class="card-title">' + escHtml(b.judul) + '</div>'
+    + '<div class="card-summary">' + escHtml(b.ringkasan || '') + '</div>'
+    + '<div class="card-meta"><span class="date">' + formatDate(b.tanggal) + '</span><span class="views">?' + ((b.dilihat || 0).toLocaleString('id-ID')) + '</span></div>'
+    + '</div></a>';
+}
+
+function applyFilters() {
+  var data = state.allBerita.slice();
+  if (state.kategori !== 'Semua') {
+    data = data.filter(function(b) { return b.kategori === state.kategori; });
+  }
+  if (state.searchQuery.trim()) {
+    var q = state.searchQuery.trim().toLowerCase();
+    data = data.filter(function(b) {
+      return (b.judul||'').toLowerCase().includes(q) || (b.ringkasan||'').toLowerCase().includes(q) || (b.kategori||'').toLowerCase().includes(q);
+    });
+  }
+  state.filtered = data;
+  state.currentPage = 1;
+}
+
+function renderGrid() {
+  var grid = document.getElementById('beritaGrid');
+  var start = (state.currentPage - 1) * LIMIT_PER_PAGE;
+  var pageData = state.filtered.slice(start, start + LIMIT_PER_PAGE);
+
+  if (!pageData.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1"><div class="berita-empty"><div class="empty-icon">??</div><h3>Tidak Ada Berita</h3><p>Tidak ada berita yang sesuai dengan filter yang dipilih.</p></div></div>';
+    document.getElementById('beritaCount').innerHTML = 'Menampilkan <strong>0</strong> berita';
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+
+  grid.innerHTML = pageData.map(renderBeritaCard).join('');
+  initScrollAnimations();
+
+  var total = state.filtered.length;
+  var end = Math.min(start + LIMIT_PER_PAGE, total);
+  document.getElementById('beritaCount').innerHTML = 'Menampilkan <strong>' + (start + 1) + '�' + end + '</strong> dari <strong>' + total + '</strong> berita';
+  renderPagination(total);
+}
+
+function buildPageRange(current, total) {
+  if (total <= 7) { var r=[]; for(var i=1;i<=total;i++) r.push(i); return r; }
+  if (current <= 4) return [1,2,3,4,5,'�',total];
+  if (current >= total-3) return [1,'�',total-4,total-3,total-2,total-1,total];
+  return [1,'�',current-1,current,current+1,'�',total];
+}
+
+function renderPagination(total) {
+  var pag = document.getElementById('pagination');
+  var totalPages = Math.ceil(total / LIMIT_PER_PAGE);
+  if (totalPages <= 1) { pag.innerHTML = ''; return; }
+
+  var html = '';
+  html += '<button class="page-btn" ' + (state.currentPage===1?'disabled style="opacity:0.4;cursor:not-allowed"':'') + ' data-page="' + (state.currentPage-1) + '">�</button>';
+
+  buildPageRange(state.currentPage, totalPages).forEach(function(p) {
+    if (p === '�') {
+      html += '<button class="page-btn" disabled style="cursor:default">�</button>';
+    } else {
+      html += '<button class="page-btn ' + (p===state.currentPage?'active':'') + '" data-page="' + p + '">' + p + '</button>';
+    }
+  });
+
+  html += '<button class="page-btn" ' + (state.currentPage===totalPages?'disabled style="opacity:0.4;cursor:not-allowed"':'') + ' data-page="' + (state.currentPage+1) + '">�</button>';
+  pag.innerHTML = html;
+
+  pag.querySelectorAll('[data-page]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var p = parseInt(btn.getAttribute('data-page'));
+      if (isNaN(p) || p < 1 || p > totalPages) return;
+      state.currentPage = p;
+      renderGrid();
+      var sec = document.querySelector('.berita-page-section');
+      if (sec) window.scrollTo({ top: sec.offsetTop - 80, behavior: 'smooth' });
+    });
+  });
+}
+
+async function loadBerita() {
+  if (state.isLoading) return;
+  state.isLoading = true;
+  var grid = document.getElementById('beritaGrid');
+  grid.innerHTML = '<div class="card berita-card skeleton skeleton-card"></div>'.repeat(6);
+  document.getElementById('pagination').innerHTML = '';
+  document.getElementById('beritaCount').textContent = 'Memuat berita...';
+
+  var res = await API.berita({ limit: 100, page: 1 });
+  state.isLoading = false;
+
+  if (!res || !res.data) {
+    grid.innerHTML = '<div style="grid-column:1/-1"><div class="berita-empty"><div class="empty-icon">??</div><h3>Gagal Memuat</h3><p>Tidak dapat terhubung ke server. Silakan coba lagi.</p></div></div>';
+    document.getElementById('beritaCount').textContent = 'Gagal memuat berita';
+    return;
+  }
+
+  state.allBerita = res.data;
+  applyFilters();
+  renderGrid();
+}
+
+document.getElementById('filterTabs').addEventListener('click', function(e) {
+  var tab = e.target.closest('.filter-tab');
+  if (!tab) return;
+  document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+  tab.classList.add('active');
+  state.kategori = tab.dataset.kategori;
+  applyFilters();
+  renderGrid();
+});
+
+var searchTimer;
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(function() {
+    state.searchQuery = e.target.value;
+    applyFilters();
+    renderGrid();
+  }, 320);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadBerita();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin - Desa Kauman</title>
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/css/admin.css" />
+</head>
+<body>
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" />
+      <div class="sidebar-brand-text">
+        <span class="name">Desa Kauman</span>
+        <span class="role">Panel Administrasi</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Umum</div>
+      <a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      
+      <div class="sidebar-section-label">Konten Website</div>
+      <a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Hero Slider</a>
+      <a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a>
+      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
+      <a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri Foto</a>
+      <a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing UMKM</a>
+      
+      <div class="sidebar-section-label">Layanan Publik</div>
+      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a>
+      
+      <div class="sidebar-section-label">Profil Desa</div>
+      <a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil Desa</a>
+      <a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat Desa</a>
+      <a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Data Penduduk</a>
+      
+      <div class="sidebar-section-label">Keuangan & Administrasi</div>
+      <a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a>
+      <a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> Data IDM</a>
+      <a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> Dokumen PPID</a>
+      
+      <div class="sidebar-section-label">Pengaturan</div>
+      <a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar" data-admin-initial>A</div>
+        <div class="sidebar-user-info">
+          <span class="uname" data-admin-nama>Administrator</span>
+          <span class="role">Admin</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:0.78rem">🌐 Website</a>
+        <button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪 Keluar</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Dashboard</div>
+        <div class="topbar-breadcrumb">
+          <span>Admin</span> / <span>Dashboard</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Lihat Website</a>
+        <button class="topbar-btn" data-logout>🚪 Keluar</button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="page-content">
+      <!-- Welcome -->
+      <div class="dash-welcome">
+        <div>
+          <h2>Selamat Datang, <span data-admin-nama>Admin</span>! 👋</h2>
+          <p>Panel administrasi Website Resmi Desa Kauman. Kelola semua konten website dari sini.</p>
+        </div>
+        <div style="font-size:3rem;opacity:0.8">🏡</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="dash-stats" id="dashStats">
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon green">📰</div>
+          <div>
+            <div class="dash-stat-num" id="statBerita">-</div>
+            <div class="dash-stat-label">Total Berita</div>
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon yellow">🏪</div>
+          <div>
+            <div class="dash-stat-num" id="statListing">-</div>
+            <div class="dash-stat-label">Listing UMKM</div>
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon blue">👥</div>
+          <div>
+            <div class="dash-stat-num" id="statPenduduk">-</div>
+            <div class="dash-stat-label">Jumlah Penduduk</div>
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon purple">🏠</div>
+          <div>
+            <div class="dash-stat-num" id="statKK">-</div>
+            <div class="dash-stat-label">Kepala Keluarga</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid: Recent Berita + Quick Links -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+        <!-- Recent Berita -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>📰 Berita Terbaru</h3>
+            <a href="/admin/berita.html" class="btn-admin btn-light btn-sm-admin">Kelola Berita</a>
+          </div>
+          <div class="admin-card-body" id="recentBerita">
+            <div style="text-align:center;padding:20px;color:var(--text-muted)">⏳ Memuat...</div>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <!-- Quick Access -->
+          <div class="admin-card">
+            <div class="admin-card-header"><h3>⚡ Akses Cepat</h3></div>
+            <div class="admin-card-body" style="padding:16px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <a href="/admin/berita.html" class="btn-admin btn-primary-admin" style="justify-content:center;font-size:0.82rem">➕ Tambah Berita</a>
+                <a href="/admin/slider.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">🖼️ Edit Slider</a>
+                <a href="/admin/perangkat.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">👥 Perangkat</a>
+                <a href="/admin/galeri.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">📷 Galeri</a>
+                <a href="/admin/listing.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">🏪 UMKM</a>
+                <a href="/admin/pengaturan.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">⚙️ Pengaturan</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info Desa -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>🏡 Info Desa</h3>
+              <a href="/admin/profil-desa.html" class="btn-admin btn-light btn-sm-admin">Edit</a>
+            </div>
+            <div class="admin-card-body" id="infoDesaDash">
+              <div style="text-align:center;padding:20px;color:var(--text-muted)">⏳ Memuat...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/admin/js/admin.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  // Load stats
+  const stats = await adminFetch('/stats');
+  if (stats) {
+    document.getElementById('statBerita').textContent = stats.total_berita;
+    document.getElementById('statListing').textContent = stats.total_listing;
+    document.getElementById('statPenduduk').textContent = Number(stats.jumlah_penduduk).toLocaleString('id-ID');
+    document.getElementById('statKK').textContent = Number(stats.jumlah_kk).toLocaleString('id-ID');
+  }
+
+  // Load recent berita
+  const beritaRes = await adminFetch('/berita?limit=5');
+  const beritaEl = document.getElementById('recentBerita');
+  if (beritaRes?.data?.length) {
+    beritaEl.innerHTML = beritaRes.data.map(b => `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${b.judul}</div>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px">${formatDate(b.tanggal)} • ${b.kategori}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <a href="/admin/berita.html?edit=${b.id}" class="btn-admin btn-warning btn-sm-admin">✏️</a>
+        </div>
+      </div>
+    `).join('') + `<div style="text-align:center;margin-top:12px"><a href="/admin/berita.html" class="btn-admin btn-light btn-sm-admin">Lihat Semua →</a></div>`;
+  } else {
+    beritaEl.innerHTML = `<div class="empty-state"><div class="icon">📰</div><h3>Belum ada berita</h3></div>`;
+  }
+
+  // Load desa info
+  const desa = await adminFetch('/desa');
+  const desaEl = document.getElementById('infoDesaDash');
+  if (desa) {
+    desaEl.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:0.88rem">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Nama Desa</span><span style="font-weight:600">Desa ${desa.nama_desa}</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Kepala Desa</span><span style="font-weight:600">${desa.kepala_desa}</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Kecamatan</span><span style="font-weight:600">Kec. ${desa.kecamatan}</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Kabupaten</span><span style="font-weight:600">Kab. ${desa.kabupaten}</span></div>
+      </div>
+    `;
+  }
+});
+</script>
+</body>
+</html>

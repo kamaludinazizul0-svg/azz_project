@@ -1,0 +1,417 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infografis Desa Kauman - Data &amp; Statistik Penduduk</title>
+  <meta name="description" content="Infografis dan statistik kependudukan Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Data penduduk berdasarkan usia, pendidikan, agama, dan pekerjaan." />
+  <link rel="icon" href="/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-brand">
+      <img src="/images/logo.png" alt="Logo Desa Kauman" class="nav-logo" />
+      <div class="nav-title">
+        <span class="desa-name" data-desa-nama>Desa Kauman</span>
+        <span class="desa-loc">Kab. Jombang, Jawa Timur</span>
+      </div>
+    </a>
+    <div class="nav-menu">
+      <a href="/index.html" class="nav-link">&#127968; Beranda</a>
+      <a href="/profil.html" class="nav-link">&#128203; Profil Desa</a>
+      <a href="/infografis.html" class="nav-link active">&#128202; Infografis</a>
+      <a href="/idm.html" class="nav-link">&#127942; IDM</a>
+      <a href="/berita.html" class="nav-link">&#128240; Berita</a>
+      <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">&#127978; Listing</a>
+      <a href="/belanja.html" class="nav-link">&#128176; APBDesa</a>
+      <a href="/ppid.html" class="nav-link">&#128194; PPID</a>
+      <a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'" >✉️ Layanan Surat</a>
+    </div>
+    <div class="nav-burger" id="navBurger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">&#127968; Beranda</a>
+  <a href="/profil.html" class="nav-link">&#128203; Profil Desa</a>
+  <a href="/infografis.html" class="nav-link active">&#128202; Infografis</a>
+  <a href="/idm.html" class="nav-link">&#127942; IDM</a>
+  <a href="/berita.html" class="nav-link">&#128240; Berita</a>
+  <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">&#127978; Listing</a>
+  <a href="/belanja.html" class="nav-link">&#128176; APBDesa</a>
+  <a href="/ppid.html" class="nav-link">&#128194; PPID</a>
+  <a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
+</div>
+
+<!-- ===== PAGE HEADER ===== -->
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/index.html" style="color:rgba(255,255,255,0.8)">Home</a>
+      <span style="opacity:0.5">&rsaquo;</span>
+      <span>Infografis</span>
+    </div>
+    <h1>Infografis Desa Kauman</h1>
+    <p>Data dan statistik kependudukan Desa Kauman dalam visualisasi yang informatif dan mudah dipahami</p>
+  </div>
+</div>
+
+<!-- ===== STATS OVERVIEW ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">Statistik Penduduk</div>
+      <h2 class="section-title">Ringkasan Data Kependudukan</h2>
+      <p class="section-subtitle">Data terkini jumlah penduduk Desa Kauman berdasarkan hasil pendataan</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" class="fade-in" id="statsOverview">
+      <!-- Total Penduduk -->
+      <div style="background:linear-gradient(135deg,#1b5e20,#2e7d32);border-radius:var(--radius-lg);padding:28px;color:#fff;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:2.4rem;margin-bottom:10px">&#128101;</div>
+        <div style="font-size:2.2rem;font-weight:800;color:#ffb300;line-height:1" id="statTotal">—</div>
+        <div style="font-size:0.82rem;opacity:0.85;margin-top:6px;font-weight:500">Total Penduduk</div>
+      </div>
+      <!-- Laki-laki -->
+      <div style="background:#fff;border-radius:var(--radius-lg);padding:28px;text-align:center;box-shadow:var(--shadow-sm);border:1px solid var(--border);border-top:4px solid #1565c0">
+        <div style="font-size:2.4rem;margin-bottom:10px">&#128104;</div>
+        <div style="font-size:2.2rem;font-weight:800;color:#1565c0;line-height:1" id="statLaki">—</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-weight:500">Laki-laki</div>
+      </div>
+      <!-- Perempuan -->
+      <div style="background:#fff;border-radius:var(--radius-lg);padding:28px;text-align:center;box-shadow:var(--shadow-sm);border:1px solid var(--border);border-top:4px solid #880e4f">
+        <div style="font-size:2.4rem;margin-bottom:10px">&#128105;</div>
+        <div style="font-size:2.2rem;font-weight:800;color:#880e4f;line-height:1" id="statPerempuan">—</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-weight:500">Perempuan</div>
+      </div>
+      <!-- KK -->
+      <div style="background:#fff;border-radius:var(--radius-lg);padding:28px;text-align:center;box-shadow:var(--shadow-sm);border:1px solid var(--border);border-top:4px solid #e65100">
+        <div style="font-size:2.4rem;margin-bottom:10px">&#127968;</div>
+        <div style="font-size:2.2rem;font-weight:800;color:#e65100;line-height:1" id="statKK">—</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-weight:500">Kepala Keluarga</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CHARTS ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">Visualisasi Data</div>
+      <h2 class="section-title">Grafik Kependudukan</h2>
+      <p class="section-subtitle">Komposisi penduduk Desa Kauman berdasarkan kelompok umur, pendidikan, agama, dan pekerjaan</p>
+    </div>
+    <div class="charts-grid fade-in">
+
+      <!-- Chart 1: Kelompok Umur (Bar) -->
+      <div class="chart-card">
+        <div class="chart-title">&#128200; Kelompok Umur</div>
+        <div style="position:relative;height:280px">
+          <canvas id="chartUmur"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Pendidikan (Doughnut) -->
+      <div class="chart-card">
+        <div class="chart-title">&#127979; Tingkat Pendidikan</div>
+        <div style="position:relative;height:280px">
+          <canvas id="chartPendidikan"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Agama (Doughnut) -->
+      <div class="chart-card">
+        <div class="chart-title">&#9740;&#65039; Agama</div>
+        <div style="position:relative;height:280px">
+          <canvas id="chartAgama"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 4: Pekerjaan (Bar) -->
+      <div class="chart-card">
+        <div class="chart-title">&#128188; Pekerjaan</div>
+        <div style="position:relative;height:280px">
+          <canvas id="chartPekerjaan"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== GENDER COMPARISON ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">Perbandingan</div>
+      <h2 class="section-title">Rasio Jenis Kelamin</h2>
+      <p class="section-subtitle">Perbandingan proporsi penduduk laki-laki dan perempuan Desa Kauman</p>
+    </div>
+    <div style="max-width:640px;margin:0 auto" class="fade-in">
+      <div style="background:#fff;border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow-sm);border:1px solid var(--border)">
+        <!-- Progress bars -->
+        <div style="margin-bottom:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-weight:700;color:#1565c0">Laki-laki</span>
+            <span style="font-weight:800;color:#1565c0;font-size:1.1rem" id="pctLaki">—%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="barLaki" style="width:0%;background:#1565c0;transition:width 1.2s ease"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-weight:700;color:#880e4f">Perempuan</span>
+            <span style="font-weight:800;color:#880e4f;font-size:1.1rem" id="pctPerempuan">—%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="barPerempuan" style="width:0%;background:#880e4f;transition:width 1.2s ease"></div>
+          </div>
+        </div>
+        <p style="text-align:center;color:var(--text-muted);font-size:0.85rem;margin-top:24px" id="genderNote">Memuat data...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" />
+          <div class="footer-logo-text">
+            <span class="name" data-desa-nama>Desa Kauman</span>
+            <span class="loc">Kec. Ngoro, Kab. Jombang</span>
+          </div>
+        </div>
+        <p class="footer-desc">Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional yang terus berkembang menuju desa digital.</p>
+        <div class="footer-sosmed">
+          <a href="#" data-sosmed-fb title="Facebook">f</a>
+          <a href="#" data-sosmed-ig title="Instagram">ig</a>
+          <a href="#" data-sosmed-yt title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">MENU</h4>
+        <div class="footer-links">
+          <a href="/index.html">→ Beranda</a>
+          <a href="/profil.html">→ Profil Desa</a>
+          <a href="/infografis.html">→ Infografis</a>
+          <a href="/idm.html">→ IDM</a>
+          <a href="/berita.html">→ Berita</a>
+          <a href="/galeri.html">→ Galeri</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">LAYANAN</h4>
+        <div class="footer-links">
+          <a href="/listing.html">→ Listing UMKM</a>
+          <a href="/belanja.html">→ APBDesa</a>
+          <a href="/ppid.html">→ PPID</a>
+          <a href="/pengaduan.html">→ Pengaduan</a>
+          <a href="/admin">→ Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">KONTAK</h4>
+        <div class="footer-contact">
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span data-desa-telp>(0321) 123456</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pemerintah Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop">&#8593;</button>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/main.js"></script>
+<script>
+// Chart color palettes
+var GREEN_COLORS = ['#1b5e20','#2e7d32','#388e3c','#4caf50','#66bb6a','#81c784','#a5d6a7','#c8e6c9'];
+var ACCENT_COLORS = ['#2e7d32','#1565c0','#6a1b9a','#e65100','#004d40','#880e4f','#f57f17','#37474f'];
+var DOUGHNUT_GREEN = ['#1b5e20','#2e7d32','#4caf50','#81c784','#a5d6a7','#c8e6c9','#e8f5e9','#66bb6a'];
+
+Chart.defaults.font.family = "'Outfit', sans-serif";
+Chart.defaults.plugins.legend.labels.font = { family: "'Outfit', sans-serif", weight: '600' };
+
+function makeBar(id, labels, data, colors, xLabel) {
+  var ctx = document.getElementById(id);
+  if (!ctx) return;
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: colors,
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) { return ' ' + ctx.parsed.y.toLocaleString('id') + ' jiwa'; }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 11 }, maxRotation: 35 }
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(0,0,0,0.06)' },
+          ticks: { font: { size: 11 } }
+        }
+      }
+    }
+  });
+}
+
+function makeDoughnut(id, labels, data, colors) {
+  var ctx = document.getElementById(id);
+  if (!ctx) return;
+  return new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: colors,
+        borderWidth: 2,
+        borderColor: '#fff',
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { padding: 12, font: { size: 11 }, boxWidth: 14 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              var total = ctx.dataset.data.reduce(function(a,b){return a+b;},0);
+              var pct = total ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
+              return ' ' + ctx.label + ': ' + ctx.parsed.toLocaleString('id') + ' (' + pct + '%)';
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+  var penduduk = await API.penduduk();
+  if (!penduduk) return;
+
+  var stat = penduduk.statistik || {};
+  var total = stat.jumlah_penduduk || 0;
+  var laki  = stat.laki_laki      || 0;
+  var perempuan = stat.perempuan  || 0;
+  var kk    = stat.jumlah_kk      || 0;
+
+  // Stats cards
+  var fmt = function(n){ return n ? n.toLocaleString('id') : '—'; };
+  document.getElementById('statTotal').textContent     = fmt(total);
+  document.getElementById('statLaki').textContent      = fmt(laki);
+  document.getElementById('statPerempuan').textContent = fmt(perempuan);
+  document.getElementById('statKK').textContent        = fmt(kk);
+
+  // Gender bars
+  if (total > 0) {
+    var pLaki = ((laki / total) * 100).toFixed(1);
+    var pPerempuan = ((perempuan / total) * 100).toFixed(1);
+    document.getElementById('pctLaki').textContent = pLaki + '%';
+    document.getElementById('pctPerempuan').textContent = pPerempuan + '%';
+    setTimeout(function(){
+      document.getElementById('barLaki').style.width = pLaki + '%';
+      document.getElementById('barPerempuan').style.width = pPerempuan + '%';
+    }, 400);
+    document.getElementById('genderNote').textContent =
+      'Rasio laki-laki : perempuan = ' + pLaki + '% : ' + pPerempuan + '% dari total ' + fmt(total) + ' jiwa';
+  }
+
+  // Chart: Kelompok Umur
+  var umurData = penduduk.kelompok_umur || [];
+  if (umurData.length) {
+    makeBar('chartUmur',
+      umurData.map(function(d){ return d.kelompok || d.label; }),
+      umurData.map(function(d){ return d.jumlah; }),
+      GREEN_COLORS
+    );
+  }
+
+  // Chart: Pendidikan
+  var pendidikanData = penduduk.pendidikan || [];
+  if (pendidikanData.length) {
+    makeDoughnut('chartPendidikan',
+      pendidikanData.map(function(d){ return d.tingkat || d.label; }),
+      pendidikanData.map(function(d){ return d.jumlah; }),
+      DOUGHNUT_GREEN
+    );
+  }
+
+  // Chart: Agama
+  var agamaData = penduduk.agama || [];
+  if (agamaData.length) {
+    makeDoughnut('chartAgama',
+      agamaData.map(function(d){ return d.agama || d.label; }),
+      agamaData.map(function(d){ return d.jumlah; }),
+      ACCENT_COLORS
+    );
+  }
+
+  // Chart: Pekerjaan
+  var pekerjaanData = penduduk.pekerjaan || [];
+  if (pekerjaanData.length) {
+    makeBar('chartPekerjaan',
+      pekerjaanData.map(function(d){ return d.pekerjaan || d.label; }),
+      pekerjaanData.map(function(d){ return d.jumlah; }),
+      GREEN_COLORS.slice().reverse()
+    );
+  }
+
+  if (typeof initScrollAnimations === 'function') initScrollAnimations();
+});
+</script>
+</body>
+</html>

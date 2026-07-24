@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galeri Desa Kauman - Kecamatan Ngoro, Kabupaten Jombang</title>
+  <meta name="description" content="Galeri foto Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang." />
+  <link rel="icon" href="/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .berita-page-section { padding: 60px 0 80px; }
+    .berita-toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:32px; flex-wrap:wrap; }
+    .berita-count { font-size:0.9rem; color:var(--text-muted); font-weight:500; }
+    .berita-count strong { color:var(--primary); }
+    .berita-search-wrap { display:flex; align-items:center; gap:8px; background:#fff; border:1.5px solid var(--border); border-radius:100px; padding:8px 18px; transition:var(--transition); }
+    .berita-search-wrap:focus-within { border-color:var(--primary); box-shadow:0 0 0 3px rgba(46,125,50,0.1); }
+    .berita-search-wrap input { border:none; outline:none; font-family:'Outfit',sans-serif; font-size:0.88rem; color:var(--text-dark); background:transparent; width:200px; }
+    .berita-search-wrap input::placeholder { color:var(--text-light); }
+    .berita-empty { text-align:center; padding:80px 20px; color:var(--text-muted); }
+    .berita-empty .empty-icon { font-size:4rem; margin-bottom:16px; }
+    .berita-empty h3 { font-size:1.2rem; font-weight:700; color:var(--text-dark); margin-bottom:8px; }
+    .berita-grid-wrap { min-height:400px; }
+    .berita-grid a.berita-card { display:block; text-decoration:none; color:inherit; }
+    .skeleton-card { height:360px; border-radius:var(--radius-lg); }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-brand">
+      <img src="/images/logo.png" alt="Logo Desa Kauman" class="nav-logo" />
+      <div class="nav-title">
+        <span class="desa-name" data-desa-nama>Desa Kauman</span>
+        <span class="desa-loc">Kab. Jombang, Jawa Timur</span>
+      </div>
+    </a>
+    <div class="nav-menu">
+      <a href="/index.html" class="nav-link">🏠 Beranda</a>
+      <a href="/profil.html" class="nav-link">📋 Profil Desa</a>
+      <a href="/infografis.html" class="nav-link">📊 Infografis</a>
+      <a href="/idm.html" class="nav-link">🏆 IDM</a>
+      <a href="/berita.html" class="nav-link">📰 Berita</a>
+      <a href="/galeri.html" class="nav-link active">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a>
+      <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
+      <a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" >✉️ Layanan Surat</a>
+    </div>
+    <div class="nav-burger" id="navBurger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">🏠 Beranda</a>
+  <a href="/profil.html" class="nav-link">📋 Profil Desa</a>
+  <a href="/infografis.html" class="nav-link">📊 Infografis</a>
+  <a href="/idm.html" class="nav-link">🏆 IDM</a>
+  <a href="/berita.html" class="nav-link">📰 Berita</a>
+  <a href="/galeri.html" class="nav-link active">📷 Galeri</a>
+  <a href="/listing.html" class="nav-link">🏪 Listing</a>
+  <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
+  <a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
+</div>
+
+<!-- ===== PAGE HEADER ===== -->
+
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/index.html">🏠 Beranda</a>
+      <span>&gt;</span>
+      <span>Galeri</span>
+    </div>
+    <h1>📷 Galeri Desa Kauman</h1>
+    <p>Dokumentasi kegiatan dan potensi wisata Desa Kauman</p>
+  </div>
+</div>
+
+<!-- ===== GALERI SECTION ===== -->
+
+<section class="berita-page-section">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;" id="galeriGrid">
+      <div style="text-align:center; padding: 40px; grid-column: 1 / -1; color: var(--text-muted)">Memuat galeri...</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const res = await fetch('/api/galeri');
+      const data = await res.json();
+      const grid = document.getElementById('galeriGrid');
+      
+      if (!data || data.length === 0) {
+        grid.innerHTML = '<div style="text-align:center; padding: 40px; grid-column: 1 / -1; color: var(--text-muted)">Belum ada foto di galeri.</div>';
+        return;
+      }
+      
+      grid.innerHTML = data.map(item => `
+        <div class="card" style="overflow:hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+          <img src="${item.gambar}" alt="${item.judul}" style="width:100%; height:200px; object-fit:cover;" />
+          <div style="padding: 16px;">
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin: 0 0 8px;">${item.judul || 'Tanpa Judul'}</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">${item.deskripsi || ''}</p>
+          </div>
+        </div>
+      `).join('');
+    } catch (e) {
+      console.error(e);
+      document.getElementById('galeriGrid').innerHTML = '<div style="text-align:center; padding: 40px; grid-column: 1 / -1; color: red">Gagal memuat galeri.</div>';
+    }
+  });
+</script>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" />
+          <div class="footer-logo-text">
+            <span class="name" data-desa-nama>Desa Kauman</span>
+            <span class="loc">Kec. Ngoro, Kab. Jombang</span>
+          </div>
+        </div>
+        <p class="footer-desc">Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional yang terus berkembang menuju desa digital.</p>
+        <div class="footer-sosmed">
+          <a href="#" data-sosmed-fb title="Facebook">f</a>
+          <a href="#" data-sosmed-ig title="Instagram">ig</a>
+          <a href="#" data-sosmed-yt title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">MENU</h4>
+        <div class="footer-links">
+          <a href="/index.html">→ Beranda</a>
+          <a href="/profil.html">→ Profil Desa</a>
+          <a href="/infografis.html">→ Infografis</a>
+          <a href="/idm.html">→ IDM</a>
+          <a href="/berita.html">→ Berita</a>
+          <a href="/galeri.html">→ Galeri</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">LAYANAN</h4>
+        <div class="footer-links">
+          <a href="/listing.html">→ Listing UMKM</a>
+          <a href="/belanja.html">→ APBDesa</a>
+          <a href="/ppid.html">→ PPID</a>
+          <a href="/pengaduan.html">→ Pengaduan</a>
+          <a href="/admin">→ Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">KONTAK</h4>
+        <div class="footer-contact">
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span data-desa-telp>(0321) 123456</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pemerintah Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop">?</button>
+
+<script src="/js/api.js"></script>
+<script src="/js/main.js"></script>
+
+</body>
+</html>
