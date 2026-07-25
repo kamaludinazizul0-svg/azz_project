@@ -398,6 +398,62 @@ app.delete('/api/galeri/:id', authMiddleware, (req, res) => {
   res.json({ message: 'Dihapus' });
 });
 
+// ====================== PROGRAM PRIORITAS ======================
+app.get('/api/program', (req, res) => {
+  let data = readData('program.json') || [];
+  data = data.filter(p => p.aktif !== false);
+  res.json(data);
+});
+app.post('/api/program', authMiddleware, (req, res) => {
+  const data = readData('program.json') || [];
+  const newItem = { ...req.body, id: Date.now(), aktif: true };
+  data.push(newItem);
+  writeData('program.json', data);
+  res.json(newItem);
+});
+app.put('/api/program/:id', authMiddleware, (req, res) => {
+  const data = readData('program.json') || [];
+  const idx = data.findIndex(p => p.id == req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Tidak ditemukan' });
+  data[idx] = { ...data[idx], ...req.body };
+  writeData('program.json', data);
+  res.json(data[idx]);
+});
+app.delete('/api/program/:id', authMiddleware, (req, res) => {
+  let data = readData('program.json') || [];
+  data = data.filter(p => p.id != req.params.id);
+  writeData('program.json', data);
+  res.json({ message: 'Dihapus' });
+});
+
+// ====================== MITRA DESA ======================
+app.get('/api/mitra', (req, res) => {
+  let data = readData('mitra.json') || [];
+  data = data.filter(m => m.aktif !== false);
+  res.json(data);
+});
+app.post('/api/mitra', authMiddleware, (req, res) => {
+  const data = readData('mitra.json') || [];
+  const newItem = { ...req.body, id: Date.now(), aktif: true };
+  data.push(newItem);
+  writeData('mitra.json', data);
+  res.json(newItem);
+});
+app.put('/api/mitra/:id', authMiddleware, (req, res) => {
+  const data = readData('mitra.json') || [];
+  const idx = data.findIndex(m => m.id == req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Tidak ditemukan' });
+  data[idx] = { ...data[idx], ...req.body };
+  writeData('mitra.json', data);
+  res.json(data[idx]);
+});
+app.delete('/api/mitra/:id', authMiddleware, (req, res) => {
+  let data = readData('mitra.json') || [];
+  data = data.filter(m => m.id != req.params.id);
+  writeData('mitra.json', data);
+  res.json({ message: 'Dihapus' });
+});
+
 // ====================== UPLOAD ======================
 app.post('/api/upload', authMiddleware, upload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'File tidak ditemukan' });

@@ -24,6 +24,7 @@
       .org-level-bottom::before, .org-connector-vertical, .org-connector-top { display: none; }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -67,6 +68,7 @@
   <a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
 </div>
 
+
 <!-- ===== HERO SLIDER ===== -->
 <section class="hero-section">
   <div class="hero-slides" id="heroSlides">
@@ -88,7 +90,69 @@
     <span>↓</span>
   </div>
 </section>
+<!-- ===== SAMBUTAN KEPALA DESA ===== -->
+<section class="section section-alt" id="secSambutan" style="display:none">
+  <div class="container">
+    <div class="admin-card" style="padding:0;overflow:hidden;border:none;box-shadow:var(--shadow-md);border-radius:var(--radius-lg)">
+      <div style="display:flex;flex-wrap:wrap">
+        <div style="flex:1;min-width:300px;background:var(--primary);display:flex;align-items:center;justify-content:center;padding:40px">
+          <img id="imgKades" src="" alt="Kepala Desa" style="width:100%;max-width:300px;border-radius:var(--radius-lg);box-shadow:0 10px 25px rgba(0,0,0,0.2);border:5px solid rgba(255,255,255,0.2)" onerror="this.style.display='none'" />
+        </div>
+        <div style="flex:2;min-width:300px;padding:40px;background:#fff;display:flex;flex-direction:column;justify-content:center">
+          <div class="section-tag" style="margin-bottom:12px">Sambutan Kepala Desa</div>
+          <h2 class="section-title" style="margin-bottom:24px;font-size:2rem">Selamat Datang di Website Resmi Desa Kauman</h2>
+          <div id="txtSambutan" style="font-size:1.1rem;line-height:1.7;color:var(--text-muted);font-style:italic"></div>
+          <div style="margin-top:24px;font-weight:700;color:var(--text-dark);font-size:1.2rem" id="txtNamaKades"></div>
+          <div style="color:var(--primary);font-weight:600;font-size:0.9rem">Kepala Desa Kauman</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ===== PENGUMUMAN TERBARU ===== -->
+<section class="section" id="secPengumuman" style="display:none; padding: 20px 0; background: var(--primary); color: white;">
+  <div class="container" style="display: flex; align-items: center; gap: 16px;">
+    <div style="font-weight: 700; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; white-space: nowrap;">📢 PENGUMUMAN</div>
+    <marquee id="txtPengumuman" style="font-weight: 500;"></marquee>
+  </div>
+</section>
+
+<!-- ===== BERITA TERBARU ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">📰 Informasi Terkini</div>
+      <h2 class="section-title">Berita Desa Kauman</h2>
+      <p class="section-subtitle">Informasi terbaru seputar kegiatan, pembangunan, dan kehidupan masyarakat Desa Kauman</p>
+    </div>
+    <div class="berita-grid" id="beritaGrid">
+      <!-- Loaded by JS -->
+      <div class="card berita-card skeleton" style="height:360px"></div>
+      <div class="card berita-card skeleton" style="height:360px"></div>
+      <div class="card berita-card skeleton" style="height:360px"></div>
+    </div>
+    <div style="text-align:center;margin-top:40px" class="fade-in">
+      <a href="/berita.html" class="btn btn-outline btn-lg">Lihat Semua Berita →</a>
+    </div>
+  </div>
+</section>
+<!-- ===== AGENDA TERDEKAT ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">📅 Agenda Desa</div>
+      <h2 class="section-title">Kegiatan Terdekat</h2>
+      <p class="section-subtitle">Daftar kegiatan dan acara yang akan segera dilaksanakan di Desa Kauman</p>
+    </div>
+    <div class="grid-agenda" id="agendaIndex" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px">
+      <!-- Loaded by JS -->
+    </div>
+    <div style="text-align:center;margin-top:40px" class="fade-in">
+      <a href="/agenda.html" class="btn btn-outline btn-lg">Lihat Semua Agenda →</a>
+    </div>
+  </div>
+</section>
 <!-- ===== STATS ===== -->
 <section class="stats-section">
   <div class="stats-grid" id="statsGrid">
@@ -115,123 +179,20 @@
   </div>
 </section>
 
-<!-- ===== SAMBUTAN KEPALA DESA ===== -->
-<section class="section section-alt" id="secSambutan" style="display:none">
-  <div class="container">
-    <div class="admin-card" style="padding:0;overflow:hidden;border:none;box-shadow:var(--shadow-md);border-radius:var(--radius-lg)">
-      <div style="display:flex;flex-wrap:wrap">
-        <div style="flex:1;min-width:300px;background:var(--primary);display:flex;align-items:center;justify-content:center;padding:40px">
-          <img id="imgKades" src="" alt="Kepala Desa" style="width:100%;max-width:300px;border-radius:var(--radius-lg);box-shadow:0 10px 25px rgba(0,0,0,0.2);border:5px solid rgba(255,255,255,0.2)" onerror="this.style.display='none'" />
-        </div>
-        <div style="flex:2;min-width:300px;padding:40px;background:#fff;display:flex;flex-direction:column;justify-content:center">
-          <div class="section-tag" style="margin-bottom:12px">Sambutan Kepala Desa</div>
-          <h2 class="section-title" style="margin-bottom:24px;font-size:2rem">Selamat Datang di Website Resmi Desa Kauman</h2>
-          <div id="txtSambutan" style="font-size:1.1rem;line-height:1.7;color:var(--text-muted);font-style:italic"></div>
-          <div style="margin-top:24px;font-weight:700;color:var(--text-dark);font-size:1.2rem" id="txtNamaKades"></div>
-          <div style="color:var(--primary);font-weight:600;font-size:0.9rem">Kepala Desa Kauman</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== AGENDA TERDEKAT ===== -->
+<!-- ===== INFOGRAFIS CEPAT ===== -->
 <section class="section">
   <div class="container">
     <div class="section-header fade-in">
-      <div class="section-tag">📅 Agenda Desa</div>
-      <h2 class="section-title">Kegiatan Terdekat</h2>
-      <p class="section-subtitle">Daftar kegiatan dan acara yang akan segera dilaksanakan di Desa Kauman</p>
+      <div class="section-tag">📊 Infografis</div>
+      <h2 class="section-title">Statistik Kependudukan</h2>
     </div>
-    <div class="grid-agenda" id="agendaIndex" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px">
-      <!-- Loaded by JS -->
-    </div>
-    <div style="text-align:center;margin-top:40px" class="fade-in">
-      <a href="/agenda.html" class="btn btn-outline btn-lg">Lihat Semua Agenda →</a>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:24px" class="fade-in">
+      <div class="admin-card"><div class="admin-card-header"><h3>Agama</h3></div><div class="admin-card-body" style="position:relative; height:300px; width:100%"><canvas id="chartAgama"></canvas></div></div>
+      <div class="admin-card"><div class="admin-card-header"><h3>Pendidikan</h3></div><div class="admin-card-body" style="position:relative; height:300px; width:100%"><canvas id="chartPendidikan"></canvas></div></div>
+      <div class="admin-card"><div class="admin-card-header"><h3>Pekerjaan</h3></div><div class="admin-card-body" style="position:relative; height:300px; width:100%"><canvas id="chartPekerjaan"></canvas></div></div>
     </div>
   </div>
-</section>
-
-<!-- ===== BERITA TERBARU ===== -->
-<section class="section section-alt">
-  <div class="container">
-    <div class="section-header fade-in">
-      <div class="section-tag">📰 Informasi Terkini</div>
-      <h2 class="section-title">Berita Desa Kauman</h2>
-      <p class="section-subtitle">Informasi terbaru seputar kegiatan, pembangunan, dan kehidupan masyarakat Desa Kauman</p>
-    </div>
-    <div class="berita-grid" id="beritaGrid">
-      <!-- Loaded by JS -->
-      <div class="card berita-card skeleton" style="height:360px"></div>
-      <div class="card berita-card skeleton" style="height:360px"></div>
-      <div class="card berita-card skeleton" style="height:360px"></div>
-    </div>
-    <div style="text-align:center;margin-top:40px" class="fade-in">
-      <a href="/berita.html" class="btn btn-outline btn-lg">Lihat Semua Berita →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ===== POTENSI DESA ===== -->
-<section class="section section-alt">
-  <div class="container">
-    <div class="section-header fade-in">
-      <div class="section-tag">🌿 Unggulan Desa</div>
-      <h2 class="section-title">Potensi Desa Kauman</h2>
-      <p class="section-subtitle">Kekayaan alam dan budaya yang menjadi kebanggaan dan sumber penghidupan masyarakat</p>
-    </div>
-    <div class="potensi-grid fade-in">
-      <div class="potensi-card">
-        <img src="/images/jamu.jpg" alt="Kampung Jamu" />
-        <div class="potensi-overlay"></div>
-        <div class="potensi-content">
-          <div class="potensi-tag">🌱 UMKM Unggulan</div>
-          <h3 class="potensi-title">Kampung Jamu Tradisional</h3>
-          <p class="potensi-desc">Desa Kauman dikenal sebagai Kampung Jamu, di mana sebagian besar warganya memproduksi jamu tradisional secara turun-temurun seperti sinom, temulawak, kunir asem, dan beras kencur.</p>
-        </div>
-      </div>
-      <div class="potensi-card">
-        <img src="/images/hero3.jpg" alt="Wisata Kali Telu" />
-        <div class="potensi-overlay"></div>
-        <div class="potensi-content">
-          <div class="potensi-tag">🏞️ Wisata Alam</div>
-          <h3 class="potensi-title">Wisata Kali Telu</h3>
-          <p class="potensi-desc">Destinasi wisata alam berbasis sungai yang dikelola oleh BUMDes Kauman Sejahtera. Menawarkan keindahan alam pedesaan yang asri dengan fasilitas lengkap untuk keluarga.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== PROFIL SINGKAT ===== -->
-<section class="section">
-  <div class="container">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center" class="fade-in">
-      <div>
-        <div class="section-tag" style="margin-bottom:16px">📋 Tentang Kami</div>
-        <h2 class="section-title" style="text-align:left;margin-bottom:20px">Desa Kauman,<br>Kecamatan Ngoro</h2>
-        <p style="color:var(--text-muted);line-height:1.8;margin-bottom:24px" id="desaDeskripsi">Desa Kauman adalah desa yang terletak di Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Dikenal sebagai Kampung Jamu Tradisional, desa ini memiliki potensi besar dalam produksi jamu herbal turun-temurun.</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px">
-          <div style="background:var(--primary-pale);border-radius:var(--radius);padding:16px">
-            <div style="font-weight:700;color:var(--primary);font-size:1.1rem">35.17.03.2004</div>
-            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px">Kode Kemendagri</div>
-          </div>
-          <div style="background:var(--primary-pale);border-radius:var(--radius);padding:16px">
-            <div style="font-weight:700;color:var(--primary);font-size:1.1rem">61473</div>
-            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px">Kode Pos</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <a href="/profil.html" class="btn btn-primary">📋 Profil Lengkap</a>
-          <a href="/infografis.html" class="btn btn-outline">📊 Lihat Infografis</a>
-        </div>
-      </div>
-      <div>
-        <div id="map" style="height:380px;border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);overflow:hidden"></div>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
 <!-- ===== IDM TEASER ===== -->
 <section class="section section-alt">
@@ -268,6 +229,113 @@
   </div>
 </section>
 
+<!-- ===== PROGRAM PRIORITAS ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">🎯 Fokus Kami</div>
+      <h2 class="section-title">Program Prioritas Desa</h2>
+    </div>
+    <div class="listing-grid fade-in" id="programGrid">
+      <!-- Loaded by JS -->
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== LAYANAN CEPAT ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">⚡ Layanan Cepat</div>
+      <h2 class="section-title">Akses Layanan Desa</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;text-align:center" class="fade-in">
+      <a href="/layanan-surat.html" class="admin-card" style="text-decoration:none;color:inherit;padding:24px;transition:0.3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:3rem;margin-bottom:12px">✉️</div>
+        <h3 style="font-size:1.1rem">Surat Online</h3>
+      </a>
+      <a href="/pengaduan.html" class="admin-card" style="text-decoration:none;color:inherit;padding:24px;transition:0.3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:3rem;margin-bottom:12px">📢</div>
+        <h3 style="font-size:1.1rem">Lapor/Pengaduan</h3>
+      </a>
+      <a href="/ppid.html" class="admin-card" style="text-decoration:none;color:inherit;padding:24px;transition:0.3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:3rem;margin-bottom:12px">📂</div>
+        <h3 style="font-size:1.1rem">Informasi Publik</h3>
+      </a>
+      <a href="/belanja.html" class="admin-card" style="text-decoration:none;color:inherit;padding:24px;transition:0.3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:3rem;margin-bottom:12px">💰</div>
+        <h3 style="font-size:1.1rem">Transparansi Dana</h3>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== GALERI TERBARU ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">📷 Galeri</div>
+      <h2 class="section-title">Momen Terbaru</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:16px" id="galeriGridHome" class="fade-in">
+      <!-- Loaded by JS -->
+    </div>
+    <div style="text-align:center;margin-top:30px">
+      <a href="/galeri.html" class="btn btn-outline">Lihat Semua Galeri →</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== VIDEO PROFIL ===== -->
+<section class="section" id="secVideo" style="display:none">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">🎥 Jelajahi</div>
+      <h2 class="section-title">Video Profil Desa</h2>
+    </div>
+    <div style="max-width:800px;margin:0 auto;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-lg)" class="fade-in">
+      <div style="position:relative;padding-bottom:56.25%;height:0;">
+        <iframe id="iframeVideo" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== POTENSI DESA ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">🌿 Unggulan Desa</div>
+      <h2 class="section-title">Potensi Desa Kauman</h2>
+      <p class="section-subtitle">Kekayaan alam dan budaya yang menjadi kebanggaan dan sumber penghidupan masyarakat</p>
+    </div>
+    <div class="potensi-grid fade-in">
+      <div class="potensi-card">
+        <img src="/images/jamu.jpg" alt="Kampung Jamu" />
+        <div class="potensi-overlay"></div>
+        <div class="potensi-content">
+          <div class="potensi-tag">🌱 UMKM Unggulan</div>
+          <h3 class="potensi-title">Kampung Jamu Tradisional</h3>
+          <p class="potensi-desc">Desa Kauman dikenal sebagai Kampung Jamu, di mana sebagian besar warganya memproduksi jamu tradisional secara turun-temurun seperti sinom, temulawak, kunir asem, dan beras kencur.</p>
+        </div>
+      </div>
+      <div class="potensi-card">
+        <img src="/images/hero3.jpg" alt="Wisata Kali Telu" />
+        <div class="potensi-overlay"></div>
+        <div class="potensi-content">
+          <div class="potensi-tag">🏞️ Wisata Alam</div>
+          <h3 class="potensi-title">Wisata Kali Telu</h3>
+          <p class="potensi-desc">Destinasi wisata alam berbasis sungai yang dikelola oleh BUMDes Kauman Sejahtera. Menawarkan keindahan alam pedesaan yang asri dengan fasilitas lengkap untuk keluarga.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+\n
 <!-- ===== LISTING UMKM ===== -->
 <section class="section">
   <div class="container">
@@ -286,7 +354,7 @@
     </div>
   </div>
 </section>
-
+\n
 <!-- ===== PERANGKAT DESA ===== -->
 <section class="section section-alt">
   <div class="container">
@@ -296,6 +364,48 @@
       <p class="section-subtitle">Struktur pemerintahan yang melayani masyarakat dengan tulus dan profesional</p>
     </div>
     <div class="perangkat-grid fade-in" id="perangkatGrid">
+      <!-- Loaded by JS -->
+    </div>
+  </div>
+</section>
+\n<!-- ===== PROFIL SINGKAT ===== -->
+<section class="section">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center" class="fade-in">
+      <div>
+        <div class="section-tag" style="margin-bottom:16px">📋 Tentang Kami</div>
+        <h2 class="section-title" style="text-align:left;margin-bottom:20px">Desa Kauman,<br>Kecamatan Ngoro</h2>
+        <p style="color:var(--text-muted);line-height:1.8;margin-bottom:24px" id="desaDeskripsi">Desa Kauman adalah desa yang terletak di Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Dikenal sebagai Kampung Jamu Tradisional, desa ini memiliki potensi besar dalam produksi jamu herbal turun-temurun.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px">
+          <div style="background:var(--primary-pale);border-radius:var(--radius);padding:16px">
+            <div style="font-weight:700;color:var(--primary);font-size:1.1rem">35.17.03.2004</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px">Kode Kemendagri</div>
+          </div>
+          <div style="background:var(--primary-pale);border-radius:var(--radius);padding:16px">
+            <div style="font-weight:700;color:var(--primary);font-size:1.1rem">61473</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px">Kode Pos</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="/profil.html" class="btn btn-primary">📋 Profil Lengkap</a>
+          <a href="/infografis.html" class="btn btn-outline">📊 Lihat Infografis</a>
+        </div>
+      </div>
+      <div>
+        <div id="map" style="height:380px;border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);overflow:hidden"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MITRA DESA ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">🤝 Sinergi</div>
+      <h2 class="section-title">Mitra Desa</h2>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:32px;align-items:center" id="mitraGridHome" class="fade-in">
       <!-- Loaded by JS -->
     </div>
   </div>
@@ -352,6 +462,7 @@
 </section>
 
 <!-- ===== FOOTER ===== -->
+
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
@@ -510,7 +621,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Load listing (3 items)
   const listingData = await API.listing();
   const listingGrid = document.getElementById('listingGrid');
-  if (listingData?.length) {
+  if (listingGrid && listingData?.length) {
     const items = listingData.slice(0, 3);
     listingGrid.innerHTML = items.map(l => `
       <div class="card listing-card fade-in">
@@ -533,7 +644,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Load perangkat (show first 4 chief positions)
   const perangkatData = await API.perangkat();
   const perangkatGrid = document.getElementById('perangkatGrid');
-  if (perangkatData?.length) {
+  if (perangkatGrid && perangkatData?.length) {
     const kades = perangkatData[0] || {};
     const subItems = perangkatData.slice(1, 4);
     
@@ -573,7 +684,90 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Init maps
   initMaps(desa);
+
+  // --- NEW SECTIONS LOGIC ---
+  if (desa) {
+    if (desa.pengumuman_teks) {
+      document.getElementById('secPengumuman').style.display = 'block';
+      document.getElementById('txtPengumuman').textContent = desa.pengumuman_teks;
+    }
+    if (desa.video_profil) {
+      document.getElementById('secVideo').style.display = 'block';
+      document.getElementById('iframeVideo').src = desa.video_profil;
+    }
+    if (desa.sambutan_kades) {
+      document.getElementById('secSambutan').style.display = 'block';
+      document.getElementById('txtSambutan').textContent = '"' + desa.sambutan_kades + '"';
+      document.getElementById('txtNamaKades').textContent = desa.kepala_desa;
+      document.getElementById('imgKades').src = desa.foto_kades || '/images/kades.jpg';
+    }
+  }
+
+  // Load Infografis (Agama, Pendidikan, Pekerjaan)
+  if (penduduk) {
+    const initPie = (id, dataObj) => {
+      const el = document.getElementById(id);
+      if(!el || !dataObj) return;
+      new Chart(el, {
+        type: 'pie',
+        data: {
+          labels: dataObj.map(d=>d.label),
+          datasets: [{ data: dataObj.map(d=>d.jumlah), backgroundColor: ['#0d6efd','#198754','#dc3545','#ffc107','#0dcaf0','#6610f2','#fd7e14','#20c997'] }]
+        },
+        options: { plugins: { legend: { position: 'bottom' } } }
+      });
+    };
+    initPie('chartAgama', penduduk.agama);
+    initPie('chartPendidikan', penduduk.pendidikan);
+    initPie('chartPekerjaan', penduduk.pekerjaan);
+  }
+
+  // Load Program Prioritas
+  const programData = await adminFetch('/program');
+  if (programData && programData.length) {
+    document.getElementById('programGrid').innerHTML = programData.map(p => `
+      <div class="card listing-card">
+        <img class="card-img" src="${p.gambar || '/images/hero1.jpg'}" onerror="this.src='/images/hero1.jpg'" />
+        <div class="card-body">
+          <div class="card-title">${p.judul}</div>
+          <div class="card-desc">${p.deskripsi}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Load Galeri
+  const galeriData = await adminFetch('/galeri');
+  if (galeriData && galeriData.length) {
+    document.getElementById('galeriGridHome').innerHTML = galeriData.slice(0, 4).map(g => `
+      <div style="border-radius:12px;overflow:hidden;box-shadow:var(--shadow-md);aspect-ratio:4/3">
+        <img src="${g.gambar}" style="width:100%;height:100%;object-fit:cover" />
+      </div>
+    `).join('');
+  }
+
+  // Load Mitra
+  const mitraData = await adminFetch('/mitra');
+  if (mitraData && mitraData.length) {
+    document.getElementById('mitraGridHome').innerHTML = mitraData.map(m => `
+      <div style="text-align:center;width:120px">
+        <img src="${m.logo}" style="width:100%;max-width:100px;height:auto;filter:grayscale(100%);transition:0.3s" onmouseover="this.style.filter='none'" onmouseout="this.style.filter='grayscale(100%)'" title="${m.nama}" />
+      </div>
+    `).join('');
+  }
+
 });
+
+// Helper for adminFetch if API is not defined (for public page, use fetch directly)
+async function adminFetch(url) {
+  try {
+    const res = await fetch('/api' + url);
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
+}
+
 
 function initMaps(desa) {
   const coords = desa?.koordinat || { lat: -7.6285, lng: 112.3921 };
