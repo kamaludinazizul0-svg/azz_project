@@ -11,57 +11,7 @@
 <body>
 <div class="admin-layout">
   <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-      <img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" />
-      <div class="sidebar-brand-text">
-        <span class="name">Desa Kauman</span>
-        <span class="role">Panel Administrasi</span>
-      </div>
-    </div>
-    <nav class="sidebar-nav">
-      <div class="sidebar-section-label">Umum</div>
-      <a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
-      
-      <div class="sidebar-section-label">Konten Website</div>
-      <a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Hero Slider</a>
-      <a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a>
-      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
-      <a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri Foto</a>
-      <a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing UMKM</a>
-      <a href="/admin/program.html" class="sidebar-link"><span class="icon">🎯</span> Program Prioritas</a>
-      
-      <div class="sidebar-section-label">Layanan Publik</div>
-      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a>
-      
-      <div class="sidebar-section-label">Profil Desa</div>
-      <a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil Desa</a>
-      <a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat Desa</a>
-      <a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Data Penduduk</a>
-      <a href="/admin/mitra.html" class="sidebar-link"><span class="icon">🤝</span> Mitra Desa</a>
-      
-      <div class="sidebar-section-label">Keuangan & Administrasi</div>
-      <a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a>
-      <a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> Data IDM</a>
-      <a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> Dokumen PPID</a>
-      
-      <div class="sidebar-section-label">Pengaturan</div>
-      <a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="sidebar-user">
-        <div class="sidebar-user-avatar" data-admin-initial>A</div>
-        <div class="sidebar-user-info">
-          <span class="uname" data-admin-nama>Administrator</span>
-          <span class="role">Admin</span>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px">
-        <a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:0.78rem">🌐 Website</a>
-        <button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪 Keluar</button>
-      </div>
-    </div>
-  </aside>
+  <aside class="sidebar" id="sidebar" data-page="dashboard"></aside>
 
   <!-- MAIN -->
   <main class="admin-main">
@@ -90,35 +40,39 @@
         <div style="font-size:3rem;opacity:0.8">🏡</div>
       </div>
 
-      <!-- Stats -->
-      <div class="dash-stats" id="dashStats">
+      <!-- Stats Grid 4x2 -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
         <div class="dash-stat-card">
           <div class="dash-stat-icon green">📰</div>
-          <div>
-            <div class="dash-stat-num" id="statBerita">-</div>
-            <div class="dash-stat-label">Total Berita</div>
-          </div>
+          <div><div class="dash-stat-num" id="statBerita">-</div><div class="dash-stat-label">Total Berita</div></div>
         </div>
         <div class="dash-stat-card">
           <div class="dash-stat-icon yellow">🏪</div>
-          <div>
-            <div class="dash-stat-num" id="statListing">-</div>
-            <div class="dash-stat-label">Listing UMKM</div>
-          </div>
+          <div><div class="dash-stat-num" id="statListing">-</div><div class="dash-stat-label">Listing UMKM</div></div>
         </div>
         <div class="dash-stat-card">
           <div class="dash-stat-icon blue">👥</div>
-          <div>
-            <div class="dash-stat-num" id="statPenduduk">-</div>
-            <div class="dash-stat-label">Jumlah Penduduk</div>
-          </div>
+          <div><div class="dash-stat-num" id="statPenduduk">-</div><div class="dash-stat-label">Jumlah Penduduk</div></div>
         </div>
         <div class="dash-stat-card">
           <div class="dash-stat-icon purple">🏠</div>
-          <div>
-            <div class="dash-stat-num" id="statKK">-</div>
-            <div class="dash-stat-label">Kepala Keluarga</div>
-          </div>
+          <div><div class="dash-stat-num" id="statKK">-</div><div class="dash-stat-label">Kepala Keluarga</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon green">🏗️</div>
+          <div><div class="dash-stat-num" id="statPembangunan">-</div><div class="dash-stat-label">Proyek Pembangunan</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon yellow">✉️</div>
+          <div><div class="dash-stat-num" id="statSurat">-</div><div class="dash-stat-label">Permohonan Surat</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon blue">📢</div>
+          <div><div class="dash-stat-num" id="statPengaduan">-</div><div class="dash-stat-label">Total Pengaduan</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon" style="background:#fce4ec">🔴</div>
+          <div><div class="dash-stat-num" id="statPengaduanMenunggu" style="color:#c62828">-</div><div class="dash-stat-label">Pengaduan Baru</div></div>
         </div>
       </div>
 
@@ -143,10 +97,12 @@
             <div class="admin-card-body" style="padding:16px">
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
                 <a href="/admin/berita.html" class="btn-admin btn-primary-admin" style="justify-content:center;font-size:0.82rem">➕ Tambah Berita</a>
-                <a href="/admin/slider.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">🖼️ Edit Slider</a>
-                <a href="/admin/perangkat.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">👥 Perangkat</a>
+                <a href="/admin/surat.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">✉️ Permohonan Surat</a>
+                <a href="/admin/pengaduan.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">📢 Pengaduan</a>
+                <a href="/admin/pembangunan.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">🏗️ Pembangunan</a>
+                <a href="/admin/permohonan-info.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">ℹ️ Permohonan Info</a>
+                <a href="/admin/profil-desa.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">🏡 Profil Desa</a>
                 <a href="/admin/galeri.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">📷 Galeri</a>
-                <a href="/admin/listing.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">🏪 UMKM</a>
                 <a href="/admin/pengaturan.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">⚙️ Pengaturan</a>
               </div>
             </div>
@@ -168,6 +124,7 @@
   </main>
 </div>
 
+<script src="/admin/js/sidebar.js"></script>
 <script src="/admin/js/admin.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
@@ -178,6 +135,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('statListing').textContent = stats.total_listing;
     document.getElementById('statPenduduk').textContent = Number(stats.jumlah_penduduk).toLocaleString('id-ID');
     document.getElementById('statKK').textContent = Number(stats.jumlah_kk).toLocaleString('id-ID');
+    document.getElementById('statPembangunan').textContent = stats.total_pembangunan || 0;
+    document.getElementById('statSurat').textContent = stats.total_surat || 0;
+    document.getElementById('statPengaduan').textContent = stats.total_pengaduan || 0;
+    document.getElementById('statPengaduanMenunggu').textContent = stats.pengaduan_menunggu || 0;
   }
 
   // Load recent berita

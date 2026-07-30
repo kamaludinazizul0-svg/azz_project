@@ -49,5 +49,37 @@
     "youtube": "https://youtube.com/@desakauman"
   },
   "sambutan_kades": "HALO GAIS",
-  "foto_kades": "/uploads/1784394283861.jpeg"
+  "foto_kades": "/uploads/1784394283861.jpeg",
+  "statistik": {
+    "jumlah_penduduk": 3850,
+    "jumlah_kk": 1120,
+    "laki_laki": 1920,
+    "perempuan": 1930
+  },
+  "potensi_desa": [
+    {
+      "judul": "Produksi Jamu Tradisional",
+      "deskripsi": "Desa Kauman dikenal sebagai Kampung Jamu Tradisional dengan berbagai produk jamu herbal seperti temulawak, kunyit asam, dan beras kencur yang diracik dengan resep turun-temurun."
+    },
+    {
+      "judul": "UMKM Pengerajin",
+      "deskripsi": "Terdapat berbagai UKM di bidang kerajinan tangan, makanan olahan, dan jasa yang dikelola oleh warga desa."
+    },
+    {
+      "judul": "Pertanian",
+      "deskripsi": "Lahan pertanian produktif dengan komoditas padi, jagung, dan tanaman hortikultura."
+    }
+  ],
+  "regulasi": [
+    {
+      "nama": "Peraturan Desa Kelembagaan",
+      "deskripsi": "Mengatur tentang pembentukan dan tata kerja lembaga desa.",
+      "dokumen": "Perdes No. 03 Tahun 2022"
+    },
+    {
+      "nama": "Peraturan Desa Keuangan",
+      "deskripsi": "Mengatur tentang pengelolaan keuangan desa.",
+      "dokumen": "Perdes No. 05 Tahun 2022"
+    }
+  ]
 }

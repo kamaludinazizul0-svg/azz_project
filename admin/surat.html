@@ -20,42 +20,7 @@
 </head>
 <body>
 <div class="admin-layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div>
-    <nav class="sidebar-nav">
-      <div class="sidebar-section-label">Umum</div>
-      <a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
-      
-      <div class="sidebar-section-label">Konten Website</div>
-      <a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Hero Slider</a>
-      <a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a>
-      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
-      <a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri Foto</a>
-      <a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing UMKM</a>
-      <a href="/admin/program.html" class="sidebar-link"><span class="icon">🎯</span> Program Prioritas</a>
-      
-      <div class="sidebar-section-label">Layanan Publik</div>
-      <a href="/admin/surat.html" class="sidebar-link active"><span class="icon">✉️</span> Layanan Surat</a>
-      
-      <div class="sidebar-section-label">Profil Desa</div>
-      <a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil Desa</a>
-      <a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat Desa</a>
-      <a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Data Penduduk</a>
-      <a href="/admin/mitra.html" class="sidebar-link"><span class="icon">🤝</span> Mitra Desa</a>
-      
-      <div class="sidebar-section-label">Keuangan & Administrasi</div>
-      <a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a>
-      <a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> Data IDM</a>
-      <a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> Dokumen PPID</a>
-      
-      <div class="sidebar-section-label">Pengaturan</div>
-      <a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Administrator</span><span class="role">Admin</span></div></div>
-      <div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:0.78rem">🌐 Website</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪 Keluar</button></div>
-    </div>
-  </aside>
+  <aside class="sidebar" id="sidebar" data-page="surat"></aside>
   <main class="admin-main">
     <div class="topbar">
       <div class="topbar-left"><div class="topbar-title">Layanan Surat</div><div class="topbar-breadcrumb"><span>Admin</span> / <span>Layanan Surat</span></div></div>
@@ -64,15 +29,56 @@
     <div class="page-content">
       <div class="page-header-admin">
         <div><h1>✉️ Layanan Surat Online</h1><p>Kelola dan setujui permohonan surat masuk dari warga</p></div>
+        <div style="display:flex;gap:10px">
+          <input type="text" id="searchInput" class="form-control" placeholder="🔍 Cari nama atau NIK..." style="max-width:200px" oninput="filterData()" />
+          <select id="filterStatus" class="form-control" style="max-width:160px" onchange="filterData()">
+            <option value="">Semua Status</option>
+            <option value="Menunggu">Menunggu</option>
+            <option value="Disetujui">Disetujui</option>
+            <option value="Ditolak">Ditolak</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon blue">📋</div>
+          <div><div class="dash-stat-num" id="statTotal">-</div><div class="dash-stat-label">Total Surat</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon yellow">⏳</div>
+          <div><div class="dash-stat-num" id="statMenunggu">-</div><div class="dash-stat-label">Menunggu</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon green">✅</div>
+          <div><div class="dash-stat-num" id="statSelesai">-</div><div class="dash-stat-label">Disetujui</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon" style="background:#fce4ec;color:#c62828">❌</div>
+          <div><div class="dash-stat-num" id="statDitolak">-</div><div class="dash-stat-label">Ditolak</div></div>
+        </div>
       </div>
       <div class="admin-card">
-        <div class="admin-card-header"><h3>Permohonan Masuk</h3>
-          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari nama atau NIK..." style="max-width:250px" oninput="filterData()" />
+        <div class="admin-card-body" style="padding:0">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Tanggal Masuk</th>
+                <th>Nama Pemohon</th>
+                <th>NIK</th>
+                <th>Jenis Surat</th>
+                <th>Lampiran</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="dataTable">
+              <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">⏳ Memuat data...</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="admin-card-body"><div class="admin-table-wrap">
-          <table class="admin-table"><thead><tr><th>Tanggal Masuk</th><th>Nama Pemohon</th><th>NIK</th><th>Jenis Surat</th><th>Lampiran</th><th>Status</th><th>Aksi</th></tr></thead>
-          <tbody id="dataTable"><tr><td colspan="6" style="text-align:center;padding:40px">⏳ Memuat...</td></tr></tbody></table>
-        </div></div>
       </div>
     </div>
   </main>
@@ -141,6 +147,7 @@
 <div id="printArea" class="surat-print"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
+<script src="/admin/js/sidebar.js"></script>
 <script src="/admin/js/admin.js"></script>
 <script>
 let allData = [];
@@ -148,7 +155,16 @@ document.addEventListener('DOMContentLoaded', loadData);
 
 async function loadData() {
   allData = await adminFetch('/surat') || [];
+  updateStats();
   renderTable();
+}
+
+function updateStats() {
+  if(!document.getElementById('statTotal')) return;
+  document.getElementById('statTotal').textContent = allData.length;
+  document.getElementById('statMenunggu').textContent = allData.filter(d=>d.status==='Menunggu').length;
+  document.getElementById('statSelesai').textContent = allData.filter(d=>d.status==='Disetujui').length;
+  document.getElementById('statDitolak').textContent = allData.filter(d=>d.status==='Ditolak').length;
 }
 
 function filterData() { renderTable(); }
@@ -156,20 +172,24 @@ function filterData() { renderTable(); }
 function renderTable() {
   const tbody = document.getElementById('dataTable');
   const term = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = allData.filter(d => (d.nama||'').toLowerCase().includes(term) || (d.nik||'').includes(term));
+  const filterStatus = document.getElementById('filterStatus') ? document.getElementById('filterStatus').value : '';
+  
+  let filtered = allData.filter(d => (d.nama||'').toLowerCase().includes(term) || (d.nik||'').includes(term));
+  if(filterStatus) filtered = filtered.filter(d => d.status === filterStatus);
   
   if (!filtered.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted)">Belum ada permohonan surat masuk.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">📭 Tidak ada permohonan</td></tr>';
     return;
   }
   
-  tbody.innerHTML = filtered.map((d) => {
+  tbody.innerHTML = filtered.map((d, i) => {
     let statusClass = 'badge bg-amber-100 text-amber-800';
     if(d.status === 'Disetujui') statusClass = 'badge bg-green-100 text-green-800';
     if(d.status === 'Ditolak') statusClass = 'badge bg-red-100 text-red-800';
 
     return `
     <tr>
+      <td>${i+1}</td>
       <td style="white-space:nowrap;font-size:0.85rem;color:var(--text-muted)">${new Date(d.created_at).toLocaleString('id-ID')}</td>
       <td style="font-weight:600">${d.nama}</td>
       <td>${d.nik}</td>

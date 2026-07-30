@@ -9,28 +9,7 @@
 </head>
 <body>
 <div class="admin-layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div>
-    <nav class="sidebar-nav">
-      <div class="sidebar-section-label">Umum</div><a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
-      <div class="sidebar-section-label">Konten Website</div>
-      <a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Hero Slider</a>
-      <a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a>
-      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
-      <a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri Foto</a>
-      <a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing UMKM</a>
-      <a href="/admin/program.html" class="sidebar-link"><span class="icon">🎯</span> Program Prioritas</a>
-      
-      <div class="sidebar-section-label">Layanan Publik</div>
-      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a>
-      
-      <div class="sidebar-section-label">Profil Desa</div><a href="/admin/profil-desa.html" class="sidebar-link"><span class="icon">🏡</span> Profil Desa</a><a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat Desa</a><a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Data Penduduk</a>
-      <a href="/admin/mitra.html" class="sidebar-link active"><span class="icon">🤝</span> Mitra Desa</a>
-      <div class="sidebar-section-label">Keuangan & Administrasi</div><a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a><a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> Data IDM</a><a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> Dokumen PPID</a>
-      <div class="sidebar-section-label">Pengaturan</div><a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a>
-    </nav>
-    <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Administrator</span><span class="role">Admin</span></div></div><div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:0.78rem">🌐 Website</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪 Keluar</button></div></div>
-  </aside>
+  <aside class="sidebar" id="sidebar" data-page="mitra"></aside>
   <main class="admin-main">
     <div class="topbar"><div class="topbar-left"><div class="topbar-title">Kelola Mitra Desa</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Lihat Website</a></div></div>
     <div class="page-content">
@@ -63,6 +42,7 @@
     <div class="admin-modal-footer" style="padding:16px 0 0;border-top:1px solid var(--border)"><button type="button" class="btn-admin btn-light" onclick="closeModal('formModal')">Batal</button><button type="submit" class="btn-admin btn-primary-admin">💾 Simpan</button></div>
   </form>
 </div></div></div>
+<script src="/admin/js/sidebar.js"></script>
 <script src="/admin/js/admin.js"></script>
 <script>
 let allData = [];

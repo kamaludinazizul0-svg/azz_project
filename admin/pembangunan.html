@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pembangunan Desa - Admin Desa Kauman</title>
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/css/admin.css" />
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar" data-page="pembangunan"></aside>
+
+  <main class="admin-main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Pembangunan Desa</div>
+        <div class="topbar-breadcrumb"><span>Admin</span> / <span>Pembangunan</span></div>
+      </div>
+      <div class="topbar-right">
+        <a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Lihat Website</a>
+        <button class="topbar-btn" data-logout>🚪 Keluar</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div class="page-header-admin">
+        <div>
+          <h1>🏗️ Kelola Pembangunan Desa</h1>
+          <p>Tambah, edit, dan kelola data proyek pembangunan desa</p>
+        </div>
+        <button class="btn-admin btn-primary-admin" onclick="openModalAdd()">➕ Tambah Proyek</button>
+      </div>
+
+      <!-- Filter & Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px" id="statsGrid">
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon green">🏗️</div>
+          <div><div class="dash-stat-num" id="statTotal">-</div><div class="dash-stat-label">Total Proyek</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon blue">🔄</div>
+          <div><div class="dash-stat-num" id="statProses">-</div><div class="dash-stat-label">Sedang Berjalan</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon green">✅</div>
+          <div><div class="dash-stat-num" id="statSelesai">-</div><div class="dash-stat-label">Selesai</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon yellow">📋</div>
+          <div><div class="dash-stat-num" id="statPerencanaan">-</div><div class="dash-stat-label">Perencanaan</div></div>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="admin-card" style="margin-bottom:20px">
+        <div class="admin-card-body" style="padding:16px">
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Cari nama proyek..." style="max-width:300px" oninput="renderTable()" />
+            <select id="filterStatus" class="form-control" style="max-width:180px" onchange="renderTable()">
+              <option value="">Semua Status</option>
+              <option value="Perencanaan">Perencanaan</option>
+              <option value="Berjalan">Sedang Berjalan</option>
+              <option value="Selesai">Selesai</option>
+              <option value="Ditangguhkan">Ditangguhkan</option>
+            </select>
+            <select id="filterTahun" class="form-control" style="max-width:120px" onchange="renderTable()">
+              <option value="">Semua Tahun</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="admin-card">
+        <div class="admin-card-body" style="padding:0">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Proyek</th>
+                <th>Kategori</th>
+                <th>Anggaran</th>
+                <th>Sumber Dana</th>
+                <th>Tahun</th>
+                <th>Status</th>
+                <th>Progress</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted)">⏳ Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal Add/Edit -->
+<div class="admin-modal-overlay" id="modalForm">
+  <div class="admin-modal" style="max-width:680px">
+    <div class="admin-modal-header">
+      <span class="admin-modal-title" id="modalTitle">➕ Tambah Proyek Pembangunan</span>
+      <button class="admin-modal-close" onclick="closeModal('modalForm')">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="fId" />
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Nama Proyek *</label>
+          <input type="text" id="fNama" class="form-control" placeholder="Contoh: Pembangunan Jalan Dusun..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kategori *</label>
+          <select id="fKategori" class="form-control">
+            <option value="Infrastruktur">Infrastruktur</option>
+            <option value="Pendidikan">Pendidikan</option>
+            <option value="Kesehatan">Kesehatan</option>
+            <option value="Ekonomi">Ekonomi</option>
+            <option value="Lingkungan">Lingkungan</option>
+            <option value="Sosial">Sosial</option>
+            <option value="Pemerintahan">Pemerintahan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tahun</label>
+          <input type="number" id="fTahun" class="form-control" placeholder="2024" min="2000" max="2030" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Anggaran (Rp)</label>
+          <input type="number" id="fAnggaran" class="form-control" placeholder="50000000" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sumber Dana</label>
+          <select id="fSumber" class="form-control">
+            <option value="Dana Desa">Dana Desa</option>
+            <option value="ADD">ADD (Alokasi Dana Desa)</option>
+            <option value="APBD">APBD</option>
+            <option value="APBN">APBN</option>
+            <option value="Swadaya">Swadaya Masyarakat</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select id="fStatus" class="form-control" onchange="toggleProgress()">
+            <option value="Perencanaan">Perencanaan</option>
+            <option value="Berjalan">Sedang Berjalan</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Ditangguhkan">Ditangguhkan</option>
+          </select>
+        </div>
+        <div class="form-group" id="progressGroup">
+          <label class="form-label">Progress (%)</label>
+          <input type="number" id="fProgress" class="form-control" placeholder="0" min="0" max="100" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal Mulai</label>
+          <input type="date" id="fTglMulai" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal Selesai (Rencana)</label>
+          <input type="date" id="fTglSelesai" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pelaksana</label>
+          <input type="text" id="fPelaksana" class="form-control" placeholder="Nama kontraktor/pelaksana" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Volume/Satuan</label>
+          <input type="text" id="fVolume" class="form-control" placeholder="Contoh: 500 meter, 2 unit" />
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Lokasi</label>
+          <input type="text" id="fLokasi" class="form-control" placeholder="Lokasi proyek pembangunan" />
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Deskripsi</label>
+          <textarea id="fDeskripsi" class="form-control" rows="3" placeholder="Keterangan detail proyek pembangunan..."></textarea>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Foto Dokumentasi (URL)</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="fFoto" class="form-control" placeholder="/uploads/foto-proyek.jpg" style="flex:1" />
+            <button class="btn-admin btn-light btn-sm-admin" onclick="triggerUpload()">📂 Upload</button>
+          </div>
+          <div id="fotoPreview" style="margin-top:8px;display:none">
+            <img id="fotoImg" src="" style="max-height:120px;border-radius:8px;border:2px solid var(--border)" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-admin btn-light" onclick="closeModal('modalForm')">Batal</button>
+      <button class="btn-admin btn-primary-admin" onclick="saveProyek()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detail -->
+<div class="admin-modal-overlay" id="modalDetail">
+  <div class="admin-modal" style="max-width:580px">
+    <div class="admin-modal-header">
+      <span class="admin-modal-title">🏗️ Detail Proyek</span>
+      <button class="admin-modal-close" onclick="closeModal('modalDetail')">✕</button>
+    </div>
+    <div class="admin-modal-body" id="detailContent"></div>
+    <div class="admin-modal-footer">
+      <button class="btn-admin btn-light" onclick="closeModal('modalDetail')">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script src="/admin/js/sidebar.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+let allData = [];
+let editId = null;
+
+document.addEventListener('DOMContentLoaded', loadData);
+
+async function loadData() {
+  const res = await adminFetch('/pembangunan');
+  if (res) {
+    allData = Array.isArray(res) ? res : (res.data || []);
+    updateStats();
+    fillTahunFilter();
+    renderTable();
+  }
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = allData.length;
+  document.getElementById('statProses').textContent = allData.filter(d=>d.status==='Berjalan').length;
+  document.getElementById('statSelesai').textContent = allData.filter(d=>d.status==='Selesai').length;
+  document.getElementById('statPerencanaan').textContent = allData.filter(d=>d.status==='Perencanaan').length;
+}
+
+function fillTahunFilter() {
+  const tahunSet = [...new Set(allData.map(d=>d.tahun).filter(Boolean))].sort((a,b)=>b-a);
+  const sel = document.getElementById('filterTahun');
+  tahunSet.forEach(t => sel.innerHTML += `<option value="${t}">${t}</option>`);
+}
+
+function renderTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('filterStatus').value;
+  const tahun = document.getElementById('filterTahun').value;
+  
+  let filtered = allData.filter(d => {
+    const matchSearch = !search || d.nama?.toLowerCase().includes(search) || d.lokasi?.toLowerCase().includes(search);
+    const matchStatus = !status || d.status === status;
+    const matchTahun = !tahun || String(d.tahun) === tahun;
+    return matchSearch && matchStatus && matchTahun;
+  });
+
+  const statusColors = { 'Perencanaan':'blue', 'Berjalan':'warning', 'Selesai':'success', 'Ditangguhkan':'danger' };
+  
+  document.getElementById('tableBody').innerHTML = filtered.length === 0
+    ? `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted)">📭 Tidak ada data proyek</td></tr>`
+    : filtered.map((d, i) => `
+      <tr>
+        <td>${i+1}</td>
+        <td>
+          <div style="font-weight:600;color:var(--text-dark)">${d.nama||'-'}</div>
+          <div style="font-size:0.76rem;color:var(--text-muted)">${d.lokasi||''}</div>
+        </td>
+        <td><span class="badge-admin">${d.kategori||'-'}</span></td>
+        <td style="font-weight:600;color:var(--primary)">${formatRupiah(d.anggaran)}</td>
+        <td>${d.sumber_dana||'-'}</td>
+        <td>${d.tahun||'-'}</td>
+        <td><span class="badge-admin ${statusColors[d.status]||''}">${d.status||'-'}</span></td>
+        <td>
+          <div style="background:#e8f5e9;border-radius:20px;height:8px;width:80px;position:relative;overflow:hidden">
+            <div style="background:var(--primary);width:${d.progress||0}%;height:100%;border-radius:20px"></div>
+          </div>
+          <div style="font-size:0.76rem;color:var(--text-muted);margin-top:2px">${d.progress||0}%</div>
+        </td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <button class="btn-admin btn-light btn-sm-admin" onclick="viewDetail(${d.id})">👁️</button>
+            <button class="btn-admin btn-warning btn-sm-admin" onclick="openModalEdit(${d.id})">✏️</button>
+            <button class="btn-admin btn-danger btn-sm-admin" onclick="hapusProyek(${d.id})">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+}
+
+function openModalAdd() {
+  editId = null;
+  document.getElementById('modalTitle').textContent = '➕ Tambah Proyek Pembangunan';
+  ['fId','fNama','fTglMulai','fTglSelesai','fAnggaran','fPelaksana','fLokasi','fDeskripsi','fFoto','fProgress','fVolume'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  document.getElementById('fTahun').value = new Date().getFullYear();
+  document.getElementById('fKategori').value = 'Infrastruktur';
+  document.getElementById('fSumber').value = 'Dana Desa';
+  document.getElementById('fStatus').value = 'Perencanaan';
+  document.getElementById('fotoPreview').style.display = 'none';
+  openModal('modalForm');
+}
+
+function openModalEdit(id) {
+  const d = allData.find(x => x.id === id);
+  if(!d) return;
+  editId = id;
+  document.getElementById('modalTitle').textContent = '✏️ Edit Proyek Pembangunan';
+  document.getElementById('fId').value = d.id;
+  document.getElementById('fNama').value = d.nama||'';
+  document.getElementById('fKategori').value = d.kategori||'Infrastruktur';
+  document.getElementById('fTahun').value = d.tahun||'';
+  document.getElementById('fAnggaran').value = d.anggaran||'';
+  document.getElementById('fSumber').value = d.sumber_dana||'Dana Desa';
+  document.getElementById('fStatus').value = d.status||'Perencanaan';
+  document.getElementById('fProgress').value = d.progress||0;
+  document.getElementById('fTglMulai').value = d.tgl_mulai||'';
+  document.getElementById('fTglSelesai').value = d.tgl_selesai||'';
+  document.getElementById('fPelaksana').value = d.pelaksana||'';
+  document.getElementById('fVolume').value = d.volume||'';
+  document.getElementById('fLokasi').value = d.lokasi||'';
+  document.getElementById('fDeskripsi').value = d.deskripsi||'';
+  document.getElementById('fFoto').value = d.foto||'';
+  if(d.foto) { document.getElementById('fotoImg').src = d.foto; document.getElementById('fotoPreview').style.display='block'; }
+  openModal('modalForm');
+}
+
+function triggerUpload() {
+  const f = document.createElement('input');
+  f.type = 'file'; f.accept = 'image/*';
+  f.onchange = async () => {
+    const res = await uploadFile(f.files[0]);
+    if(res?.url) {
+      document.getElementById('fFoto').value = res.url;
+      document.getElementById('fotoImg').src = res.url;
+      document.getElementById('fotoPreview').style.display = 'block';
+    }
+  };
+  f.click();
+}
+
+function toggleProgress() {
+  const status = document.getElementById('fStatus').value;
+  document.getElementById('progressGroup').style.display = status === 'Perencanaan' ? 'none' : 'block';
+  if(status === 'Selesai') document.getElementById('fProgress').value = 100;
+}
+
+async function saveProyek() {
+  const nama = document.getElementById('fNama').value.trim();
+  if(!nama) { showToast('Nama proyek wajib diisi', 'error'); return; }
+  
+  const body = {
+    nama,
+    kategori: document.getElementById('fKategori').value,
+    tahun: parseInt(document.getElementById('fTahun').value) || new Date().getFullYear(),
+    anggaran: parseFloat(document.getElementById('fAnggaran').value) || 0,
+    sumber_dana: document.getElementById('fSumber').value,
+    status: document.getElementById('fStatus').value,
+    progress: parseInt(document.getElementById('fProgress').value) || 0,
+    tgl_mulai: document.getElementById('fTglMulai').value,
+    tgl_selesai: document.getElementById('fTglSelesai').value,
+    pelaksana: document.getElementById('fPelaksana').value,
+    volume: document.getElementById('fVolume').value,
+    lokasi: document.getElementById('fLokasi').value,
+    deskripsi: document.getElementById('fDeskripsi').value,
+    foto: document.getElementById('fFoto').value,
+  };
+
+  let res;
+  if(editId) {
+    res = await adminFetch(`/pembangunan/${editId}`, { method:'PUT', body:JSON.stringify(body) });
+  } else {
+    res = await adminFetch('/pembangunan', { method:'POST', body:JSON.stringify(body) });
+  }
+  if(res) {
+    showToast(editId ? 'Proyek berhasil diupdate' : 'Proyek berhasil ditambahkan');
+    closeModal('modalForm');
+    await loadData();
+  }
+}
+
+async function hapusProyek(id) {
+  confirmDialog('Yakin ingin menghapus proyek ini?', async () => {
+    const res = await adminFetch(`/pembangunan/${id}`, { method:'DELETE' });
+    if(res) { showToast('Proyek berhasil dihapus'); await loadData(); }
+  });
+}
+
+function viewDetail(id) {
+  const d = allData.find(x => x.id === id);
+  if(!d) return;
+  document.getElementById('detailContent').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:16px">
+      ${d.foto ? `<img src="${d.foto}" style="width:100%;height:200px;object-fit:cover;border-radius:8px;border:2px solid var(--border)" />` : ''}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.88rem">
+        <div><span style="color:var(--text-muted)">Nama Proyek</span><div style="font-weight:700;color:var(--text-dark)">${d.nama}</div></div>
+        <div><span style="color:var(--text-muted)">Kategori</span><div style="font-weight:600">${d.kategori||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Status</span><div style="font-weight:600">${d.status||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Progress</span><div style="font-weight:600">${d.progress||0}%</div></div>
+        <div><span style="color:var(--text-muted)">Anggaran</span><div style="font-weight:700;color:var(--primary)">${formatRupiah(d.anggaran)}</div></div>
+        <div><span style="color:var(--text-muted)">Sumber Dana</span><div>${d.sumber_dana||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Tahun</span><div>${d.tahun||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Pelaksana</span><div>${d.pelaksana||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Tgl Mulai</span><div>${formatDate(d.tgl_mulai)||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Tgl Selesai</span><div>${formatDate(d.tgl_selesai)||'-'}</div></div>
+        <div style="grid-column:1/-1"><span style="color:var(--text-muted)">Lokasi</span><div>${d.lokasi||'-'}</div></div>
+        <div style="grid-column:1/-1"><span style="color:var(--text-muted)">Volume</span><div>${d.volume||'-'}</div></div>
+        <div style="grid-column:1/-1"><span style="color:var(--text-muted)">Deskripsi</span><div style="line-height:1.6">${d.deskripsi||'-'}</div></div>
+      </div>
+    </div>
+  `;
+  openModal('modalDetail');
+}
+</script>
+</body>
+</html>

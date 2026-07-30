@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Statistik Tambahan - Admin Desa Kauman</title>
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/css/admin.css" />
+  <style>
+    .stat-card-admin {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .stat-card-admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stat-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+    .stat-item-row:last-child { border: none; }
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar" data-page="statistik"></aside>
+
+  <main class="admin-main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Statistik Tambahan</div>
+        <div class="topbar-breadcrumb"><span>Admin</span> / <span>Statistik Tambahan</span></div>
+      </div>
+      <div class="topbar-right">
+        <a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Lihat Website</a>
+        <button class="topbar-btn" data-logout>🚪 Keluar</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div class="page-header-admin">
+        <div>
+          <h1>📈 Statistik Tambahan Desa</h1>
+          <p>Kelola data statistik tambahan yang ditampilkan di website</p>
+        </div>
+        <button class="btn-admin btn-primary-admin" onclick="openModalAdd()">➕ Tambah Kategori Statistik</button>
+      </div>
+
+      <!-- Grid Statistik Categories -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:20px" id="statGrid">
+        <div style="text-align:center;padding:60px;color:var(--text-muted);grid-column:1/-1">⏳ Memuat data...</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal Tambah/Edit Kategori -->
+<div class="admin-modal-overlay" id="modalKategori">
+  <div class="admin-modal" style="max-width:520px">
+    <div class="admin-modal-header">
+      <span class="admin-modal-title" id="modalKategoriTitle">➕ Tambah Kategori Statistik</span>
+      <button class="admin-modal-close" onclick="closeModal('modalKategori')">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="fKatId" />
+      <div class="form-group">
+        <label class="form-label">Nama Kategori *</label>
+        <input type="text" id="fKatNama" class="form-control" placeholder="Contoh: Mata Pencaharian, Pendidikan Warga..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Icon (emoji)</label>
+        <input type="text" id="fKatIcon" class="form-control" placeholder="💼" maxlength="4" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Warna (hex)</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="color" id="fKatWarna" value="#2e7d32" style="width:48px;height:40px;border:none;padding:2px;cursor:pointer;border-radius:6px" />
+          <input type="text" id="fKatWarnaText" class="form-control" placeholder="#2e7d32" value="#2e7d32" oninput="syncColor()" style="flex:1" />
+        </div>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-admin btn-light" onclick="closeModal('modalKategori')">Batal</button>
+      <button class="btn-admin btn-primary-admin" onclick="saveKategori()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tambah/Edit Item Statistik -->
+<div class="admin-modal-overlay" id="modalItem">
+  <div class="admin-modal" style="max-width:480px">
+    <div class="admin-modal-header">
+      <span class="admin-modal-title" id="modalItemTitle">➕ Tambah Data Statistik</span>
+      <button class="admin-modal-close" onclick="closeModal('modalItem')">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="fItemId" />
+      <input type="hidden" id="fItemKatId" />
+      <div class="form-group">
+        <label class="form-label">Label *</label>
+        <input type="text" id="fItemLabel" class="form-control" placeholder="Contoh: Petani, Buruh, PNS..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Jumlah / Nilai *</label>
+        <input type="text" id="fItemJumlah" class="form-control" placeholder="Contoh: 245, 35%, 1.200 Ha" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Satuan</label>
+        <input type="text" id="fItemSatuan" class="form-control" placeholder="jiwa, KK, Ha, unit, %" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Urutan Tampil</label>
+        <input type="number" id="fItemUrutan" class="form-control" placeholder="1" min="1" />
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-admin btn-light" onclick="closeModal('modalItem')">Batal</button>
+      <button class="btn-admin btn-primary-admin" onclick="saveItem()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script src="/admin/js/sidebar.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+let allData = []; // array of kategori dengan items
+
+document.addEventListener('DOMContentLoaded', loadData);
+
+async function loadData() {
+  const res = await adminFetch('/statistik-tambahan');
+  if (res) {
+    allData = Array.isArray(res) ? res : (res.data || []);
+    renderGrid();
+  }
+}
+
+function renderGrid() {
+  const grid = document.getElementById('statGrid');
+  if(!allData.length) {
+    grid.innerHTML = `<div style="text-align:center;padding:60px;color:var(--text-muted);grid-column:1/-1">
+      📊 Belum ada kategori statistik.<br>Klik tombol <strong>"Tambah Kategori Statistik"</strong> untuk memulai.
+    </div>`;
+    return;
+  }
+  grid.innerHTML = allData.map(kat => `
+    <div class="stat-card-admin">
+      <div class="stat-card-admin-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;background:${kat.warna||'#2e7d32'}20;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.3rem">${kat.icon||'📊'}</div>
+          <span style="font-weight:700;color:var(--text-dark)">${kat.nama}</span>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn-admin btn-warning btn-sm-admin" onclick="openModalEditKat(${kat.id})">✏️</button>
+          <button class="btn-admin btn-danger btn-sm-admin" onclick="hapusKategori(${kat.id})">🗑️</button>
+        </div>
+      </div>
+      <div id="items-${kat.id}">
+        ${(kat.items||[]).sort((a,b)=>(a.urutan||0)-(b.urutan||0)).map(item => `
+          <div class="stat-item-row">
+            <span style="color:var(--text-body)">${item.label}</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-weight:700;color:${kat.warna||'#2e7d32'}">${item.jumlah} <small style="font-weight:400;color:var(--text-muted)">${item.satuan||''}</small></span>
+              <button class="btn-admin btn-warning btn-sm-admin" style="padding:4px 8px;font-size:0.7rem" onclick="openModalEditItem(${kat.id},${item.id})">✏️</button>
+              <button class="btn-admin btn-danger btn-sm-admin" style="padding:4px 8px;font-size:0.7rem" onclick="hapusItem(${kat.id},${item.id})">✕</button>
+            </div>
+          </div>
+        `).join('')}
+        ${!(kat.items||[]).length ? `<div style="color:var(--text-muted);font-size:0.85rem;text-align:center;padding:12px">Belum ada data</div>` : ''}
+      </div>
+      <button class="btn-admin btn-light btn-sm-admin" style="width:100%;justify-content:center" onclick="openModalAddItem(${kat.id})">➕ Tambah Data</button>
+    </div>
+  `).join('');
+}
+
+// ---- Kategori ----
+function openModalAdd() {
+  document.getElementById('modalKategoriTitle').textContent = '➕ Tambah Kategori Statistik';
+  document.getElementById('fKatId').value = '';
+  document.getElementById('fKatNama').value = '';
+  document.getElementById('fKatIcon').value = '📊';
+  document.getElementById('fKatWarna').value = '#2e7d32';
+  document.getElementById('fKatWarnaText').value = '#2e7d32';
+  openModal('modalKategori');
+}
+
+function openModalEditKat(katId) {
+  const kat = allData.find(k => k.id === katId);
+  if(!kat) return;
+  document.getElementById('modalKategoriTitle').textContent = '✏️ Edit Kategori Statistik';
+  document.getElementById('fKatId').value = kat.id;
+  document.getElementById('fKatNama').value = kat.nama;
+  document.getElementById('fKatIcon').value = kat.icon||'📊';
+  document.getElementById('fKatWarna').value = kat.warna||'#2e7d32';
+  document.getElementById('fKatWarnaText').value = kat.warna||'#2e7d32';
+  openModal('modalKategori');
+}
+
+function syncColor() {
+  const v = document.getElementById('fKatWarnaText').value;
+  if(/^#[0-9A-Fa-f]{6}$/.test(v)) document.getElementById('fKatWarna').value = v;
+}
+
+async function saveKategori() {
+  const nama = document.getElementById('fKatNama').value.trim();
+  if(!nama) { showToast('Nama kategori wajib diisi', 'error'); return; }
+  const katId = document.getElementById('fKatId').value;
+  const body = {
+    nama,
+    icon: document.getElementById('fKatIcon').value,
+    warna: document.getElementById('fKatWarna').value,
+  };
+  let res;
+  if(katId) {
+    res = await adminFetch(`/statistik-tambahan/${katId}`, { method:'PUT', body:JSON.stringify(body) });
+  } else {
+    res = await adminFetch('/statistik-tambahan', { method:'POST', body:JSON.stringify(body) });
+  }
+  if(res) {
+    showToast(katId ? 'Kategori diupdate' : 'Kategori ditambahkan');
+    closeModal('modalKategori');
+    await loadData();
+  }
+}
+
+async function hapusKategori(katId) {
+  confirmDialog('Hapus kategori ini beserta semua datanya?', async () => {
+    const res = await adminFetch(`/statistik-tambahan/${katId}`, { method:'DELETE' });
+    if(res) { showToast('Kategori dihapus'); await loadData(); }
+  });
+}
+
+// ---- Items ----
+function openModalAddItem(katId) {
+  document.getElementById('modalItemTitle').textContent = '➕ Tambah Data Statistik';
+  document.getElementById('fItemId').value = '';
+  document.getElementById('fItemKatId').value = katId;
+  document.getElementById('fItemLabel').value = '';
+  document.getElementById('fItemJumlah').value = '';
+  document.getElementById('fItemSatuan').value = '';
+  document.getElementById('fItemUrutan').value = '';
+  openModal('modalItem');
+}
+
+function openModalEditItem(katId, itemId) {
+  const kat = allData.find(k => k.id === katId);
+  const item = (kat?.items||[]).find(i => i.id === itemId);
+  if(!item) return;
+  document.getElementById('modalItemTitle').textContent = '✏️ Edit Data Statistik';
+  document.getElementById('fItemId').value = item.id;
+  document.getElementById('fItemKatId').value = katId;
+  document.getElementById('fItemLabel').value = item.label;
+  document.getElementById('fItemJumlah').value = item.jumlah;
+  document.getElementById('fItemSatuan').value = item.satuan||'';
+  document.getElementById('fItemUrutan').value = item.urutan||'';
+  openModal('modalItem');
+}
+
+async function saveItem() {
+  const label = document.getElementById('fItemLabel').value.trim();
+  const jumlah = document.getElementById('fItemJumlah').value.trim();
+  if(!label || !jumlah) { showToast('Label dan jumlah wajib diisi', 'error'); return; }
+  const katId = document.getElementById('fItemKatId').value;
+  const itemId = document.getElementById('fItemId').value;
+  const body = {
+    label,
+    jumlah,
+    satuan: document.getElementById('fItemSatuan').value,
+    urutan: parseInt(document.getElementById('fItemUrutan').value)||1,
+    kategori_id: parseInt(katId),
+  };
+  let res;
+  if(itemId) {
+    res = await adminFetch(`/statistik-tambahan/${katId}/item/${itemId}`, { method:'PUT', body:JSON.stringify(body) });
+  } else {
+    res = await adminFetch(`/statistik-tambahan/${katId}/item`, { method:'POST', body:JSON.stringify(body) });
+  }
+  if(res) {
+    showToast(itemId ? 'Data diupdate' : 'Data ditambahkan');
+    closeModal('modalItem');
+    await loadData();
+  }
+}
+
+async function hapusItem(katId, itemId) {
+  confirmDialog('Hapus data statistik ini?', async () => {
+    const res = await adminFetch(`/statistik-tambahan/${katId}/item/${itemId}`, { method:'DELETE' });
+    if(res) { showToast('Data dihapus'); await loadData(); }
+  });
+}
+</script>
+</body>
+</html>

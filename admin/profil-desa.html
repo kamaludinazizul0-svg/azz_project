@@ -3,13 +3,7 @@
 <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Profil Desa - Admin</title><link rel="icon" href="/images/logo.png" /><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/admin/css/admin.css" /><style>.tab-nav{display:flex;gap:4px;border-bottom:2px solid var(--border);margin-bottom:24px;flex-wrap:wrap}.tab-btn{padding:10px 20px;font-family:Outfit;font-size:.88rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}.tab-btn.active{color:var(--primary);border-color:var(--primary)}.tab-btn:hover{color:var(--primary)}.tab-content{display:none}.tab-content.active{display:block}</style></head>
 <body>
 <div class="admin-layout">
-  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><img src="/images/logo.png" alt="Logo" onerror="this.style.display='none'" /><div class="sidebar-brand-text"><span class="name">Desa Kauman</span><span class="role">Panel Administrasi</span></div></div><nav class="sidebar-nav"><div class="sidebar-section-label">Umum</div><a href="/admin/dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a><div class="sidebar-section-label">Konten</div><a href="/admin/slider.html" class="sidebar-link"><span class="icon">🖼️</span> Slider</a><a href="/admin/berita.html" class="sidebar-link"><span class="icon">📰</span> Berita</a><a href="/admin/galeri.html" class="sidebar-link"><span class="icon">📷</span> Galeri</a><a href="/admin/listing.html" class="sidebar-link"><span class="icon">🏪</span> Listing</a>
-      <a href="/admin/program.html" class="sidebar-link"><span class="icon">🎯</span> Program Prioritas</a>
-      <a href="/admin/agenda.html" class="sidebar-link"><span class="icon">📅</span> Agenda Desa</a>
-      
-      <div class="sidebar-section-label">Layanan Publik</div>
-      <a href="/admin/surat.html" class="sidebar-link"><span class="icon">✉️</span> Layanan Surat</a><div class="sidebar-section-label">Profil</div><a href="/admin/profil-desa.html" class="sidebar-link active"><span class="icon">🏡</span> Profil</a><a href="/admin/perangkat.html" class="sidebar-link"><span class="icon">👥</span> Perangkat</a><a href="/admin/penduduk.html" class="sidebar-link"><span class="icon">📊</span> Penduduk</a>
-      <a href="/admin/mitra.html" class="sidebar-link"><span class="icon">🤝</span> Mitra Desa</a><div class="sidebar-section-label">Keuangan</div><a href="/admin/apbdesa.html" class="sidebar-link"><span class="icon">💰</span> APBDesa</a><a href="/admin/idm.html" class="sidebar-link"><span class="icon">🏆</span> IDM</a><a href="/admin/ppid.html" class="sidebar-link"><span class="icon">📂</span> PPID</a><div class="sidebar-section-label">Pengaturan</div><a href="/admin/pengaturan.html" class="sidebar-link"><span class="icon">⚙️</span> Pengaturan</a></nav><div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" data-admin-initial>A</div><div class="sidebar-user-info"><span class="uname" data-admin-nama>Admin</span><span class="role">Admin</span></div></div><div style="display:flex;gap:8px"><a href="/" target="_blank" class="btn-admin btn-light btn-sm-admin" style="flex:1;justify-content:center;font-size:.78rem">🌐</a><button class="btn-admin btn-light btn-sm-admin" data-logout style="flex:1">🚪</button></div></div></aside>
+  <aside class="sidebar" id="sidebar" data-page="profil-desa"></aside>
   <main class="admin-main">
     <div class="topbar"><div class="topbar-left"><div class="topbar-title">Profil Desa</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div></div>
     <div class="page-content">
@@ -23,6 +17,9 @@
             <button class="tab-btn" onclick="showTab('visimisi')">🎯 Visi & Misi</button>
             <button class="tab-btn" onclick="showTab('wilayah')">🗺️ Batas Wilayah</button>
             <button class="tab-btn" onclick="showTab('kontak')">📞 Kontak & Sosmed</button>
+            <button class="tab-btn" onclick="showTab('demografi')">👨‍👩‍👧‍👦 Demografi</button>
+            <button class="tab-btn" onclick="showTab('potensi')">⭐ Potensi Desa</button>
+            <button class="tab-btn" onclick="showTab('regulasi')">📜 Regulasi</button>
           </div>
 
           <!-- Tab: Info Umum -->
@@ -99,11 +96,35 @@
             </div>
             <button class="btn-admin btn-primary-admin" onclick="saveTab('kontak')">💾 Simpan Kontak</button>
           </div>
+
+          <!-- Tab: Demografi -->
+          <div class="tab-content" id="tab-demografi">
+            <div class="form-group"><label class="form-label">Jumlah Penduduk (Jiwa)</label><input type="number" id="fJumlahPenduduk" class="form-control" /></div>
+            <div class="form-group"><label class="form-label">Jumlah KK</label><input type="number" id="fJumlahKK" class="form-control" /></div>
+            <div class="form-group"><label class="form-label">Laki-laki</label><input type="number" id="fLakiLaki" class="form-control" /></div>
+            <div class="form-group"><label class="form-label">Perempuan</label><input type="number" id="fPerempuan" class="form-control" /></div>
+            <button class="btn-admin btn-primary-admin" onclick="saveTab('demografi')">💾 Simpan Demografi</button>
+          </div>
+
+          <!-- Tab: Potensi Desa -->
+          <div class="tab-content" id="tab-potensi">
+            <div id="potensiAdminList"></div>
+            <button class="btn-admin btn-light btn-sm-admin" style="margin-top:10px" onclick="addPotensi()">➕ Tambah Potensi</button>
+            <button class="btn-admin btn-primary-admin" style="margin-top:16px" onclick="saveTab('potensi')">💾 Simpan Potensi</button>
+          </div>
+
+          <!-- Tab: Regulasi -->
+          <div class="tab-content" id="tab-regulasi">
+            <div id="regulasiAdminList"></div>
+            <button class="btn-admin btn-light btn-sm-admin" style="margin-top:10px" onclick="addRegulasi()">➕ Tambah Regulasi</button>
+            <button class="btn-admin btn-primary-admin" style="margin-top:16px" onclick="saveTab('regulasi')">💾 Simpan Regulasi</button>
+          </div>
         </div>
       </div>
     </div>
   </main>
 </div>
+<script src="/admin/js/sidebar.js"></script>
 <script src="/admin/js/admin.js"></script>
 <script>
 let desaData={};
@@ -115,7 +136,7 @@ function showTab(name){
   document.getElementById('tab-'+name)?.classList.add('active');
   // Fix active button
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  const tabs={umum:0,sejarah:1,visimisi:2,wilayah:3,kontak:4};
+  const tabs={umum:0,sejarah:1,visimisi:2,wilayah:3,kontak:4,demografi:5,potensi:6,regulasi:7};
   document.querySelectorAll('.tab-btn')[tabs[name]]?.classList.add('active');
 }
 
@@ -160,6 +181,14 @@ async function loadData(){
   document.getElementById('fFacebook').value=desaData.sosmed?.facebook||'';
   document.getElementById('fInstagram').value=desaData.sosmed?.instagram||'';
   document.getElementById('fYoutube').value=desaData.sosmed?.youtube||'';
+  // Demografi
+  document.getElementById('fJumlahPenduduk').value=desaData.statistik?.jumlah_penduduk||'';
+  document.getElementById('fJumlahKK').value=desaData.statistik?.jumlah_kk||'';
+  document.getElementById('fLakiLaki').value=desaData.statistik?.laki_laki||'';
+  document.getElementById('fPerempuan').value=desaData.statistik?.perempuan||'';
+  // Potensi & Regulasi
+  renderPotensi();
+  renderRegulasi();
 }
 
 function renderMisi(){
@@ -170,6 +199,24 @@ function renderMisi(){
 function addMisi(){if(!desaData.misi)desaData.misi=[];desaData.misi.push('Misi baru');renderMisi();}
 function removeMisi(i){desaData.misi.splice(i,1);renderMisi();}
 function collectMisi(){desaData.misi=[];document.querySelectorAll('[data-misi]').forEach(el=>{desaData.misi[parseInt(el.dataset.misi)]=el.value;});}
+
+function renderPotensi(){
+  const list=document.getElementById('potensiAdminList');
+  const items=desaData.potensi_desa||[];
+  list.innerHTML=items.map((p,i)=>`<div style="display:flex;gap:8px;margin-bottom:8px;align-items:center"><input type="text" class="form-control" value="${p.judul||''}" data-potensi-judul="${i}" placeholder="Judul" style="flex:2" /><input type="text" class="form-control" value="${p.deskripsi||''}" data-potensi-desc="${i}" placeholder="Deskripsi" style="flex:3" /><button class="btn-admin btn-danger btn-sm-admin" onclick="removePotensi(${i})">✕</button></div>`).join('');
+}
+function addPotensi(){if(!desaData.potensi_desa)desaData.potensi_desa=[];desaData.potensi_desa.push({judul:'Potensi baru',deskripsi:''});renderPotensi();}
+function removePotensi(i){desaData.potensi_desa.splice(i,1);renderPotensi();}
+function collectPotensi(){desaData.potensi_desa=[];document.querySelectorAll('[data-potensi-judul]').forEach(el=>{const idx=parseInt(el.dataset.potensiJudul);desaData.potensi_desa[idx]={judul:el.value,deskripsi:document.querySelector(`[data-potensi-desc="${idx}"]`)?.value||''};});}
+
+function renderRegulasi(){
+  const list=document.getElementById('regulasiAdminList');
+  const items=desaData.regulasi||[];
+  list.innerHTML=items.map((r,i)=>`<div style="display:flex;gap:8px;margin-bottom:8px;align-items:center"><input type="text" class="form-control" value="${r.nama||''}" data-regulasi-nama="${i}" placeholder="Nama Regulasi" style="flex:2" /><input type="text" class="form-control" value="${r.deskripsi||''}" data-regulasi-desc="${i}" placeholder="Deskripsi" style="flex:2" /><input type="text" class="form-control" value="${r.dokumen||''}" data-regulasi-doc="${i}" placeholder="Dokumen" style="flex:1" /><button class="btn-admin btn-danger btn-sm-admin" onclick="removeRegulasi(${i})">✕</button></div>`).join('');
+}
+function addRegulasi(){if(!desaData.regulasi)desaData.regulasi=[];desaData.regulasi.push({nama:'Regulasi baru',deskripsi:'',dokumen:''});renderRegulasi();}
+function removeRegulasi(i){desaData.regulasi.splice(i,1);renderRegulasi();}
+function collectRegulasi(){desaData.regulasi=[];document.querySelectorAll('[data-regulasi-nama]').forEach(el=>{const idx=parseInt(el.dataset.regulasiNama);desaData.regulasi[idx]={nama:el.value,deskripsi:document.querySelector(`[data-regulasi-desc="${idx}"]`)?.value||'',dokumen:document.querySelector(`[data-regulasi-doc="${idx}"]`)?.value||''};});}
 
 async function saveTab(tab){
   collectMisi();
@@ -204,6 +251,12 @@ async function saveTab(tab){
   } else if(tab==='kontak'){
     desaData.kontak={email:document.getElementById('fEmail').value,telepon:document.getElementById('fTelepon').value,whatsapp:document.getElementById('fWhatsapp').value,jam_operasional:document.getElementById('fJam').value,alamat:document.getElementById('fAlamatLengkap').value};
     desaData.sosmed={facebook:document.getElementById('fFacebook').value,instagram:document.getElementById('fInstagram').value,youtube:document.getElementById('fYoutube').value};
+  } else if(tab==='demografi'){
+    desaData.statistik={jumlah_penduduk:parseInt(document.getElementById('fJumlahPenduduk').value)||0,jumlah_kk:parseInt(document.getElementById('fJumlahKK').value)||0,laki_laki:parseInt(document.getElementById('fLakiLaki').value)||0,perempuan:parseInt(document.getElementById('fPerempuan').value)||0};
+  } else if(tab==='potensi'){
+    collectPotensi();
+  } else if(tab==='regulasi'){
+    collectRegulasi();
   }
   const r=await adminFetch('/desa',{method:'PUT',body:JSON.stringify(desaData)});
   if(r)showToast('Profil desa berhasil disimpan');

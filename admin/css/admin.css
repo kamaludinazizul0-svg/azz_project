@@ -610,3 +610,81 @@ input:checked + .slider-toggle::before { transform: translateX(20px); }
 }
 .dash-welcome h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; }
 .dash-welcome p { font-size: 0.88rem; opacity: 0.85; }
+
+/* ===== BADGE ADMIN ===== */
+.badge-admin {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--bg-page);
+  color: var(--text-body);
+  border: 1px solid var(--border);
+}
+.badge-admin.success { background: #e8f5e9; color: #2e7d32; border-color: #a5d6a7; }
+.badge-admin.warning { background: #fff3e0; color: #e65100; border-color: #ffcc80; }
+.badge-admin.danger { background: #fce4ec; color: #c62828; border-color: #ef9a9a; }
+.badge-admin.blue { background: #e3f2fd; color: #0277bd; border-color: #90caf9; }
+.badge-admin.purple { background: #f3e5f5; color: #6a1b9a; border-color: #ce93d8; }
+
+/* ===== DASH STAT CARDS ===== */
+.dash-stat-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+.dash-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.dash-stat-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.dash-stat-icon.green { background: #e8f5e9; }
+.dash-stat-icon.yellow { background: #fff8e1; }
+.dash-stat-icon.blue { background: #e3f2fd; }
+.dash-stat-icon.purple { background: #f3e5f5; }
+.dash-stat-num {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1;
+}
+.dash-stat-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ===== PAGE HEADER ===== */
+.page-header-admin {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.page-header-admin h1 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+.page-header-admin p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}

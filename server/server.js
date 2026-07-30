@@ -194,7 +194,7 @@ app.get('/api/penduduk', async (req, res) => {
       limit: l
     });
   } catch (error) {
-    console.error(error);
+    console.error('DB error - using fallback:', error.message);
     // Fallback if DB error or table not found
     const fallback = readData('penduduk.json') || {};
     res.json(fallback);
@@ -628,10 +628,100 @@ app.delete('/api/pengaduan/:id', authMiddleware, (req, res) => {
   res.json({ message: 'Dihapus' });
 });
 
+// ====================== PEMBANGUNAN ======================
+app.get('/api/pembangunan', (req, res) => {
+  let data = readData('pembangunan.json') || [];
+  const { status, tahun } = req.query;
+  if (status) data = data.filter(d => d.status === status);
+  if (tahun) data = data.filter(d => String(d.tahun) === String(tahun));
+  data.sort((a, b) => b.id - a.id);
+  res.json(data);
+});
+app.post('/api/pembangunan', authMiddleware, (req, res) => {
+  const data = readData('pembangunan.json') || [];
+  const newItem = { ...req.body, id: Date.now(), created_at: new Date().toISOString() };
+  data.push(newItem);
+  writeData('pembangunan.json', data);
+  res.json(newItem);
+});
+app.put('/api/pembangunan/:id', authMiddleware, (req, res) => {
+  const data = readData('pembangunan.json') || [];
+  const idx = data.findIndex(d => d.id == req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Tidak ditemukan' });
+  data[idx] = { ...data[idx], ...req.body };
+  writeData('pembangunan.json', data);
+  res.json(data[idx]);
+});
+app.delete('/api/pembangunan/:id', authMiddleware, (req, res) => {
+  let data = readData('pembangunan.json') || [];
+  data = data.filter(d => d.id != req.params.id);
+  writeData('pembangunan.json', data);
+  res.json({ message: 'Dihapus' });
+});
+
+// ====================== STATISTIK TAMBAHAN ======================
+app.get('/api/statistik-tambahan', (req, res) => {
+  const data = readData('statistik-tambahan.json') || [];
+  res.json(data);
+});
+app.post('/api/statistik-tambahan', authMiddleware, (req, res) => {
+  const data = readData('statistik-tambahan.json') || [];
+  const newKat = { ...req.body, id: Date.now(), items: [] };
+  data.push(newKat);
+  writeData('statistik-tambahan.json', data);
+  res.json(newKat);
+});
+app.put('/api/statistik-tambahan/:id', authMiddleware, (req, res) => {
+  const data = readData('statistik-tambahan.json') || [];
+  const idx = data.findIndex(k => k.id == req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Tidak ditemukan' });
+  data[idx] = { ...data[idx], ...req.body, items: data[idx].items || [] };
+  writeData('statistik-tambahan.json', data);
+  res.json(data[idx]);
+});
+app.delete('/api/statistik-tambahan/:id', authMiddleware, (req, res) => {
+  let data = readData('statistik-tambahan.json') || [];
+  data = data.filter(k => k.id != req.params.id);
+  writeData('statistik-tambahan.json', data);
+  res.json({ message: 'Dihapus' });
+});
+// Items dalam kategori statistik
+app.post('/api/statistik-tambahan/:katId/item', authMiddleware, (req, res) => {
+  const data = readData('statistik-tambahan.json') || [];
+  const kat = data.find(k => k.id == req.params.katId);
+  if (!kat) return res.status(404).json({ error: 'Kategori tidak ditemukan' });
+  if (!kat.items) kat.items = [];
+  const newItem = { ...req.body, id: Date.now() };
+  kat.items.push(newItem);
+  writeData('statistik-tambahan.json', data);
+  res.json(newItem);
+});
+app.put('/api/statistik-tambahan/:katId/item/:itemId', authMiddleware, (req, res) => {
+  const data = readData('statistik-tambahan.json') || [];
+  const kat = data.find(k => k.id == req.params.katId);
+  if (!kat) return res.status(404).json({ error: 'Kategori tidak ditemukan' });
+  const itemIdx = (kat.items || []).findIndex(i => i.id == req.params.itemId);
+  if (itemIdx === -1) return res.status(404).json({ error: 'Item tidak ditemukan' });
+  kat.items[itemIdx] = { ...kat.items[itemIdx], ...req.body };
+  writeData('statistik-tambahan.json', data);
+  res.json(kat.items[itemIdx]);
+});
+app.delete('/api/statistik-tambahan/:katId/item/:itemId', authMiddleware, (req, res) => {
+  const data = readData('statistik-tambahan.json') || [];
+  const kat = data.find(k => k.id == req.params.katId);
+  if (!kat) return res.status(404).json({ error: 'Kategori tidak ditemukan' });
+  kat.items = (kat.items || []).filter(i => i.id != req.params.itemId);
+  writeData('statistik-tambahan.json', data);
+  res.json({ message: 'Dihapus' });
+});
+
 app.get('/api/stats', authMiddleware, async (req, res) => {
   const berita = readData('berita.json') || [];
   const listing = readData('listing.json') || [];
   const perangkat = readData('perangkat.json') || [];
+  const pembangunan = readData('pembangunan.json') || [];
+  const surat = readData('surat.json') || [];
+  const pengaduan = readData('pengaduan.json') || [];
   
   let jumlah_penduduk = 0;
   let jumlah_kk = 0;
@@ -652,7 +742,12 @@ app.get('/api/stats', authMiddleware, async (req, res) => {
     total_listing: listing.length,
     total_perangkat: perangkat.length,
     jumlah_penduduk: jumlah_penduduk,
-    jumlah_kk: jumlah_kk
+    jumlah_kk: jumlah_kk,
+    total_pembangunan: pembangunan.length,
+    total_surat: surat.length,
+    total_pengaduan: pengaduan.length,
+    pengaduan_menunggu: pengaduan.filter(p => p.status === 'Menunggu').length,
+    surat_menunggu: surat.filter(s => s.status === 'Menunggu').length,
   });
 });
 

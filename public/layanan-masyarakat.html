@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layanan Masyarakat - Desa Kauman</title>
+  <meta name="description" content="Layanan masyarakat online Desa Kauman: Permohonan Surat, Permohonan Informasi, dan Pengaduan Masyarakat." />
+  <meta name="keywords" content="Layanan Desa Kauman, Permohonan Surat, Permohonan Informasi, Pengaduan" />
+  <link rel="icon" href="/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    /* ===== SERVICE TABS ===== */
+    .layanan-hero {
+      background: linear-gradient(135deg, #1b2e1c 0%, #2e7d32 60%, #388e3c 100%);
+      padding: 100px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .layanan-hero::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      top: -180px; right: -120px;
+    }
+    .layanan-hero::after {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      bottom: 20px; left: -80px;
+    }
+    .layanan-hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 20px 0;
+      color: #fff;
+    }
+    .layanan-hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 6px 18px;
+      border-radius: 100px;
+      margin-bottom: 18px;
+      letter-spacing: 0.5px;
+    }
+    .layanan-hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+    .layanan-hero p {
+      font-size: 1rem;
+      opacity: 0.85;
+      max-width: 560px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    /* Tab Navigation */
+    .service-tabs-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      position: relative;
+      z-index: 2;
+      padding: 0 20px;
+    }
+    .service-tab-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 16px 36px 20px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      border-bottom: 3px solid transparent;
+      position: relative;
+    }
+    .service-tab-btn:first-child { border-radius: 12px 0 0 0; }
+    .service-tab-btn:last-child { border-radius: 0 12px 0 0; }
+    .service-tab-btn .tab-icon { font-size: 1.5rem; }
+    .service-tab-btn:hover { background: rgba(255,255,255,0.18); color: #fff; }
+    .service-tab-btn.active {
+      background: #fff;
+      color: #2e7d32;
+      border-bottom-color: #fff;
+    }
+    .service-tab-btn.active .tab-icon { filter: none; }
+    .service-tab-btn .tab-badge {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: #f44336;
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 100px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    /* Tab Content */
+    .service-tab-content { display: none; }
+    .service-tab-content.active { display: block; }
+
+    .service-section {
+      background: #f8faf8;
+      min-height: 60vh;
+      padding: 48px 0 64px;
+    }
+
+    /* Service Cards (for overview on tab open) */
+    .service-info-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 32px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      border: 1px solid #e5e7eb;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .service-info-icon {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    /* Form Styles */
+    .form-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 36px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+      border: 1px solid #e5e7eb;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .form-section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e8f5e9;
+    }
+    .form-field {
+      margin-bottom: 18px;
+    }
+    .form-field label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+    .form-field label .req { color: #e53935; }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.92rem;
+      color: #1a1a2e;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fff;
+    }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: #2e7d32;
+      box-shadow: 0 0 0 3px rgba(46,125,50,0.12);
+    }
+    .form-field textarea { resize: vertical; min-height: 100px; }
+    .form-field .field-hint { font-size: 0.78rem; color: #6b7280; margin-top: 5px; }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 600px) { .form-grid-2 { grid-template-columns: 1fr; } }
+
+    .upload-field {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+    .upload-field input { flex: 1; }
+    .upload-btn {
+      padding: 12px 20px;
+      background: #f1f5f1;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #374151;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .upload-btn:hover { background: #e8f5e9; border-color: #2e7d32; color: #2e7d32; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 15px 32px;
+      border-radius: 12px;
+      border: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .btn-submit-surat { background: linear-gradient(135deg, #2e7d32, #4caf50); color: #fff; }
+    .btn-submit-surat:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,125,50,0.35); }
+    .btn-submit-info { background: linear-gradient(135deg, #0277bd, #29b6f6); color: #fff; }
+    .btn-submit-info:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(2,119,189,0.35); }
+    .btn-submit-pengaduan { background: linear-gradient(135deg, #c62828, #ef5350); color: #fff; }
+    .btn-submit-pengaduan:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(198,40,40,0.35); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* Success State */
+    .success-state {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .success-state .success-icon {
+      width: 80px; height: 80px;
+      background: #e8f5e9;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 20px;
+      animation: popIn 0.4s ease;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      80% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .success-state h3 { font-size: 1.4rem; font-weight: 800; color: #1a1a2e; margin-bottom: 10px; }
+    .success-state p { color: #6b7280; line-height: 1.7; max-width: 400px; margin: 0 auto 24px; }
+    .btn-reset {
+      padding: 11px 28px;
+      border-radius: 100px;
+      border: 2px solid #2e7d32;
+      background: transparent;
+      color: #2e7d32;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover { background: #2e7d32; color: #fff; }
+
+    /* Syarat & Info Box */
+    .info-box {
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: 0.84rem;
+      color: #2e7d32;
+      line-height: 1.7;
+    }
+    .info-box.blue { background: #e3f2fd; border-color: #90caf9; color: #0277bd; }
+    .info-box.red { background: #fce4ec; border-color: #ef9a9a; color: #c62828; }
+    .info-box strong { font-weight: 700; }
+
+    /* Step indicator */
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 32px;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #9ca3af;
+    }
+    .step-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      color: #9ca3af;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .step.done .step-num { background: #2e7d32; color: #fff; }
+    .step.active .step-num { background: #2e7d32; color: #fff; box-shadow: 0 0 0 4px rgba(46,125,50,0.2); }
+    .step.active { color: #2e7d32; }
+    .step-line { width: 40px; height: 2px; background: #e5e7eb; margin: 0 4px; }
+    .step-line.done { background: #2e7d32; }
+
+    /* Responsive tabs */
+    @media (max-width: 640px) {
+      .service-tab-btn { padding: 12px 16px 16px; font-size: 0.76rem; }
+      .service-tab-btn .tab-icon { font-size: 1.2rem; }
+      .form-card { padding: 24px 20px; }
+      .layanan-hero { padding-top: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-brand">
+      <img src="/images/logo.png" alt="Logo Desa Kauman" class="nav-logo" />
+      <div class="nav-title">
+        <span class="desa-name" data-desa-nama>Desa Kauman</span>
+        <span class="desa-loc">Kab. Jombang, Jawa Timur</span>
+      </div>
+    </a>
+    <div class="nav-menu">
+      <a href="/index.html" class="nav-link">🏠 Beranda</a>
+      <a href="/profil.html" class="nav-link">📋 Profil Desa</a>
+      <a href="/infografis.html" class="nav-link">📊 Infografis</a>
+      <a href="/idm.html" class="nav-link">🏆 IDM</a>
+      <a href="/berita.html" class="nav-link">📰 Berita</a>
+      <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a>
+      <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
+      <a href="/ppid.html" class="nav-link">📂 PPID</a>
+      <a href="/layanan-masyarakat.html" style="background:var(--primary,#2e7d32);color:#fff;padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 4px 12px rgba(46,125,50,0.4);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s,box-shadow 0.2s" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 6px 20px rgba(46,125,50,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 12px rgba(46,125,50,0.4)'">🏛️ Layanan Masyarakat</a>
+    </div>
+    <div class="nav-burger" id="navBurger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">🏠 Beranda</a>
+  <a href="/profil.html" class="nav-link">📋 Profil Desa</a>
+  <a href="/infografis.html" class="nav-link">📊 Infografis</a>
+  <a href="/idm.html" class="nav-link">🏆 IDM</a>
+  <a href="/berita.html" class="nav-link">📰 Berita</a>
+  <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+  <a href="/listing.html" class="nav-link">🏪 Listing</a>
+  <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
+  <a href="/ppid.html" class="nav-link">📂 PPID</a>
+  <a href="/layanan-masyarakat.html" class="nav-link active">🏛️ Layanan Masyarakat</a>
+</div>
+
+<!-- ===== HERO + TABS ===== -->
+<div class="layanan-hero">
+  <div class="layanan-hero-content container">
+    <div class="layanan-hero-badge">🏛️ Layanan Publik Online</div>
+    <h1>Layanan Masyarakat<br>Desa Kauman</h1>
+    <p>Akses berbagai layanan administrasi dan aspirasi secara mudah, cepat, dan transparan langsung dari rumah Anda.</p>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="service-tabs-nav container">
+    <button class="service-tab-btn active" id="tabBtnSurat" onclick="switchTab('surat')">
+      <span class="tab-icon">✉️</span>
+      <span>Permohonan Surat</span>
+    </button>
+    <button class="service-tab-btn" id="tabBtnInfo" onclick="switchTab('info')">
+      <span class="tab-icon">ℹ️</span>
+      <span>Permohonan Info</span>
+    </button>
+    <button class="service-tab-btn" id="tabBtnPengaduan" onclick="switchTab('pengaduan')">
+      <span class="tab-icon">📢</span>
+      <span>Layanan Pengaduan</span>
+    </button>
+  </div>
+</div>
+
+<!-- ===== SERVICE SECTION ===== -->
+<div class="service-section">
+  <div class="container">
+
+    <!-- ========== TAB: PERMOHONAN SURAT ========== -->
+    <div class="service-tab-content active" id="tab-surat">
+      <div class="form-card">
+        <div class="info-box">
+          <strong>ℹ️ Persyaratan Permohonan Surat:</strong><br>
+          Siapkan: KTP asli, Surat Pengantar RT/RW, dan dokumen pendukung sesuai jenis surat yang dimohon.
+          Proses: <strong>1-3 hari kerja</strong>. Surat akan dikirim via WhatsApp setelah disetujui.
+        </div>
+
+        <div class="form-section-title">📝 Formulir Permohonan Surat</div>
+        <form id="suratForm" onsubmit="submitSurat(event)">
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label>Nama Lengkap <span class="req">*</span></label>
+              <input type="text" id="sNama" required placeholder="Sesuai KTP" />
+            </div>
+            <div class="form-field">
+              <label>NIK <span class="req">*</span></label>
+              <input type="text" id="sNik" required pattern="[0-9]{16}" title="NIK harus 16 digit angka" placeholder="16 Digit Angka" />
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label>No. WhatsApp Aktif <span class="req">*</span></label>
+              <input type="text" id="sWa" required placeholder="08xxxxxxxxxx" />
+            </div>
+            <div class="form-field">
+              <label>Jenis Surat <span class="req">*</span></label>
+              <select id="sJenis" required>
+                <option value="">-- Pilih Jenis Surat --</option>
+                <option value="Surat Pengantar Domisili">Surat Pengantar Domisili</option>
+                <option value="Surat Pengantar SKCK">Surat Pengantar SKCK</option>
+                <option value="Surat Keterangan Usaha">Surat Keterangan Usaha (SKU)</option>
+                <option value="Surat Keterangan Tidak Mampu">Surat Keterangan Tidak Mampu (SKTM)</option>
+                <option value="Surat Keterangan Belum Menikah">Surat Keterangan Belum Menikah</option>
+                <option value="Surat Keterangan Lahir">Surat Keterangan Lahir</option>
+                <option value="Surat Keterangan Kematian">Surat Keterangan Kematian</option>
+                <option value="Surat Pengantar Pindah">Surat Pengantar Pindah</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Alamat Lengkap <span class="req">*</span></label>
+            <textarea id="sAlamat" required rows="2" placeholder="Masukkan alamat sesuai domisili..."></textarea>
+          </div>
+          <div class="form-field">
+            <label>Tujuan / Keperluan Membuat Surat</label>
+            <textarea id="sKeperluan" rows="3" placeholder="Contoh: Untuk melengkapi berkas melamar pekerjaan di..."></textarea>
+          </div>
+          <div class="form-field">
+            <label>Upload Foto KTP <span class="req">*</span></label>
+            <div class="upload-field">
+              <input type="text" id="sLampiranKtp" placeholder="URL file KTP akan muncul di sini..." required readonly />
+              <button type="button" class="upload-btn" id="btnUploadKtp" onclick="handleUpload('sLampiranKtp', 'btnUploadKtp')">📂 Upload KTP</button>
+            </div>
+            <div class="field-hint">Wajib melampirkan foto/scan KTP asli (JPG/PNG/PDF, maks 5MB)</div>
+          </div>
+          <div class="form-field">
+            <label>Upload Surat Pengantar RT/RW <span class="req">*</span></label>
+            <div class="upload-field">
+              <input type="text" id="sLampiran" placeholder="URL file akan muncul di sini..." required readonly />
+              <button type="button" class="upload-btn" id="btnUploadRT" onclick="handleUpload('sLampiran', 'btnUploadRT')">📂 Upload Surat RT</button>
+            </div>
+            <div class="field-hint">Wajib melampirkan foto/scan Surat Pengantar dari RT/RW setempat</div>
+          </div>
+          <button type="submit" class="btn-submit btn-submit-surat" id="btnSubmitSurat">
+            ✉️ Kirim Permohonan Surat
+          </button>
+        </form>
+        <div id="suratSuccess" style="display:none">
+          <div class="success-state">
+            <div class="success-icon">✅</div>
+            <h3>Permohonan Berhasil Dikirim!</h3>
+            <p>Permohonan surat Anda sedang kami proses. Surat akan dikirim ke WhatsApp Anda setelah disetujui (1-3 hari kerja).</p>
+            <button class="btn-reset" onclick="resetForm('suratForm','suratSuccess')">Buat Permohonan Lain</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== TAB: PERMOHONAN INFO ========== -->
+    <div class="service-tab-content" id="tab-info">
+      <div class="form-card">
+        <div class="info-box blue">
+          <strong>ℹ️ Tentang Permohonan Informasi:</strong><br>
+          Berdasarkan <strong>UU No. 14 Tahun 2008</strong> tentang Keterbukaan Informasi Publik, setiap warga berhak meminta informasi publik.
+          Pemerintah Desa wajib merespons dalam <strong>10 hari kerja</strong>.
+        </div>
+
+        <div class="form-section-title">📝 Formulir Permohonan Informasi</div>
+        <form id="infoForm" onsubmit="submitInfo(event)">
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label>Nama Lengkap <span class="req">*</span></label>
+              <input type="text" id="pNama" required placeholder="Masukkan nama lengkap" />
+            </div>
+            <div class="form-field">
+              <label>No. HP / WhatsApp <span class="req">*</span></label>
+              <input type="text" id="pNoHp" required placeholder="08xxxxxxxxxx" />
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label>Email (Opsional)</label>
+              <input type="email" id="pEmail" placeholder="email@contoh.com" />
+            </div>
+            <div class="form-field">
+              <label>Instansi / Lembaga (Opsional)</label>
+              <input type="text" id="pInstansi" placeholder="Nama instansi jika mewakili lembaga" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Informasi yang Diminta <span class="req">*</span></label>
+            <textarea id="pInformasi" required rows="4" placeholder="Jelaskan secara detail informasi apa yang ingin Anda ketahui..."></textarea>
+          </div>
+          <div class="form-field">
+            <label>Tujuan Penggunaan Informasi <span class="req">*</span></label>
+            <textarea id="pTujuan" required rows="3" placeholder="Untuk keperluan apa informasi ini akan digunakan..."></textarea>
+          </div>
+          <div class="form-field">
+            <label>Format Informasi yang Diinginkan</label>
+            <select id="pFormat">
+              <option value="Softcopy (Digital)">Softcopy (Digital)</option>
+              <option value="Hardcopy (Cetak)">Hardcopy (Cetak)</option>
+              <option value="Keduanya">Keduanya</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-submit btn-submit-info" id="btnSubmitInfo">
+            📨 Kirim Permohonan Informasi
+          </button>
+        </form>
+        <div id="infoSuccess" style="display:none">
+          <div class="success-state">
+            <div class="success-icon" style="background:#e3f2fd">📋</div>
+            <h3>Permohonan Berhasil Dikirim!</h3>
+            <p>Tim PPID Desa Kauman akan segera menghubungi Anda melalui nomor WhatsApp yang diberikan dalam 10 hari kerja.</p>
+            <button class="btn-reset" style="border-color:#0277bd;color:#0277bd" onmouseover="this.style.background='#0277bd';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#0277bd'" onclick="resetForm('infoForm','infoSuccess')">Buat Permohonan Lain</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== TAB: LAYANAN PENGADUAN ========== -->
+    <div class="service-tab-content" id="tab-pengaduan">
+      <div class="form-card">
+        <div class="info-box red">
+          <strong>📢 Penting:</strong> Identitas Anda akan <strong>dijaga kerahasiaannya</strong>.
+          Laporan yang masuk akan ditindaklanjuti dalam <strong>7 hari kerja</strong>. Pengaduan tidak berisi SARA, pornografi, atau ujaran kebencian.
+        </div>
+
+        <div class="form-section-title">📝 Formulir Pengaduan Masyarakat</div>
+        <form id="pengaduanForm" onsubmit="submitPengaduan(event)">
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label>Nama Lengkap <span class="req">*</span></label>
+              <input type="text" id="pengNama" required placeholder="Sesuai KTP" />
+            </div>
+            <div class="form-field">
+              <label>No. HP / WhatsApp <span class="req">*</span></label>
+              <input type="text" id="pengNoHp" required placeholder="08xxxxxxxxxx" />
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label>NIK (Opsional)</label>
+              <input type="text" id="pengNik" pattern="[0-9]{16}" title="NIK harus 16 digit angka" placeholder="16 Digit Angka" />
+            </div>
+            <div class="form-field">
+              <label>Kategori Pengaduan <span class="req">*</span></label>
+              <select id="pengKategori" required>
+                <option value="">-- Pilih Kategori --</option>
+                <option value="Infrastruktur">Infrastruktur &amp; Fasilitas Umum</option>
+                <option value="Pelayanan">Pelayanan Aparatur Desa</option>
+                <option value="Keamanan">Ketertiban &amp; Keamanan</option>
+                <option value="Lingkungan">Lingkungan Hidup</option>
+                <option value="Sosial">Masalah Sosial</option>
+                <option value="Bantuan Sosial">Bantuan Sosial</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Judul / Subjek Pengaduan <span class="req">*</span></label>
+            <input type="text" id="pengJudul" required placeholder="Ringkasan singkat pengaduan Anda" />
+          </div>
+          <div class="form-field">
+            <label>Isi Laporan / Pengaduan <span class="req">*</span></label>
+            <textarea id="pengIsi" required rows="5" placeholder="Jelaskan detail kejadian, lokasi, waktu, dan pihak yang terlibat..."></textarea>
+          </div>
+          <div class="form-field">
+            <label>Prioritas</label>
+            <select id="pengPrioritas">
+              <option value="Rendah">Rendah - Tidak mendesak</option>
+              <option value="Sedang" selected>Sedang - Perlu perhatian</option>
+              <option value="Tinggi">Tinggi - Mendesak</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Bukti Foto / Dokumen Pendukung (Opsional)</label>
+            <div class="upload-field">
+              <input type="text" id="pengLampiran" placeholder="Tidak ada file terpilih..." readonly />
+              <button type="button" class="upload-btn" id="btnUploadPengaduan" onclick="handleUpload('pengLampiran', 'btnUploadPengaduan')">📂 Upload Foto</button>
+            </div>
+            <div class="field-hint">Format: JPG, PNG, PDF (maks 5MB)</div>
+          </div>
+          <button type="submit" class="btn-submit btn-submit-pengaduan" id="btnSubmitPengaduan">
+            📢 Kirim Pengaduan
+          </button>
+        </form>
+        <div id="pengaduanSuccess" style="display:none">
+          <div class="success-state">
+            <div class="success-icon" style="background:#fce4ec">📢</div>
+            <h3>Pengaduan Berhasil Dikirim!</h3>
+            <p>Terima kasih atas partisipasi Anda. Laporan Anda telah kami terima dan akan segera ditindaklanjuti oleh Pemerintah Desa Kauman dalam 7 hari kerja.</p>
+            <button class="btn-reset" style="border-color:#c62828;color:#c62828" onmouseover="this.style.background='#c62828';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#c62828'" onclick="resetForm('pengaduanForm','pengaduanSuccess')">Buat Pengaduan Lain</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" />
+          <div class="footer-logo-text">
+            <span class="name" data-desa-nama>Desa Kauman</span>
+            <span class="loc">Kec. Ngoro, Kab. Jombang</span>
+          </div>
+        </div>
+        <p class="footer-desc">Website resmi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur. Kampung Jamu Tradisional yang terus berkembang menuju desa digital.</p>
+        <div class="footer-sosmed">
+          <a href="#" data-sosmed-fb title="Facebook">f</a>
+          <a href="#" data-sosmed-ig title="Instagram">ig</a>
+          <a href="#" data-sosmed-yt title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">MENU</h4>
+        <div class="footer-links">
+          <a href="/index.html">→ Beranda</a>
+          <a href="/profil.html">→ Profil Desa</a>
+          <a href="/infografis.html">→ Infografis</a>
+          <a href="/idm.html">→ IDM</a>
+          <a href="/berita.html">→ Berita</a>
+          <a href="/galeri.html">→ Galeri</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">LAYANAN</h4>
+        <div class="footer-links">
+          <a href="/layanan-masyarakat.html?tab=surat">→ Permohonan Surat</a>
+          <a href="/layanan-masyarakat.html?tab=info">→ Permohonan Info</a>
+          <a href="/layanan-masyarakat.html?tab=pengaduan">→ Pengaduan</a>
+          <a href="/listing.html">→ Listing UMKM</a>
+          <a href="/ppid.html">→ PPID</a>
+          <a href="/admin">→ Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col-title">KONTAK</h4>
+        <div class="footer-contact">
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span data-desa-telp>(0321) 123456</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pemerintah Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script src="/js/api.js"></script>
+<script src="/js/main.js"></script>
+<script>
+// ===== TAB SWITCHING =====
+function switchTab(tabName) {
+  // Update buttons
+  document.querySelectorAll('.service-tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('tabBtn' + capitalize(tabName)).classList.add('active');
+  
+  // Update content
+  document.querySelectorAll('.service-tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + tabName).classList.add('active');
+  
+  // Update URL without reload
+  const url = new URL(window.location);
+  url.searchParams.set('tab', tabName);
+  window.history.pushState({}, '', url);
+  
+  // Scroll to content smoothly
+  document.querySelector('.service-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function capitalize(str) {
+  const map = { surat: 'Surat', info: 'Info', pengaduan: 'Pengaduan' };
+  return map[str] || str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Handle URL tab param on load
+document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const tab = params.get('tab');
+  if (tab && ['surat', 'info', 'pengaduan'].includes(tab)) {
+    switchTab(tab);
+  }
+});
+
+// ===== UPLOAD HANDLER =====
+async function handleUpload(targetId, btnId) {
+  const f = document.createElement('input');
+  f.type = 'file';
+  f.accept = 'image/*,.pdf,.doc,.docx';
+  f.onchange = async () => {
+    const btn = document.getElementById(btnId);
+    const originalText = btn.textContent;
+    btn.textContent = '⏳ Mengunggah...';
+    btn.disabled = true;
+    
+    const fd = new FormData();
+    fd.append('file', f.files[0]);
+    try {
+      const r = await fetch('/api/upload', { method: 'POST', body: fd });
+      const d = await r.json();
+      if (d.url) {
+        document.getElementById(targetId).value = d.url;
+        btn.textContent = '✅ Terupload';
+        btn.style.background = '#e8f5e9';
+        btn.style.borderColor = '#2e7d32';
+        btn.style.color = '#2e7d32';
+      } else throw new Error('Upload gagal');
+    } catch(e) {
+      alert('Gagal mengunggah file. Coba lagi.');
+      btn.textContent = originalText;
+    }
+    btn.disabled = false;
+  };
+  f.click();
+}
+
+// ===== RESET FORM =====
+function resetForm(formId, successId) {
+  document.getElementById(formId).reset();
+  // Reset upload buttons
+  document.querySelectorAll('.upload-btn').forEach(btn => {
+    btn.disabled = false;
+    btn.style.background = '';
+    btn.style.borderColor = '';
+    btn.style.color = '';
+  });
+  document.getElementById(formId).style.display = 'block';
+  document.getElementById(successId).style.display = 'none';
+}
+
+// ===== SUBMIT SURAT =====
+async function submitSurat(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnSubmitSurat');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Mengirim...';
+  
+  const payload = {
+    nama: document.getElementById('sNama').value,
+    nik: document.getElementById('sNik').value,
+    alamat: document.getElementById('sAlamat').value,
+    no_wa: document.getElementById('sWa').value,
+    jenis_surat: document.getElementById('sJenis').value,
+    keperluan: document.getElementById('sKeperluan').value,
+    lampiran_ktp: document.getElementById('sLampiranKtp').value,
+    lampiran: document.getElementById('sLampiran').value
+  };
+  
+  const res = await API.postSurat(payload);
+  if (res) {
+    // Kirim notif WA ke admin
+    try {
+      const desa = await API.desa();
+      let adminPhone = '6281234567890';
+      if (desa?.kontak?.whatsapp) {
+        adminPhone = desa.kontak.whatsapp.replace(/[^0-9]/g, '');
+        if (adminPhone.startsWith('0')) adminPhone = '62' + adminPhone.slice(1);
+      } else if (desa?.kontak?.telepon) {
+        adminPhone = desa.kontak.telepon.replace(/[^0-9]/g, '');
+        if (adminPhone.startsWith('0')) adminPhone = '62' + adminPhone.slice(1);
+      }
+      const msg = `Halo Admin Desa Kauman,\n\nAda permohonan surat baru!\n\n*Nama:* ${payload.nama}\n*NIK:* ${payload.nik}\n*Jenis Surat:* ${payload.jenis_surat}\n*Keperluan:* ${payload.keperluan}\n\nSilakan cek di panel admin. Terima kasih.`;
+      window.open(`https://wa.me/${adminPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    } catch(err) {}
+    
+    document.getElementById('suratForm').style.display = 'none';
+    document.getElementById('suratSuccess').style.display = 'block';
+  } else {
+    alert('Gagal mengirim permohonan. Periksa koneksi internet Anda.');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '✉️ Kirim Permohonan Surat';
+}
+
+// ===== SUBMIT PERMOHONAN INFO =====
+async function submitInfo(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnSubmitInfo');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Mengirim...';
+  
+  const payload = {
+    nama: document.getElementById('pNama').value,
+    no_hp: document.getElementById('pNoHp').value,
+    email: document.getElementById('pEmail').value,
+    instansi: document.getElementById('pInstansi').value,
+    informasi_diminta: document.getElementById('pInformasi').value,
+    tujuan: document.getElementById('pTujuan').value,
+    format: document.getElementById('pFormat').value,
+    status: 'Menunggu'
+  };
+  
+  const res = await API.postPermohonanInfo(payload);
+  if (res) {
+    // Kirim notif WA ke admin
+    try {
+      const desa = await API.desa();
+      let adminPhone = '6281234567890';
+      if (desa?.kontak?.whatsapp) {
+        adminPhone = desa.kontak.whatsapp.replace(/[^0-9]/g, '');
+        if (adminPhone.startsWith('0')) adminPhone = '62' + adminPhone.slice(1);
+      } else if (desa?.kontak?.telepon) {
+        adminPhone = desa.kontak.telepon.replace(/[^0-9]/g, '');
+        if (adminPhone.startsWith('0')) adminPhone = '62' + adminPhone.slice(1);
+      }
+      const msg = `Halo Admin Desa Kauman,\n\nAda permohonan informasi baru!\n\n*Nama:* ${payload.nama}\n*Informasi Diminta:* ${payload.informasi_diminta}\n*Tujuan:* ${payload.tujuan}\n\nSilakan cek di panel admin. Terima kasih.`;
+      window.open(`https://wa.me/${adminPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    } catch(err) {}
+
+    document.getElementById('infoForm').style.display = 'none';
+    document.getElementById('infoSuccess').style.display = 'block';
+  } else {
+    alert('Gagal mengirim permohonan. Periksa koneksi internet Anda.');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '📨 Kirim Permohonan Informasi';
+}
+
+// ===== SUBMIT PENGADUAN =====
+async function submitPengaduan(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnSubmitPengaduan');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Mengirim...';
+  
+  const payload = {
+    nama: document.getElementById('pengNama').value,
+    no_hp: document.getElementById('pengNoHp').value,
+    nik: document.getElementById('pengNik').value,
+    kategori: document.getElementById('pengKategori').value,
+    judul: document.getElementById('pengJudul').value,
+    isi: document.getElementById('pengIsi').value,
+    prioritas: document.getElementById('pengPrioritas').value,
+    foto: document.getElementById('pengLampiran').value,
+    status: 'Menunggu'
+  };
+  
+  const res = await API.postPengaduan(payload);
+  if (res) {
+    // Kirim notif WA ke admin
+    try {
+      const desa = await API.desa();
+      let adminPhone = '6281234567890';
+      if (desa?.kontak?.whatsapp) {
+        adminPhone = desa.kontak.whatsapp.replace(/[^0-9]/g, '');
+        if (adminPhone.startsWith('0')) adminPhone = '62' + adminPhone.slice(1);
+      } else if (desa?.kontak?.telepon) {
+        adminPhone = desa.kontak.telepon.replace(/[^0-9]/g, '');
+        if (adminPhone.startsWith('0')) adminPhone = '62' + adminPhone.slice(1);
+      }
+      const msg = `Halo Admin Desa Kauman,\n\nAda pengaduan masyarakat baru!\n\n*Nama:* ${payload.nama}\n*Kategori:* ${payload.kategori}\n*Judul:* ${payload.judul}\n*Prioritas:* ${payload.prioritas}\n\nSilakan cek di panel admin. Terima kasih.`;
+      window.open(`https://wa.me/${adminPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    } catch(err) {}
+
+    document.getElementById('pengaduanForm').style.display = 'none';
+    document.getElementById('pengaduanSuccess').style.display = 'block';
+  } else {
+    alert('Gagal mengirim pengaduan. Periksa koneksi internet Anda.');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '📢 Kirim Pengaduan';
+}
+
+// ===== LOAD DESA INFO =====
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const desa = await API.desa();
+    if (desa) {
+      if (desa.nama_desa) document.querySelectorAll('[data-desa-nama]').forEach(el => el.textContent = desa.nama_desa);
+      if (desa.kontak?.alamat) document.querySelectorAll('[data-desa-alamat]').forEach(el => el.textContent = desa.kontak.alamat);
+      if (desa.kontak?.telepon) document.querySelectorAll('[data-desa-telp]').forEach(el => el.textContent = desa.kontak.telepon);
+      if (desa.kontak?.email) document.querySelectorAll('[data-desa-email]').forEach(el => { el.textContent = desa.kontak.email; el.href = 'mailto:' + desa.kontak.email; });
+      if (desa.sosmed?.facebook) document.querySelectorAll('[data-sosmed-fb]').forEach(el => el.href = desa.sosmed.facebook);
+      if (desa.sosmed?.instagram) document.querySelectorAll('[data-sosmed-ig]').forEach(el => el.href = desa.sosmed.instagram);
+      if (desa.sosmed?.youtube) document.querySelectorAll('[data-sosmed-yt]').forEach(el => el.href = desa.sosmed.youtube);
+    }
+  } catch(e) {}
+  
+  // Mobile nav
+  document.getElementById('navBurger')?.addEventListener('click', () => {
+    document.getElementById('navMobile')?.classList.toggle('open');
+  });
+  
+  // Back to top
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('backToTop');
+    if (btn) btn.style.opacity = window.scrollY > 300 ? '1' : '0';
+  });
+  document.getElementById('backToTop')?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+});
+</script>
+</body>
+</html>

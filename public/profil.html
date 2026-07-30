@@ -25,7 +25,7 @@
       <a href="/galeri.html" class="nav-link">📷 Galeri</a>
       <a href="/listing.html" class="nav-link">🏪 Listing</a>
       <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
-      <a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'" >✉️ Layanan Surat</a>
+      <a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-masyarakat.html" style="background:var(--primary,#2e7d32);color:#fff;padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 4px 12px rgba(46,125,50,0.4);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s,box-shadow 0.2s" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 6px 20px rgba(46,125,50,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 12px rgba(46,125,50,0.4)'">🏛️ Layanan Masyarakat</a>
     </div>
     <div class="nav-burger" id="navBurger"><span></span><span></span><span></span></div>
   </div>
@@ -35,7 +35,7 @@
   <a href="/infografis.html" class="nav-link">📊 Infografis</a><a href="/idm.html" class="nav-link">🏆 IDM</a>
   <a href="/berita.html" class="nav-link">📰 Berita</a><a href="/galeri.html" class="nav-link">📷 Galeri</a>
       <a href="/listing.html" class="nav-link">🏪 Listing</a>
-  <a href="/belanja.html" class="nav-link">💰 APBDesa</a><a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-surat.html" class="nav-link">✉️ Layanan Surat</a>
+  <a href="/belanja.html" class="nav-link">💰 APBDesa</a><a href="/ppid.html" class="nav-link">📂 PPID</a><a href="/layanan-masyarakat.html" class="nav-link">🏛️ Layanan Masyarakat</a>
 </div>
 
 <div class="page-header">
@@ -116,6 +116,40 @@
       </div>
       <div id="mapProfil" style="height:460px;border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);overflow:hidden"></div>
     </div>
+  </div>
+</section>
+
+<!-- DEMOGRAFI -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">👨‍👩‍👧‍👦 Demografi</div>
+      <h2 class="section-title">Data Demografi Desa Kauman</h2>
+    </div>
+    <div class="section-subtitle fade-in">Statistik kependudukan Desa Kauman berdasarkan data terbaru</div>
+    <div id="demografiSection" class="fade-in" style="margin-top:20px; display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;"></div>
+  </div>
+</section>
+
+<!-- POTENSI DESA -->
+<section class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">⭐ Potensi Desa</div>
+      <h2 class="section-title">Potensi Yang Ada di Desa Kauman</h2>
+    </div>
+    <div id="potensiSection" class="fade-in" style="margin-top:20px; display:flex; flex-direction:column; gap:15px;"></div>
+  </div>
+</section>
+
+<!-- REGULASI -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">📜 Regulasi</div>
+      <h2 class="section-title">Regulasi Desa Kauman</h2>
+    </div>
+    <div id="regulasiSection" class="fade-in" style="margin-top:20px; display:flex; flex-direction:column; gap:15px;"></div>
   </div>
 </section>
 
@@ -219,6 +253,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       `<div class="perangkat-card fade-in"><div class="perangkat-foto"><img src="${p.foto}" alt="${p.nama}" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem>👤</span>'" /></div><div class="perangkat-nama">${p.nama}</div><div class="perangkat-jabatan">${p.jabatan}</div></div>`).join('');
     initScrollAnimations();
   }
+
+  // Demografi
+  const demografiHTML = [
+    ['Jumlah Penduduk', (desa.statistik?.jumlah_penduduk || 0) + ' Jiwa'],
+    ['Jumlah KK', (desa.statistik?.jumlah_kk || 0) + ' Kepala Keluarga'],
+    ['Laki-laki', (desa.statistik?.laki_laki || 0) + ' Jiwa'],
+    ['Perempuan', (desa.statistik?.perempuan || 0) + ' Jiwa'],
+  ].map(([k, v]) => `<div style="background:#fff;border-radius:var(--radius-sm);padding:16px;box-shadow:var(--shadow)"><div style="color:var(--text-muted);font-size:.85rem">${k}</div><div style="font-size:1.4rem;font-weight:800;color:var(--primary-dark)">${v}</div></div>`).join('');
+  document.getElementById('demografiSection').innerHTML = demografiHTML || '<p style="color:var(--text-muted)">Data demografi belum tersedia.</p>';
+
+  // Potensi Desa
+  const potensi = (desa.potensi_desa || []).map(p => `<div style="background:#fff;border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow);border-left:4px solid var(--primary)"><div style="font-size:1.2rem;font-weight:700;color:var(--primary-dark);margin-bottom:6px">${p.judul || ''}</div><div style="color:var(--text-muted);font-size:.9rem;line-height:1.6">${p.deskripsi || ''}</div></div>`).join('');
+  document.getElementById('potensiSection').innerHTML = potensi || '<p style="color:var(--text-muted)">Data potensi desa belum tersedia.</p>';
+
+  // Regulasi
+  const regulasi = (desa.regulasi || []).map(r => `<div style="background:#fff;border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow);border-left:4px solid var(--primary)"><div style="font-size:1.1rem;font-weight:700;color:var(--primary-dark);margin-bottom:6px">${r.nama || ''}</div><div style="color:var(--text-muted);font-size:.9rem;line-height:1.6">${r.deskripsi || ''}</div><div style="margin-top:8px;font-size:.8rem;color:var(--primary)">Doc: ${r.dokumen || '-'}</div></div>`).join('');
+  document.getElementById('regulasiSection').innerHTML = regulasi || '<p style="color:var(--text-muted)">Data regulasi belum tersedia.</p>';
 });
 </script>
 </body>

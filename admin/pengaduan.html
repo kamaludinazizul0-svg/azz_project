@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layanan Pengaduan - Admin Desa Kauman</title>
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/css/admin.css" />
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar" data-page="pengaduan"></aside>
+
+  <main class="admin-main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Layanan Pengaduan</div>
+        <div class="topbar-breadcrumb"><span>Admin</span> / <span>Layanan Pengaduan</span></div>
+      </div>
+      <div class="topbar-right">
+        <a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Lihat Website</a>
+        <button class="topbar-btn" data-logout>🚪 Keluar</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div class="page-header-admin">
+        <div>
+          <h1>📢 Kelola Pengaduan Masyarakat</h1>
+          <p>Tangani laporan dan pengaduan dari masyarakat desa</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <select id="filterStatus" class="form-control" style="max-width:160px" onchange="renderTable()">
+            <option value="">Semua Status</option>
+            <option value="Menunggu">Menunggu</option>
+            <option value="Diproses">Diproses</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Ditolak">Ditolak</option>
+          </select>
+          <select id="filterKategori" class="form-control" style="max-width:160px" onchange="renderTable()">
+            <option value="">Semua Kategori</option>
+            <option value="Infrastruktur">Infrastruktur</option>
+            <option value="Pelayanan">Pelayanan Publik</option>
+            <option value="Keamanan">Keamanan</option>
+            <option value="Lingkungan">Lingkungan</option>
+            <option value="Sosial">Sosial</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon blue">📋</div>
+          <div><div class="dash-stat-num" id="statTotal">-</div><div class="dash-stat-label">Total Pengaduan</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon yellow" style="color:#e65100">🔴</div>
+          <div><div class="dash-stat-num" id="statMenunggu">-</div><div class="dash-stat-label">Belum Ditangani</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon blue">🔄</div>
+          <div><div class="dash-stat-num" id="statDiproses">-</div><div class="dash-stat-label">Sedang Diproses</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon green">✅</div>
+          <div><div class="dash-stat-num" id="statSelesai">-</div><div class="dash-stat-label">Selesai</div></div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="admin-card">
+        <div class="admin-card-body" style="padding:0">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Pelapor</th>
+                <th>Kategori</th>
+                <th>Judul Pengaduan</th>
+                <th>Tanggal</th>
+                <th>Prioritas</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">⏳ Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal Detail -->
+<div class="admin-modal-overlay" id="modalDetail">
+  <div class="admin-modal" style="max-width:620px">
+    <div class="admin-modal-header">
+      <span class="admin-modal-title">📢 Detail Pengaduan</span>
+      <button class="admin-modal-close" onclick="closeModal('modalDetail')">✕</button>
+    </div>
+    <div class="admin-modal-body" id="detailContent"></div>
+    <div class="admin-modal-footer" id="detailFooter"></div>
+  </div>
+</div>
+
+<!-- Modal Update Status -->
+<div class="admin-modal-overlay" id="modalStatus">
+  <div class="admin-modal" style="max-width:480px">
+    <div class="admin-modal-header">
+      <span class="admin-modal-title">🔄 Proses Pengaduan</span>
+      <button class="admin-modal-close" onclick="closeModal('modalStatus')">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="editId" />
+      <div class="form-group">
+        <label class="form-label">Status Penanganan</label>
+        <select id="fStatus" class="form-control">
+          <option value="Menunggu">Menunggu</option>
+          <option value="Diproses">Diproses</option>
+          <option value="Selesai">Selesai</option>
+          <option value="Ditolak">Ditolak</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tanggapan / Tindakan</label>
+        <textarea id="fTanggapan" class="form-control" rows="5" placeholder="Tuliskan tanggapan atau tindakan yang sudah/akan dilakukan..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Petugas yang Menangani</label>
+        <input type="text" id="fPetugas" class="form-control" placeholder="Nama petugas/bidang" />
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-admin btn-light" onclick="closeModal('modalStatus')">Batal</button>
+      <button class="btn-admin btn-primary-admin" onclick="updateStatus()">💾 Simpan Tanggapan</button>
+    </div>
+  </div>
+</div>
+
+<script src="/admin/js/sidebar.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+let allData = [];
+
+document.addEventListener('DOMContentLoaded', loadData);
+
+async function loadData() {
+  const res = await adminFetch('/pengaduan');
+  if (res) {
+    allData = Array.isArray(res) ? res : [];
+    updateStats();
+    renderTable();
+  }
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = allData.length;
+  document.getElementById('statMenunggu').textContent = allData.filter(d=>d.status==='Menunggu').length;
+  document.getElementById('statDiproses').textContent = allData.filter(d=>d.status==='Diproses').length;
+  document.getElementById('statSelesai').textContent = allData.filter(d=>d.status==='Selesai').length;
+}
+
+function renderTable() {
+  const filterStatus = document.getElementById('filterStatus').value;
+  const filterKategori = document.getElementById('filterKategori').value;
+  let filtered = allData;
+  if(filterStatus) filtered = filtered.filter(d => d.status === filterStatus);
+  if(filterKategori) filtered = filtered.filter(d => d.kategori === filterKategori);
+
+  const statusColors = { 'Menunggu':'warning', 'Diproses':'blue', 'Selesai':'success', 'Ditolak':'danger' };
+  const prioritasColors = { 'Tinggi':'danger', 'Sedang':'warning', 'Rendah':'success' };
+
+  document.getElementById('tableBody').innerHTML = filtered.length === 0
+    ? `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">📭 Tidak ada pengaduan</td></tr>`
+    : filtered.map((d, i) => `
+      <tr>
+        <td>${i+1}</td>
+        <td>
+          <div style="font-weight:600;color:var(--text-dark)">${d.nama||'Anonim'}</div>
+          <div style="font-size:0.76rem;color:var(--text-muted)">${d.no_hp||d.email||''}</div>
+        </td>
+        <td><span class="badge-admin">${d.kategori||'-'}</span></td>
+        <td>
+          <div style="max-width:200px;font-weight:500">${d.judul||d.subjek||'-'}</div>
+          <div style="font-size:0.76rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px">${d.isi||d.pesan||''}</div>
+        </td>
+        <td style="font-size:0.82rem">${formatDate(d.created_at)||'-'}</td>
+        <td><span class="badge-admin ${prioritasColors[d.prioritas]||''}">${d.prioritas||'Sedang'}</span></td>
+        <td><span class="badge-admin ${statusColors[d.status]||''}">${d.status||'-'}</span></td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <button class="btn-admin btn-light btn-sm-admin" onclick="viewDetail(${d.id})">👁️</button>
+            <button class="btn-admin btn-warning btn-sm-admin" onclick="openUpdateStatus(${d.id})">🔄</button>
+            <button class="btn-admin btn-danger btn-sm-admin" onclick="hapus(${d.id})">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+}
+
+function viewDetail(id) {
+  const d = allData.find(x => x.id === id);
+  if(!d) return;
+  document.getElementById('detailContent').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:14px;font-size:0.88rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><span style="color:var(--text-muted)">Pelapor</span><div style="font-weight:700">${d.nama||'Anonim'}</div></div>
+        <div><span style="color:var(--text-muted)">Kategori</span><div>${d.kategori||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">No. HP</span><div>${d.no_hp||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Email</span><div>${d.email||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Tanggal Lapor</span><div>${formatDate(d.created_at)||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Status</span><div style="font-weight:700">${d.status||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Prioritas</span><div>${d.prioritas||'Sedang'}</div></div>
+        ${d.petugas ? `<div><span style="color:var(--text-muted)">Petugas</span><div>${d.petugas}</div></div>` : ''}
+      </div>
+      <div style="background:var(--bg-page);padding:14px;border-radius:8px">
+        <div style="font-weight:600;margin-bottom:6px">${d.judul||d.subjek||'Pengaduan'}</div>
+        <div style="line-height:1.7;color:var(--text-body)">${d.isi||d.pesan||d.deskripsi||'-'}</div>
+      </div>
+      ${d.foto ? `<img src="${d.foto}" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px" />` : ''}
+      ${d.tanggapan ? `<div style="background:#e8f5e9;padding:14px;border-radius:8px;border-left:3px solid var(--primary)"><div style="font-weight:600;color:var(--primary);margin-bottom:4px">Tanggapan Admin:</div><div>${d.tanggapan}</div></div>` : ''}
+    </div>
+  `;
+  document.getElementById('detailFooter').innerHTML = `
+    <button class="btn-admin btn-light" onclick="hubungiWaPengaduan(${d.id})" style="background-color:#25D366;color:#fff;border:none;margin-right:auto" ${!d.no_hp ? 'disabled style="background:#ccc;color:#fff;border:none;margin-right:auto;cursor:not-allowed"' : ''}>💬 Chat WA</button>
+    <button class="btn-admin btn-light" onclick="closeModal('modalDetail')">Tutup</button>
+    <button class="btn-admin btn-warning" onclick="closeModal('modalDetail');openUpdateStatus(${d.id})">🔄 Proses</button>
+  `;
+  openModal('modalDetail');
+}
+
+function hubungiWaPengaduan(id) {
+  const d = allData.find(x => x.id === id);
+  if(!d || !d.no_hp) { alert('Nomor HP tidak tersedia'); return; }
+  let phone = d.no_hp.replace(/\D/g, '');
+  if (phone.startsWith('0')) phone = '62' + phone.substring(1);
+  
+  let msgString = `Halo ${d.nama || 'Bpk/Ibu'},\nKami dari Admin Desa Kauman ingin memberikan pembaruan terkait laporan pengaduan Anda berjudul "${d.judul || d.subjek || 'Pengaduan'}" yang dikirim pada ${formatDate(d.created_at)}.\n\nStatus Penanganan saat ini: *${d.status}*\n`;
+  if (d.tanggapan) msgString += `\nTanggapan / Tindakan:\n${d.tanggapan}\n`;
+  msgString += `\nTerima kasih atas partisipasi Anda dalam membangun Desa Kauman.\n-- Admin Desa Kauman`;
+  
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msgString)}`, '_blank');
+}
+
+function openUpdateStatus(id) {
+  const d = allData.find(x => x.id === id);
+  if(!d) return;
+  document.getElementById('editId').value = id;
+  document.getElementById('fStatus').value = d.status || 'Menunggu';
+  document.getElementById('fTanggapan').value = d.tanggapan || '';
+  document.getElementById('fPetugas').value = d.petugas || '';
+  openModal('modalStatus');
+}
+
+async function updateStatus() {
+  const id = document.getElementById('editId').value;
+  const body = {
+    status: document.getElementById('fStatus').value,
+    tanggapan: document.getElementById('fTanggapan').value,
+    petugas: document.getElementById('fPetugas').value,
+  };
+  const res = await adminFetch(`/pengaduan/${id}`, { method:'PUT', body:JSON.stringify(body) });
+  if(res) {
+    showToast('Status pengaduan berhasil diupdate');
+    closeModal('modalStatus');
+    await loadData();
+  }
+}
+
+async function hapus(id) {
+  confirmDialog('Yakin ingin menghapus pengaduan ini?', async () => {
+    const res = await adminFetch(`/pengaduan/${id}`, { method:'DELETE' });
+    if(res) { showToast('Pengaduan berhasil dihapus'); await loadData(); }
+  });
+}
+</script>
+</body>
+</html>

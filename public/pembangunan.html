@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pembangunan Desa - Desa Kauman</title>
+  <meta name="description" content="Informasi proyek pembangunan desa Kauman, Kecamatan Ngoro, Kabupaten Jombang." />
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .proyek-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px;
+    }
+    .proyek-card {
+      background: #fff;
+      border-radius: var(--radius-lg, 16px);
+      overflow: hidden;
+      box-shadow: var(--shadow, 0 4px 20px rgba(0,0,0,0.08));
+      border: 1px solid var(--border, #e5e7eb);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .proyek-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.14); }
+    .proyek-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    .proyek-body { padding: 20px; }
+    .proyek-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .proyek-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .proyek-tag.kategori { background: #e8f5e9; color: #2e7d32; }
+    .proyek-tag.status-perencanaan { background: #e3f2fd; color: #0277bd; }
+    .proyek-tag.status-berjalan { background: #fff3e0; color: #e65100; }
+    .proyek-tag.status-selesai { background: #e8f5e9; color: #2e7d32; }
+    .proyek-tag.status-ditangguhkan { background: #fce4ec; color: #c62828; }
+    .proyek-title { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; line-height: 1.4; }
+    .proyek-info { font-size: 0.82rem; color: #6b7280; margin-bottom: 8px; }
+    .progress-bar { background: #e8f5e9; border-radius: 20px; height: 8px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #2e7d32, #4caf50); border-radius: 20px; transition: width 1s ease; }
+    .filter-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
+    .filter-tab {
+      padding: 8px 20px;
+      border-radius: 100px;
+      border: 2px solid var(--border, #e5e7eb);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fff;
+      color: #6b7280;
+    }
+    .filter-tab.active, .filter-tab:hover { background: var(--primary, #2e7d32); color: #fff; border-color: var(--primary, #2e7d32); }
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .stat-strip-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 1px solid var(--border, #e5e7eb);
+    }
+    .stat-strip-num { font-size: 1.8rem; font-weight: 800; color: var(--primary, #2e7d32); }
+    .stat-strip-label { font-size: 0.78rem; color: #6b7280; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-brand">
+      <img src="/images/logo.png" alt="Logo Desa Kauman" class="nav-logo" />
+      <div class="nav-title">
+        <span class="desa-name" data-desa-nama>Desa Kauman</span>
+        <span class="desa-loc">Kab. Jombang, Jawa Timur</span>
+      </div>
+    </a>
+    <div class="nav-menu">
+      <a href="/index.html" class="nav-link">🏠 Beranda</a>
+      <a href="/profil.html" class="nav-link">📋 Profil Desa</a>
+      <a href="/infografis.html" class="nav-link">📊 Infografis</a>
+      <a href="/idm.html" class="nav-link">🏆 IDM</a>
+      <a href="/berita.html" class="nav-link">📰 Berita</a>
+      <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+      <a href="/listing.html" class="nav-link">🏪 Listing</a>
+      <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
+      <a href="/ppid.html" class="nav-link">📂 PPID</a>
+      <a href="/layanan-surat.html" style="background:var(--bg-white);color:var(--primary-dark);padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">✉️ Layanan Surat</a>
+    </div>
+    <div class="nav-burger" id="navBurger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/index.html" class="nav-link">🏠 Beranda</a>
+  <a href="/profil.html" class="nav-link">📋 Profil</a>
+  <a href="/infografis.html" class="nav-link">📊 Infografis</a>
+  <a href="/berita.html" class="nav-link">📰 Berita</a>
+  <a href="/galeri.html" class="nav-link">📷 Galeri</a>
+  <a href="/listing.html" class="nav-link">🏪 Listing</a>
+  <a href="/belanja.html" class="nav-link">💰 APBDesa</a>
+  <a href="/layanan-masyarakat.html" class="nav-link">🏛️ Layanan Masyarakat</a>
+</div>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">🏠 Beranda</a> / <span>Pembangunan Desa</span></div>
+    <h1>🏗️ Pembangunan Desa</h1>
+    <p>Transparansi proyek pembangunan dan infrastruktur Desa Kauman</p>
+  </div>
+</div>
+
+<!-- Stats Strip -->
+<section class="section" style="padding-top:32px;padding-bottom:0">
+  <div class="container">
+    <div class="stat-strip" id="statStrip">
+      <div class="stat-strip-card">
+        <div class="stat-strip-num" id="sTotal">-</div>
+        <div class="stat-strip-label">Total Proyek</div>
+      </div>
+      <div class="stat-strip-card">
+        <div class="stat-strip-num" style="color:#e65100" id="sBerjalan">-</div>
+        <div class="stat-strip-label">Sedang Berjalan</div>
+      </div>
+      <div class="stat-strip-card">
+        <div class="stat-strip-num" id="sSelesai">-</div>
+        <div class="stat-strip-label">Selesai</div>
+      </div>
+      <div class="stat-strip-card">
+        <div class="stat-strip-num" style="color:#0277bd" id="sPerencanaan">-</div>
+        <div class="stat-strip-label">Perencanaan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Filter & Projects -->
+<section class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">🏗️ Proyek</div>
+      <h2 class="section-title">Daftar Proyek Pembangunan</h2>
+      <p class="section-subtitle">Semua proyek pembangunan desa kami laporkan secara transparan</p>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" onclick="filterProyek('', this)">Semua</button>
+      <button class="filter-tab" onclick="filterProyek('Berjalan', this)">🔄 Sedang Berjalan</button>
+      <button class="filter-tab" onclick="filterProyek('Selesai', this)">✅ Selesai</button>
+      <button class="filter-tab" onclick="filterProyek('Perencanaan', this)">📋 Perencanaan</button>
+      <button class="filter-tab" onclick="filterProyek('Infrastruktur', this, 'kategori')">🏗️ Infrastruktur</button>
+      <button class="filter-tab" onclick="filterProyek('Pendidikan', this, 'kategori')">📚 Pendidikan</button>
+      <button class="filter-tab" onclick="filterProyek('Kesehatan', this, 'kategori')">🏥 Kesehatan</button>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="proyek-grid" id="proyekGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:60px;color:#6b7280">⏳ Memuat data proyek...</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <img src="/images/logo.png" alt="Logo Desa Kauman" class="footer-logo" onerror="this.style.display='none'" />
+          <div>
+            <div class="footer-name" data-desa-nama>Desa Kauman</div>
+            <div class="footer-loc">Kab. Jombang, Jawa Timur</div>
+          </div>
+        </div>
+        <p class="footer-desc" data-desa-desc>Website resmi Desa Kauman.</p>
+      </div>
+      <div>
+        <h4 class="footer-heading">Menu Cepat</h4>
+        <ul class="footer-links">
+          <li><a href="/profil.html">📋 Profil Desa</a></li>
+          <li><a href="/pembangunan.html">🏗️ Pembangunan</a></li>
+          <li><a href="/berita.html">📰 Berita</a></li>
+          <li><a href="/galeri.html">📷 Galeri</a></li>
+          <li><a href="/belanja.html">💰 APBDesa</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Layanan</h4>
+        <ul class="footer-links">
+          <li><a href="/layanan-surat.html">✉️ Permohonan Surat</a></li>
+          <li><a href="/permohonan-informasi.html">ℹ️ Permohonan Info</a></li>
+          <li><a href="/pengaduan.html">📢 Pengaduan</a></li>
+          <li><a href="/ppid.html">📂 PPID</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Kontak</h4>
+        <div id="footerKontak" class="footer-kontak"></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Desa Kauman, Kab. Jombang. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script>
+let allProyek = [];
+let currentFilter = '';
+let currentFilterType = 'status';
+
+async function loadProyek() {
+  try {
+    const res = await fetch('/api/pembangunan');
+    allProyek = await res.json();
+    if(!Array.isArray(allProyek)) allProyek = [];
+  } catch(e) {
+    allProyek = [];
+  }
+  
+  // Stats
+  document.getElementById('sTotal').textContent = allProyek.length;
+  document.getElementById('sBerjalan').textContent = allProyek.filter(p=>p.status==='Berjalan').length;
+  document.getElementById('sSelesai').textContent = allProyek.filter(p=>p.status==='Selesai').length;
+  document.getElementById('sPerencanaan').textContent = allProyek.filter(p=>p.status==='Perencanaan').length;
+  
+  renderProyek(allProyek);
+}
+
+function filterProyek(val, btn, type = 'status') {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = val;
+  currentFilterType = type;
+  let filtered = allProyek;
+  if(val) {
+    if(type === 'status') filtered = filtered.filter(p => p.status === val);
+    else if(type === 'kategori') filtered = filtered.filter(p => p.kategori === val);
+  }
+  renderProyek(filtered);
+}
+
+function renderProyek(data) {
+  const grid = document.getElementById('proyekGrid');
+  if(!data.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:#6b7280">
+      <div style="font-size:3rem;margin-bottom:12px">🏗️</div>
+      <h3 style="font-weight:700">Belum ada proyek</h3>
+      <p>Data proyek pembangunan akan ditampilkan di sini</p>
+    </div>`;
+    return;
+  }
+
+  const statusClassMap = {
+    'Perencanaan': 'status-perencanaan',
+    'Berjalan': 'status-berjalan',
+    'Selesai': 'status-selesai',
+    'Ditangguhkan': 'status-ditangguhkan',
+  };
+
+  grid.innerHTML = data.map(p => `
+    <div class="proyek-card fade-in">
+      ${p.foto
+        ? `<img src="${p.foto}" alt="${p.nama}" class="proyek-img" onerror="this.outerHTML='<div class=proyek-img>🏗️</div>'" />`
+        : `<div class="proyek-img">🏗️</div>`
+      }
+      <div class="proyek-body">
+        <div class="proyek-meta">
+          <span class="proyek-tag kategori">${p.kategori||'Umum'}</span>
+          <span class="proyek-tag ${statusClassMap[p.status]||''}">${p.status||'-'}</span>
+          ${p.tahun ? `<span class="proyek-tag" style="background:#f3e5f5;color:#6a1b9a">📅 ${p.tahun}</span>` : ''}
+        </div>
+        <h3 class="proyek-title">${p.nama}</h3>
+        ${p.lokasi ? `<div class="proyek-info">📍 ${p.lokasi}</div>` : ''}
+        ${p.sumber_dana ? `<div class="proyek-info">💰 ${formatRupiah(p.anggaran)} · Sumber: ${p.sumber_dana}</div>` : ''}
+        ${p.pelaksana ? `<div class="proyek-info">👷 ${p.pelaksana}</div>` : ''}
+        ${p.volume ? `<div class="proyek-info">📐 Volume: ${p.volume}</div>` : ''}
+        ${p.deskripsi ? `<div class="proyek-info" style="color:#374151;line-height:1.5;margin-top:8px">${p.deskripsi}</div>` : ''}
+        ${(p.status !== 'Perencanaan') ? `
+        <div style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#6b7280;margin-bottom:4px">
+            <span>Progress</span><span style="font-weight:700;color:var(--primary,#2e7d32)">${p.progress||0}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${p.progress||0}%"></div>
+          </div>
+        </div>` : ''}
+        ${(p.tgl_mulai || p.tgl_selesai) ? `
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:0.78rem;color:#6b7280">
+          ${p.tgl_mulai ? `<span>▶ Mulai: ${new Date(p.tgl_mulai).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</span>` : ''}
+          ${p.tgl_selesai ? `<span>⏹ Selesai: ${new Date(p.tgl_selesai).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</span>` : ''}
+        </div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function formatRupiah(n) {
+  if(!n) return 'Rp 0';
+  return 'Rp ' + Number(n).toLocaleString('id-ID');
+}
+
+loadProyek();
+
+// Load desa info
+fetch('/api/desa').then(r=>r.json()).then(desa => {
+  if(desa.nama_desa) document.querySelectorAll('[data-desa-nama]').forEach(el => el.textContent = desa.nama_desa);
+  if(desa.deskripsi_singkat) document.querySelectorAll('[data-desa-desc]').forEach(el => el.textContent = desa.deskripsi_singkat);
+  const kontak = document.getElementById('footerKontak');
+  if(kontak && desa.kontak) {
+    kontak.innerHTML = `
+      ${desa.kontak.alamat ? `<div style="font-size:0.82rem;opacity:0.8;margin-bottom:6px">📍 ${desa.kontak.alamat}</div>` : ''}
+      ${desa.kontak.telepon ? `<div style="font-size:0.82rem;opacity:0.8">📞 ${desa.kontak.telepon}</div>` : ''}
+      ${desa.kontak.email ? `<div style="font-size:0.82rem;opacity:0.8">✉️ ${desa.kontak.email}</div>` : ''}
+    `;
+  }
+}).catch(()=>{});
+
+// Mobile nav
+document.getElementById('navBurger')?.addEventListener('click', () => {
+  document.getElementById('navMobile')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>
