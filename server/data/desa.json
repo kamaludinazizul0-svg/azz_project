@@ -50,6 +50,7 @@
   },
   "sambutan_kades": "HALO GAIS",
   "foto_kades": "/uploads/1784394283861.jpeg",
+  "video_profil": "https://www.youtube.com/embed/V6_V9Cfs0m4",
   "statistik": {
     "jumlah_penduduk": 3850,
     "jumlah_kk": 1120,
@@ -58,16 +59,18 @@
   },
   "potensi_desa": [
     {
-      "judul": "Produksi Jamu Tradisional",
-      "deskripsi": "Desa Kauman dikenal sebagai Kampung Jamu Tradisional dengan berbagai produk jamu herbal seperti temulawak, kunyit asam, dan beras kencur yang diracik dengan resep turun-temurun."
+      "judul": "Kampung Jamu Tradisional",
+      "kategori": "UMKM Unggulan",
+      "deskripsi": "Desa Kauman dikenal sebagai Kampung Jamu, di mana sebagian besar warganya memproduksi jamu tradisional secara turun-temurun seperti sinom, temulawak, kunir asem, dan beras kencur.",
+      "gambar": "/images/jamu.jpg",
+      "ikon": "🌱"
     },
     {
-      "judul": "UMKM Pengerajin",
-      "deskripsi": "Terdapat berbagai UKM di bidang kerajinan tangan, makanan olahan, dan jasa yang dikelola oleh warga desa."
-    },
-    {
-      "judul": "Pertanian",
-      "deskripsi": "Lahan pertanian produktif dengan komoditas padi, jagung, dan tanaman hortikultura."
+      "judul": "Wisata Kali Telu",
+      "kategori": "Wisata Alam",
+      "deskripsi": "Destinasi wisata alam berbasis sungai yang dikelola oleh BUMDes Kauman Sejahtera. Menawarkan keindahan alam pedesaan yang asri dengan fasilitas lengkap untuk keluarga.",
+      "gambar": "/images/hero3.jpg",
+      "ikon": "🏞️"
     }
   ],
   "regulasi": [

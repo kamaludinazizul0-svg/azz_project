@@ -242,33 +242,7 @@
 </section>
 
 
-<!-- ===== LAYANAN CEPAT ===== -->
-<section class="section">
-  <div class="container">
-    <div class="section-header fade-in">
-      <div class="section-tag">⚡ Layanan Cepat</div>
-      <h2 class="section-title">Akses Layanan Desa</h2>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;text-align:center" class="fade-in">
-      <a href="/layanan-surat.html" class="admin-card" style="text-decoration:none;color:inherit;padding:24px;transition:0.3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="font-size:3rem;margin-bottom:12px">✉️</div>
-        <h3 style="font-size:1.1rem">Surat Online</h3>
-      </a>
-      <a href="/pengaduan.html" class="admin-card" style="text-decoration:none;color:inherit;padding:24px;transition:0.3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="font-size:3rem;margin-bottom:12px">📢</div>
-        <h3 style="font-size:1.1rem">Lapor/Pengaduan</h3>
-      </a>
-      <a href="/ppid.html" class="admin-card" style="text-decoration:none;color:inherit;padding:24px;transition:0.3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="font-size:3rem;margin-bottom:12px">📂</div>
-        <h3 style="font-size:1.1rem">Informasi Publik</h3>
-      </a>
-      <a href="/belanja.html" class="admin-card" style="text-decoration:none;color:inherit;padding:24px;transition:0.3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="font-size:3rem;margin-bottom:12px">💰</div>
-        <h3 style="font-size:1.1rem">Transparansi Dana</h3>
-      </a>
-    </div>
-  </div>
-</section>
+
 
 
 <!-- ===== GALERI TERBARU ===== -->
@@ -288,20 +262,6 @@
 </section>
 
 
-<!-- ===== VIDEO PROFIL ===== -->
-<section class="section" id="secVideo" style="display:none">
-  <div class="container">
-    <div class="section-header fade-in">
-      <div class="section-tag">🎥 Jelajahi</div>
-      <h2 class="section-title">Video Profil Desa</h2>
-    </div>
-    <div style="max-width:800px;margin:0 auto;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-lg)" class="fade-in">
-      <div style="position:relative;padding-bottom:56.25%;height:0;">
-        <iframe id="iframeVideo" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-</section>
 
 
 <!-- ===== POTENSI DESA ===== -->
@@ -312,29 +272,12 @@
       <h2 class="section-title">Potensi Desa Kauman</h2>
       <p class="section-subtitle">Kekayaan alam dan budaya yang menjadi kebanggaan dan sumber penghidupan masyarakat</p>
     </div>
-    <div class="potensi-grid fade-in">
-      <div class="potensi-card">
-        <img src="/images/jamu.jpg" alt="Kampung Jamu" />
-        <div class="potensi-overlay"></div>
-        <div class="potensi-content">
-          <div class="potensi-tag">🌱 UMKM Unggulan</div>
-          <h3 class="potensi-title">Kampung Jamu Tradisional</h3>
-          <p class="potensi-desc">Desa Kauman dikenal sebagai Kampung Jamu, di mana sebagian besar warganya memproduksi jamu tradisional secara turun-temurun seperti sinom, temulawak, kunir asem, dan beras kencur.</p>
-        </div>
-      </div>
-      <div class="potensi-card">
-        <img src="/images/hero3.jpg" alt="Wisata Kali Telu" />
-        <div class="potensi-overlay"></div>
-        <div class="potensi-content">
-          <div class="potensi-tag">🏞️ Wisata Alam</div>
-          <h3 class="potensi-title">Wisata Kali Telu</h3>
-          <p class="potensi-desc">Destinasi wisata alam berbasis sungai yang dikelola oleh BUMDes Kauman Sejahtera. Menawarkan keindahan alam pedesaan yang asri dengan fasilitas lengkap untuk keluarga.</p>
-        </div>
-      </div>
+    <div class="potensi-grid fade-in" id="potensiGrid">
+      <!-- Loaded by JS from desa.json -->
     </div>
   </div>
 </section>
-\n
+
 <!-- ===== LISTING UMKM ===== -->
 <section class="section">
   <div class="container">
@@ -353,7 +296,7 @@
     </div>
   </div>
 </section>
-\n
+
 <!-- ===== PERANGKAT DESA ===== -->
 <section class="section section-alt">
   <div class="container">
@@ -367,7 +310,7 @@
     </div>
   </div>
 </section>
-\n<!-- ===== PROFIL SINGKAT ===== -->
+<!-- ===== PROFIL SINGKAT ===== -->
 <section class="section">
   <div class="container">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center" class="fade-in">
@@ -387,12 +330,14 @@
         </div>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
           <a href="/profil.html" class="btn btn-primary">📋 Profil Lengkap</a>
-          <a href="/kenali-desa.html">→ Kenali Desa</a>
+          <a href="/kenali-desa.html" class="btn btn-outline">🏘️ Kenali Desa</a>
           <a href="/infografis.html" class="btn btn-outline">📊 Lihat Infografis</a>
         </div>
       </div>
       <div>
-        <div id="map" style="height:380px;border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);overflow:hidden"></div>
+        <div id="secVideo" style="display:none;width:100%;height:380px;border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);overflow:hidden">
+          <iframe id="iframeVideo" src="" style="width:100%;height:100%;border:0;" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
   </div>
@@ -595,6 +540,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (document.getElementById('statDusun') && desa.jumlah_dusun) {
       animateCounter(document.getElementById('statDusun'), desa.jumlah_dusun);
+    }
+
+    // Load Potensi Desa dinamis dari desa.json
+    const potensiGrid = document.getElementById('potensiGrid');
+    if (potensiGrid && desa.potensi_desa && desa.potensi_desa.length > 0) {
+      potensiGrid.innerHTML = desa.potensi_desa.map(p => `
+        <div class="potensi-card">
+          <img src="${p.gambar || '/images/jamu.jpg'}" alt="${p.judul}" onerror="this.src='/images/jamu.jpg'" />
+          <div class="potensi-overlay"></div>
+          <div class="potensi-content">
+            <div class="potensi-tag">${p.ikon || '🌿'} ${p.kategori || 'Unggulan'}</div>
+            <h3 class="potensi-title">${p.judul}</h3>
+            <p class="potensi-desc">${p.deskripsi}</p>
+          </div>
+        </div>
+      `).join('');
+      initScrollAnimations();
     }
   }
 

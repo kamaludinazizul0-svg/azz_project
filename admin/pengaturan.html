@@ -79,6 +79,31 @@ async function saveWaToken(e) {
   if (!currentDesaData.kontak) currentDesaData.kontak = {};
   currentDesaData.kontak.fonnte_token = token;
   
+<script src="/admin/js/admin.js"></script>
+<script>
+let currentDesaData = {};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  setInterval(()=>{
+    document.getElementById('serverTime').textContent=new Date().toLocaleString('id-ID');
+  },1000);
+  
+  // Load WA Token
+  const res = await adminFetch('/desa');
+  if (res) {
+    currentDesaData = res;
+    if (res.kontak && res.kontak.fonnte_token) {
+      document.getElementById('fonnteToken').value = res.kontak.fonnte_token;
+    }
+  }
+});
+
+async function saveWaToken(e) {
+  e.preventDefault();
+  const token = document.getElementById('fonnteToken').value;
+  if (!currentDesaData.kontak) currentDesaData.kontak = {};
+  currentDesaData.kontak.fonnte_token = token;
+  
   const res = await adminFetch('/desa', { method: 'PUT', body: JSON.stringify(currentDesaData) });
   if (res) {
     showToast('Token WhatsApp Fonnte berhasil disimpan!');
@@ -91,18 +116,14 @@ async function changePassword(e){
   const newPwd=document.getElementById('newPwd').value;
   const confirmPwd=document.getElementById('confirmPwd').value;
   
-  if(newPwd!==confirmPwd){ showToast('❌ Konfirmasi password baru tidak cocok'); return; }
-  if(newPwd.length<6){ showToast('❌ Password baru minimal 6 karakter'); return; }
+  if(newPwd!==confirmPwd){ showToast('❌ Konfirmasi password baru tidak cocok','error'); return; }
+  if(newPwd.length<6){ showToast('❌ Password baru minimal 6 karakter','error'); return; }
   
-  try{
-    const r=await adminFetch('/auth/change-password',{method:'POST',body:JSON.stringify({oldPassword:oldPwd,newPassword:newPwd})});
-    if(r){
-      showToast('✅ Password berhasil diubah! Silakan login kembali.');
-      e.target.reset();
-      setTimeout(()=>{ localStorage.removeItem('adminToken'); window.location.href='/admin/index.html'; }, 2000);
-    }
-  }catch(err){
-    showToast('❌ Gagal mengubah password. Cek password lama anda.');
+  const r=await adminFetch('/auth/change-password',{method:'PUT',body:JSON.stringify({password_lama:oldPwd,password_baru:newPwd})});
+  if(r){
+    showToast('✅ Password berhasil diubah! Silakan login kembali.');
+    e.target.reset();
+    setTimeout(()=>{ logout(); }, 2000);
   }
 }
 </script>

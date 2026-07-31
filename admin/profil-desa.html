@@ -108,9 +108,10 @@
 
           <!-- Tab: Potensi Desa -->
           <div class="tab-content" id="tab-potensi">
+            <p style="color:var(--text-muted);margin-bottom:20px;font-size:0.9rem">Kelola potensi unggulan desa yang tampil di halaman beranda website.</p>
             <div id="potensiAdminList"></div>
             <button class="btn-admin btn-light btn-sm-admin" style="margin-top:10px" onclick="addPotensi()">➕ Tambah Potensi</button>
-            <button class="btn-admin btn-primary-admin" style="margin-top:16px" onclick="saveTab('potensi')">💾 Simpan Potensi</button>
+            <button class="btn-admin btn-primary-admin" style="margin-top:16px;display:block" onclick="saveTab('potensi')">💾 Simpan Potensi</button>
           </div>
 
           <!-- Tab: Regulasi -->
@@ -203,11 +204,46 @@ function collectMisi(){desaData.misi=[];document.querySelectorAll('[data-misi]')
 function renderPotensi(){
   const list=document.getElementById('potensiAdminList');
   const items=desaData.potensi_desa||[];
-  list.innerHTML=items.map((p,i)=>`<div style="display:flex;gap:8px;margin-bottom:8px;align-items:center"><input type="text" class="form-control" value="${p.judul||''}" data-potensi-judul="${i}" placeholder="Judul" style="flex:2" /><input type="text" class="form-control" value="${p.deskripsi||''}" data-potensi-desc="${i}" placeholder="Deskripsi" style="flex:3" /><button class="btn-admin btn-danger btn-sm-admin" onclick="removePotensi(${i})">✕</button></div>`).join('');
+  list.innerHTML=items.map((p,i)=>`
+    <div style="border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px;background:#fcfcfc">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span style="font-weight:700;color:var(--primary)">Potensi #${i+1}</span>
+        <button class="btn-admin btn-danger btn-sm-admin" onclick="removePotensi(${i})">✕ Hapus</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group" style="margin:0"><label class="form-label">Judul *</label><input type="text" class="form-control" value="${p.judul||''}" data-potensi-judul="${i}" placeholder="Nama Potensi" /></div>
+        <div class="form-group" style="margin:0"><label class="form-label">Kategori</label><input type="text" class="form-control" value="${p.kategori||''}" data-potensi-kat="${i}" placeholder="UMKM Unggulan" /></div>
+      </div>
+      <div class="form-group" style="margin-top:10px"><label class="form-label">Deskripsi</label><textarea class="form-control" rows="2" data-potensi-desc="${i}" placeholder="Deskripsi singkat...">${p.deskripsi||''}</textarea></div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px;align-items:end">
+        <div class="form-group" style="margin:0"><label class="form-label">URL Gambar</label><input type="text" class="form-control" value="${p.gambar||''}" data-potensi-img="${i}" placeholder="/images/jamu.jpg" /></div>
+        <div style="position:relative;overflow:hidden;flex-shrink:0;margin-bottom:1px">
+          <button type="button" class="btn-admin btn-light" style="pointer-events:none">📁 Upload</button>
+          <input type="file" accept="image/*" style="position:absolute;top:0;left:0;opacity:0;width:100%;height:100%;cursor:pointer" onchange="uploadPotensiImg(this, ${i})" />
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:10px"><label class="form-label">Ikon (emoji)</label><input type="text" class="form-control" value="${p.ikon||'🌿'}" data-potensi-ikon="${i}" placeholder="🌿" style="width:80px" /></div>
+    </div>
+  `).join('');
 }
-function addPotensi(){if(!desaData.potensi_desa)desaData.potensi_desa=[];desaData.potensi_desa.push({judul:'Potensi baru',deskripsi:''});renderPotensi();}
+function addPotensi(){if(!desaData.potensi_desa)desaData.potensi_desa=[];desaData.potensi_desa.push({judul:'Potensi Baru',kategori:'Unggulan',deskripsi:'',gambar:'',ikon:'🌿'});renderPotensi();}
 function removePotensi(i){desaData.potensi_desa.splice(i,1);renderPotensi();}
-function collectPotensi(){desaData.potensi_desa=[];document.querySelectorAll('[data-potensi-judul]').forEach(el=>{const idx=parseInt(el.dataset.potensiJudul);desaData.potensi_desa[idx]={judul:el.value,deskripsi:document.querySelector(`[data-potensi-desc="${idx}"]`)?.value||''};});}
+async function uploadPotensiImg(input, idx){
+  if(!input.files||!input.files[0])return;
+  const res=await uploadFile(input.files[0]);
+  if(res&&res.url){document.querySelectorAll('[data-potensi-img]')[idx].value=res.url;showToast('Gambar berhasil diupload');}
+  input.value='';
+}
+function collectPotensi(){desaData.potensi_desa=[];document.querySelectorAll('[data-potensi-judul]').forEach(el=>{
+  const idx=parseInt(el.dataset.potensiJudul);
+  desaData.potensi_desa[idx]={
+    judul:el.value,
+    kategori:document.querySelector(`[data-potensi-kat="${idx}"]`)?.value||'',
+    deskripsi:document.querySelector(`[data-potensi-desc="${idx}"]`)?.value||'',
+    gambar:document.querySelector(`[data-potensi-img="${idx}"]`)?.value||'',
+    ikon:document.querySelector(`[data-potensi-ikon="${idx}"]`)?.value||'🌿',
+  };
+});}
 
 function renderRegulasi(){
   const list=document.getElementById('regulasiAdminList');

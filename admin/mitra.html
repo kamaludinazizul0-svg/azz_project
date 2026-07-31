@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Mitra Desa - Admin</title><link rel="icon" href="/images/logo.png" /><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/admin/css/admin.css" /></head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar" data-page="mitra"></aside>
+  <main class="admin-main">
+    <div class="topbar"><div class="topbar-left"><div class="topbar-title">Mitra Desa</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a><button class="topbar-btn" data-logout>🚪 Keluar</button></div></div>
+    <div class="page-content">
+      <div class="page-header-admin"><div><h1>🤝 Mitra Desa</h1><p>Kelola mitra dan lembaga yang bekerja sama dengan Desa Kauman</p></div><button class="btn-admin btn-primary-admin" onclick="openAdd()">➕ Tambah Mitra</button></div>
+
+      <div class="admin-card">
+        <div class="admin-card-body">
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>No</th><th>Logo</th><th>Nama Mitra</th><th>Jenis</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="dataTable"><tr><td colspan="6" style="text-align:center;padding:40px">⏳ Memuat...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal Form -->
+<div class="admin-modal-overlay" id="formModal">
+  <div class="admin-modal" style="max-width:600px">
+    <div class="admin-modal-header">
+      <span class="admin-modal-title" id="modalTitle">Tambah Mitra</span>
+      <button class="modal-close-btn" onclick="closeModal('formModal')">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <form id="dataForm" onsubmit="saveData(event)">
+        <input type="hidden" id="editId" />
+        <div class="form-group"><label class="form-label">Nama Mitra *</label><input type="text" id="fNama" class="form-control" required /></div>
+        <div class="form-group"><label class="form-label">Jenis Mitra</label>
+          <select id="fJenis" class="form-control">
+            <option>Pemerintah</option>
+            <option>Swasta</option>
+            <option>Lembaga Pendidikan</option>
+            <option>NGO/LSM</option>
+            <option>Komunitas</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Deskripsi Kerjasama</label><textarea id="fDeskripsi" class="form-control" rows="3"></textarea></div>
+        <div class="form-group"><label class="form-label">URL Logo</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="fLogo" class="form-control" style="flex:1" placeholder="/uploads/logo-mitra.png" />
+            <div style="position:relative;overflow:hidden;flex-shrink:0">
+              <button type="button" class="btn-admin btn-light" style="pointer-events:none">📁 Upload</button>
+              <input type="file" accept="image/*" style="position:absolute;top:0;left:0;opacity:0;width:100%;height:100%;cursor:pointer" onchange="handleUploadUI(this, 'fLogo')" />
+            </div>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Website/Link</label><input type="text" id="fWebsite" class="form-control" placeholder="https://..." /></div>
+        <div class="form-group" style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" id="fAktif" checked style="width:18px;height:18px;accent-color:var(--primary)" />
+          <label for="fAktif" class="form-label" style="margin:0">Tampilkan di website</label>
+        </div>
+        <div class="admin-modal-footer" style="padding:16px 0 0;border-top:1px solid var(--border)">
+          <button type="button" class="btn-admin btn-light" onclick="closeModal('formModal')">Batal</button>
+          <button type="submit" class="btn-admin btn-primary-admin">💾 Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/admin/js/sidebar.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+let allData = [];
+
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!requireAuth()) return;
+  await loadData();
+});
+
+async function loadData() {
+  allData = await adminFetch('/mitra') || [];
+  renderTable(allData);
+}
+
+function renderTable(data) {
+  const tb = document.getElementById('dataTable');
+  if (!data.length) {
+    tb.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="icon">🤝</div><h3>Belum ada mitra</h3><p>Klik "Tambah Mitra" untuk menambahkan mitra desa</p></div></td></tr>`;
+    return;
+  }
+  tb.innerHTML = data.map((d, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td>${d.logo ? `<img src="${d.logo}" style="width:48px;height:48px;object-fit:contain;border-radius:8px;border:1px solid var(--border)" onerror="this.style.display='none'" />` : '-'}</td>
+      <td><div style="font-weight:600">${d.nama}</div><div style="font-size:0.8rem;color:var(--text-muted)">${d.deskripsi ? d.deskripsi.substring(0,50)+'...' : ''}</div></td>
+      <td>${d.jenis || '-'}</td>
+      <td><span class="badge ${d.aktif !== false ? 'badge-success' : 'badge-danger'}">${d.aktif !== false ? 'Aktif' : 'Nonaktif'}</span></td>
+      <td>
+        <button class="btn-admin btn-warning btn-sm-admin" onclick="openEdit(${d.id})">✏️ Edit</button>
+        <button class="btn-admin btn-danger btn-sm-admin" onclick="deleteData(${d.id})">🗑️ Hapus</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openAdd() {
+  document.getElementById('modalTitle').textContent = 'Tambah Mitra';
+  document.getElementById('dataForm').reset();
+  document.getElementById('editId').value = '';
+  document.getElementById('fAktif').checked = true;
+  openModal('formModal');
+}
+
+function openEdit(id) {
+  const d = allData.find(x => x.id == id);
+  if (!d) return;
+  document.getElementById('modalTitle').textContent = 'Edit Mitra';
+  document.getElementById('editId').value = d.id;
+  document.getElementById('fNama').value = d.nama || '';
+  document.getElementById('fJenis').value = d.jenis || 'Pemerintah';
+  document.getElementById('fDeskripsi').value = d.deskripsi || '';
+  document.getElementById('fLogo').value = d.logo || '';
+  document.getElementById('fWebsite').value = d.website || '';
+  document.getElementById('fAktif').checked = d.aktif !== false;
+  openModal('formModal');
+}
+
+async function saveData(e) {
+  e.preventDefault();
+  const editId = document.getElementById('editId').value;
+  const body = {
+    nama: document.getElementById('fNama').value,
+    jenis: document.getElementById('fJenis').value,
+    deskripsi: document.getElementById('fDeskripsi').value,
+    logo: document.getElementById('fLogo').value,
+    website: document.getElementById('fWebsite').value,
+    aktif: document.getElementById('fAktif').checked,
+  };
+  let res;
+  if (editId) {
+    res = await adminFetch(`/mitra/${editId}`, { method: 'PUT', body: JSON.stringify(body) });
+  } else {
+    res = await adminFetch('/mitra', { method: 'POST', body: JSON.stringify(body) });
+  }
+  if (res) { showToast('Mitra berhasil disimpan'); closeModal('formModal'); await loadData(); }
+}
+
+function deleteData(id) {
+  confirmDialog('Hapus mitra ini?', async () => {
+    const res = await adminFetch(`/mitra/${id}`, { method: 'DELETE' });
+    if (res) { showToast('Mitra dihapus'); await loadData(); }
+  });
+}
+</script>
+</body>
+</html>

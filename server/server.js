@@ -9,12 +9,39 @@ const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = 'desa-kauman-secret-key-2024';
+const JWT_SECRET = process.env.JWT_SECRET || 'desa-kauman-secret-key-2024';
 
 // ====================== MIDDLEWARE ======================
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  next();
+});
+
+// Simple brute-force protection for login
+const loginAttempts = new Map();
+function loginRateLimit(req, res, next) {
+  const ip = req.ip || req.connection.remoteAddress;
+  const now = Date.now();
+  const attempts = loginAttempts.get(ip) || { count: 0, firstAttempt: now, blocked: false };
+  if (attempts.blocked && now - attempts.firstAttempt < 15 * 60 * 1000) {
+    return res.status(429).json({ error: 'Terlalu banyak percobaan login. Coba lagi dalam 15 menit.' });
+  }
+  if (now - attempts.firstAttempt > 15 * 60 * 1000) {
+    loginAttempts.set(ip, { count: 1, firstAttempt: now, blocked: false });
+  } else {
+    attempts.count++;
+    if (attempts.count > 10) attempts.blocked = true;
+    loginAttempts.set(ip, attempts);
+  }
+  next();
+}
 
 // Static files
 app.use(express.static(path.join(__dirname, '../public')));
@@ -63,21 +90,19 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
-app.post('/api/upload', upload.single('file'), (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'Tidak ada file yang diunggah' });
-  const fileUrl = '/uploads/' + req.file.filename;
-  res.json({ url: fileUrl });
-});
+
 
 // ====================== AUTH ======================
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', loginRateLimit, async (req, res) => {
   const { username, password } = req.body;
   const data = readData('users.json');
   const user = data.users.find(u => u.username === username);
-  if (!user) return res.status(401).json({ error: 'Username tidak ditemukan' });
+  if (!user) return res.status(401).json({ error: 'Username atau password salah' });
   const valid = await bcrypt.compare(password, user.password);
-  if (!valid) return res.status(401).json({ error: 'Password salah' });
-  const token = jwt.sign({ id: user.id, username: user.username, nama: user.nama, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
+  if (!valid) return res.status(401).json({ error: 'Username atau password salah' });
+  // Clear login attempts on success
+  loginAttempts.delete(req.ip || req.connection.remoteAddress);
+  const token = jwt.sign({ id: user.id, username: user.username, nama: user.nama, role: user.role }, JWT_SECRET, { expiresIn: '8h' });
   res.json({ token, user: { id: user.id, username: user.username, nama: user.nama, role: user.role } });
 });
 
@@ -156,6 +181,7 @@ app.get('/api/desa', async (req, res) => {
   }
   res.json(desa);
 });
+
 app.put('/api/desa', authMiddleware, (req, res) => {
   const existing = readData('desa.json');
   const updated = { ...existing, ...req.body };
@@ -165,6 +191,15 @@ app.put('/api/desa', authMiddleware, (req, res) => {
 
 // ====================== PENDUDUK (Statistik & DB) ======================
 app.get('/api/penduduk', async (req, res) => {
+  // Cek otorisasi manual
+  let isAdmin = false;
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (token) {
+    try {
+      jwt.verify(token, process.env.JWT_SECRET || 'desa-kauman-secret-key-2024');
+      isAdmin = true;
+    } catch(e){}
+  }
   try {
     const { search, limit, page } = req.query;
     
@@ -181,13 +216,13 @@ app.get('/api/penduduk', async (req, res) => {
     let query = "SELECT * FROM penduduk";
     let countQuery = "SELECT COUNT(*) as total FROM penduduk";
     let queryParams = [];
-    
+
     if (search) {
        query += " WHERE nama_lengkap LIKE ? OR nik LIKE ?";
        countQuery += " WHERE nama_lengkap LIKE ? OR nik LIKE ?";
        queryParams.push(`%${search}%`, `%${search}%`);
     }
-    
+
     const [totalRows] = await db.query(countQuery, queryParams);
     const total = totalRows[0].total;
     
@@ -254,6 +289,7 @@ app.get('/api/penduduk', async (req, res) => {
     console.error('DB error - using fallback:', error.message);
     // Fallback if DB error or table not found
     const fallback = readData('penduduk.json') || {};
+    if (!isAdmin && fallback.data) delete fallback.data;
     res.json(fallback);
   }
 });
