@@ -68,7 +68,7 @@ ul { list-style: none; }
   box-shadow: 0 4px 24px rgba(0,0,0,0.3);
 }
 .nav-container {
-  max-width: 1280px;
+  max-width: 1536px;
   margin: 0 auto;
   padding: 0 24px;
   height: 100%;
@@ -103,13 +103,13 @@ ul { list-style: none; }
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 .nav-link {
-  padding: 8px 14px;
+  padding: 8px 10px;
   color: rgba(255,255,255,0.85);
   font-weight: 600;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   border-radius: var(--radius-sm);
   transition: var(--transition);
   white-space: nowrap;

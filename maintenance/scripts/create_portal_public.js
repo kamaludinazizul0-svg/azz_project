@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+const fs = require('fs');
+const path = require('path');
+
+const dst = path.join(__dirname, 'public', 'berita.html');
+
+const html = `<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
@@ -262,45 +267,30 @@
   </style>
 </head>
 <body>
-<nav class="navbar">
-  <div class="nav-container">
-    <a href="/" class="nav-brand">
-      <img src="/images/logo.png" alt="Logo Desa Kauman" class="nav-logo" />
-      <div class="nav-title"><span class="desa-name">Desa Kauman</span><span class="desa-loc">Kab. Jombang, Jawa Timur</span></div>
-    </a>
-    <div class="nav-menu">
-      <a href="/index.html" class="nav-link">&#127968; Beranda</a>
-      <a href="/profil.html" class="nav-link">&#128203; Profil Desa</a>
-      <a href="/pendidikan.html" class="nav-link">&#127979; Pendidikan</a>
-      <a href="/kenali-desa.html" class="nav-link">&#127960; Kenali Desa</a>
-      <a href="/infografis.html" class="nav-link">&#128202; Infografis</a>
-      <a href="/idm.html" class="nav-link">&#127942; IDM</a>
-      <a href="/berita.html" class="nav-link active">&#128240; Portal Desa</a>
-      <a href="/galeri.html" class="nav-link">&#128247; Galeri</a>
-      <a href="/listing.html" class="nav-link">&#128188; UMKM</a>
-      <a href="/belanja.html" class="nav-link">&#128176; APBDesa</a>
-      <a href="/ppid.html" class="nav-link">&#128194; PPID</a>
-      <a href="/layanan-masyarakat.html" style="background:var(--primary,#2e7d32);color:#fff;padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 4px 12px rgba(46,125,50,0.4);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s,box-shadow 0.2s" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 6px 20px rgba(46,125,50,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 12px rgba(46,125,50,0.4)'">&#127963; Layanan</a>
-    </div>
-    <div class="nav-burger" id="navBurger"><span></span><span></span><span></span></div>
-  </div>
-</nav>
-<div class="nav-mobile" id="navMobile">
-  <a href="/index.html" class="nav-link">&#127968; Beranda</a>
-  <a href="/profil.html" class="nav-link">&#128203; Profil Desa</a>
-  <a href="/pendidikan.html" class="nav-link">&#127979; Pendidikan</a>
-  <a href="/kenali-desa.html" class="nav-link">&#127960; Kenali Desa</a>
-  <a href="/infografis.html" class="nav-link">&#128202; Infografis</a>
-  <a href="/idm.html" class="nav-link">&#127942; IDM</a>
-  <a href="/berita.html" class="nav-link active">&#128240; Portal Desa</a>
-  <a href="/galeri.html" class="nav-link">&#128247; Galeri</a>
-  <a href="/listing.html" class="nav-link">&#128188; UMKM</a>
-  <a href="/belanja.html" class="nav-link">&#128176; APBDesa</a>
-  <a href="/ppid.html" class="nav-link">&#128194; PPID</a>
-  <a href="/layanan-masyarakat.html" class="nav-link">&#127963; Layanan Masyarakat</a>
-</div>
   <!-- NAVBAR -->
-  
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="nav-brand">
+        <img src="/images/logo.png" alt="Logo" class="nav-logo" onerror="this.style.display='none'">
+        <span>Desa Kauman</span>
+      </a>
+      <div class="nav-links">
+        <a href="/index.html" class="nav-link">&#127968; Beranda</a>
+        <a href="/profil.html" class="nav-link">&#128203; Profil Desa</a>
+        <a href="/pendidikan.html" class="nav-link">&#127979; Pendidikan</a>
+        <a href="/kenali-desa.html" class="nav-link">&#127960; Kenali Desa</a>
+        <a href="/infografis.html" class="nav-link">&#128202; Infografis</a>
+        <a href="/idm.html" class="nav-link">&#127942; IDM</a>
+        <a href="/berita.html" class="nav-link active">&#128240; Portal Desa</a>
+        <a href="/galeri.html" class="nav-link">&#128247; Galeri</a>
+        <a href="/listing.html" class="nav-link">&#128188; UMKM</a>
+        <a href="/belanja.html" class="nav-link">&#128176; APBDesa</a>
+        <a href="/ppid.html" class="nav-link">&#128194; PPID</a>
+        <a href="/layanan-masyarakat.html" class="nav-link" style="background:var(--primary,#2e7d32);color:#fff;padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 4px 12px rgba(46,125,50,0.4);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s,box-shadow 0.2s" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 6px 20px rgba(46,125,50,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 12px rgba(46,125,50,0.4)'">&#128187; Layanan</a>
+      </div>
+      <button class="menu-btn" onclick="document.querySelector('.nav-mobile').classList.toggle('active')">☰</button>
+    </div>
+  </nav>
 
   <section class="portal-hero">
     <div class="portal-hero-content">
@@ -448,44 +438,44 @@
         else {
           const main = berita[0];
           const side = berita.slice(1, 4);
-          let sideHtml = side.map(b => `
-            <a href="/berita-detail.html?id=${b.id}" class="news-item">
-              <img src="${b.gambar || '/images/hero1.jpg'}" alt="Thumb" onerror="this.src='/images/hero1.jpg'">
+          let sideHtml = side.map(b => \`
+            <a href="/berita-detail.html?id=\${b.id}" class="news-item">
+              <img src="\${b.gambar || '/images/hero1.jpg'}" alt="Thumb" onerror="this.src='/images/hero1.jpg'">
               <div class="news-item-content">
-                <span class="news-item-date">${formatDate(b.tanggal)}</span>
-                <h4 class="news-item-title">${b.judul}</h4>
+                <span class="news-item-date">\${formatDate(b.tanggal)}</span>
+                <h4 class="news-item-title">\${b.judul}</h4>
               </div>
             </a>
-          `).join('');
+          \`).join('');
           
-          bCont.innerHTML = `
-            <a href="/berita-detail.html?id=${main.id}" class="news-featured">
-              <img src="${main.gambar || '/images/hero1.jpg'}" alt="Featured" onerror="this.src='/images/hero1.jpg'">
+          bCont.innerHTML = \`
+            <a href="/berita-detail.html?id=\${main.id}" class="news-featured">
+              <img src="\${main.gambar || '/images/hero1.jpg'}" alt="Featured" onerror="this.src='/images/hero1.jpg'">
               <div class="news-featured-content">
                 <span class="news-badge">Liputan Utama</span>
-                <h3>${main.judul}</h3>
-                <p>${main.ringkasan || ''}</p>
+                <h3>\${main.judul}</h3>
+                <p>\${main.ringkasan || ''}</p>
               </div>
             </a>
             <div class="news-side-list">
-              ${sideHtml}
+              \${sideHtml}
             </div>
-          `;
+          \`;
         }
 
         // Render Pengumuman
         const pCont = document.getElementById('pengumumanContainer');
         if(pengumuman.length === 0) pCont.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Tidak ada pengumuman saat ini.</div>';
         else {
-          pCont.innerHTML = pengumuman.map(p => `
+          pCont.innerHTML = pengumuman.map(p => \`
             <div class="board-card">
               <div class="pin-icon">📌</div>
-              <span class="board-date">${formatDate(p.tanggal)}</span>
-              <h3 class="board-title">${p.judul}</h3>
-              <p class="board-desc">${p.ringkasan || ''}</p>
-              ${p.konten ? `<a href="/berita-detail.html?id=${p.id}" style="color:var(--board-border);font-weight:700;font-size:0.85rem;margin-top:12px;display:inline-block;text-decoration:none">Baca Selengkapnya →</a>` : ''}
+              <span class="board-date">\${formatDate(p.tanggal)}</span>
+              <h3 class="board-title">\${p.judul}</h3>
+              <p class="board-desc">\${p.ringkasan || ''}</p>
+              \${p.konten ? \`<a href="/berita-detail.html?id=\${p.id}" style="color:var(--board-border);font-weight:700;font-size:0.85rem;margin-top:12px;display:inline-block;text-decoration:none">Baca Selengkapnya →</a>\` : ''}
             </div>
-          `).join('');
+          \`).join('');
         }
 
         // Render Agenda (Timeline)
@@ -493,54 +483,54 @@
         if (agenda.length === 0) {
           agCont.innerHTML = '<div class="empty-state">Belum ada agenda desa.</div>';
         } else {
-          agCont.innerHTML = agenda.map((a, i) => `
-            <div class="timeline-item" style="animation-delay:${i * 0.1}s">
+          agCont.innerHTML = agenda.map((a, i) => \`
+            <div class="timeline-item" style="animation-delay:\${i * 0.1}s">
               <div class="timeline-date">
-                <div class="day">${new Date(a.tanggal).getDate()}</div>
-                <div class="month">${new Date(a.tanggal).toLocaleString('id-ID', {month:'short'})}</div>
+                <div class="day">\${new Date(a.tanggal).getDate()}</div>
+                <div class="month">\${new Date(a.tanggal).toLocaleString('id-ID', {month:'short'})}</div>
               </div>
               <div class="timeline-content">
-                <h3 class="timeline-title">${a.judul}</h3>
+                <h3 class="timeline-title">\${a.judul}</h3>
                 <div class="timeline-meta">
-                  <span>⏰ ${a.waktu || '-'}</span>
-                  <span>📍 ${a.lokasi || '-'}</span>
+                  <span>⏰ \${a.waktu || '-'}</span>
+                  <span>📍 \${a.lokasi || '-'}</span>
                 </div>
-                <p class="timeline-desc">${(a.ringkasan || '').substring(0,100)}...</p>
+                <p class="timeline-desc">\${(a.ringkasan || '').substring(0,100)}...</p>
               </div>
             </div>
-          `).join('');
+          \`).join('');
         }
 
         // Render Artikel
         const arCont = document.getElementById('artikelContainer');
         if(artikel.length === 0) arCont.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Belum ada artikel yang dipublikasikan.</div>';
         else {
-          arCont.innerHTML = artikel.map(a => `
-            <a href="/berita-detail.html?id=${a.id}" class="artikel-card">
-              <div class="artikel-meta">${formatDate(a.tanggal)}</div>
-              <h3 class="artikel-title">${a.judul}</h3>
-              <p class="artikel-excerpt">${a.ringkasan || ''}</p>
+          arCont.innerHTML = artikel.map(a => \`
+            <a href="/berita-detail.html?id=\${a.id}" class="artikel-card">
+              <div class="artikel-meta">\${formatDate(a.tanggal)}</div>
+              <h3 class="artikel-title">\${a.judul}</h3>
+              <p class="artikel-excerpt">\${a.ringkasan || ''}</p>
               <div class="artikel-author">
-                <div class="artikel-author-img">${a.penulis ? a.penulis.charAt(0).toUpperCase() : 'A'}</div>
-                <span class="artikel-author-name">${a.penulis || 'Admin Desa'}</span>
+                <div class="artikel-author-img">\${a.penulis ? a.penulis.charAt(0).toUpperCase() : 'A'}</div>
+                <span class="artikel-author-name">\${a.penulis || 'Admin Desa'}</span>
               </div>
             </a>
-          `).join('');
+          \`).join('');
         }
 
         // Render Kegiatan
         const kCont = document.getElementById('kegiatanContainer');
         if(kegiatan.length === 0) kCont.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Belum ada dokumentasi kegiatan.</div>';
         else {
-          kCont.innerHTML = kegiatan.map(k => `
-            <a href="/berita-detail.html?id=${k.id}" class="kegiatan-card">
-              <img src="${k.gambar || '/images/hero2.jpg'}" alt="Kegiatan" onerror="this.src='/images/hero2.jpg'">
+          kCont.innerHTML = kegiatan.map(k => \`
+            <a href="/berita-detail.html?id=\${k.id}" class="kegiatan-card">
+              <img src="\${k.gambar || '/images/hero2.jpg'}" alt="Kegiatan" onerror="this.src='/images/hero2.jpg'">
               <div class="kegiatan-overlay">
-                <h3 class="kegiatan-title">${k.judul}</h3>
-                <span class="kegiatan-date">${formatDate(k.tanggal)}</span>
+                <h3 class="kegiatan-title">\${k.judul}</h3>
+                <span class="kegiatan-date">\${formatDate(k.tanggal)}</span>
               </div>
             </a>
-          `).join('');
+          \`).join('');
         }
 
       } catch (err) {
@@ -556,3 +546,7 @@
   </script>
 </body>
 </html>
+`;
+
+fs.writeFileSync(dst, html, 'utf8');
+console.log('Created public/berita.html (Portal Desa)');

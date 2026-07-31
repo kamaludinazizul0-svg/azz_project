@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "nama_sekolah": "SD Negeri Kauman 1",
+    "jenjang": "SD",
+    "profil_sekolah": "Sekolah Dasar tertua di Desa Kauman yang telah mencetak banyak generasi berprestasi. Fokus pada pendidikan karakter dasar dan literasi.",
+    "status": "Negeri",
+    "kepala_sekolah": "H. Budi Santoso, S.Pd., M.Pd.",
+    "npsn": "20504123",
+    "akreditasi": "A",
+    "jumlah_guru": 15,
+    "jumlah_siswa": 312,
+    "alamat": "Jl. Kawi No. 12, Dusun Kauman, Desa Kauman",
+    "link_pendaftaran": "https://ppdb.sdnkauman1.sch.id",
+    "contact_person": "081234567890"
+  },
+  {
+    "id": 2,
+    "nama": "TK Pertiwi Kauman",
+    "jenjang": "TK",
+    "profil_sekolah": "Taman Kanak-kanak dengan lingkungan asri, mengajarkan kemandirian dan kreativitas sejak dini.",
+    "status": "Swasta",
+    "kepala_sekolah": "Hj. Siti Aminah, S.Pd.AUD",
+    "npsn": "20509876",
+    "akreditasi": "B",
+    "jumlah_guru": 5,
+    "jumlah_siswa": 85,
+    "alamat": "Jl. Bromo No. 5, Dusun Kauman",
+    "link_pendaftaran": "https://wa.me/6285233445566",
+    "contact_person": "085233445566"
+  },
+  {
+    "id": 3,
+    "nama": "SMP Islam Bahrul Ulum",
+    "jenjang": "SMP",
+    "profil_sekolah": "Sekolah menengah pertama berbasis Islam, menyeimbangkan ilmu agama dan pengetahuan umum.",
+    "status": "Swasta",
+    "kepala_sekolah": "K.H. Ahmad Fauzi, Lc.",
+    "npsn": "20505544",
+    "akreditasi": "A",
+    "jumlah_guru": 22,
+    "jumlah_siswa": 450,
+    "alamat": "Jl. Terusan Semeru No. 99, Dusun Sedati",
+    "link_pendaftaran": "https://pmb.smpbu.sch.id",
+    "contact_person": "081987654321"
+  }
+]

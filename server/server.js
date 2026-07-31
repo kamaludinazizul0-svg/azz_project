@@ -98,7 +98,64 @@ app.put('/api/auth/change-password', authMiddleware, async (req, res) => {
 });
 
 // ====================== DESA (Profil) ======================
-app.get('/api/desa', (req, res) => res.json(readData('desa.json')));
+app.get('/api/desa', async (req, res) => {
+  const desa = readData('desa.json') || {};
+  try {
+    const sqlCase = `CASE 
+      WHEN alamat LIKE '%KRENGAN%' OR alamat LIKE '%KRENGGAN%' THEN 'Dusun Krenggan'
+      WHEN alamat LIKE '%TEGALAN%' THEN 'Dusun Tegalan'
+      WHEN alamat LIKE '%SEDATI%' THEN 'Dusun Sedati'
+      ELSE 'Dusun Kauman'
+    END`;
+    
+    const [popStats] = await db.query(`SELECT ${sqlCase} AS dusun_name, COUNT(*) as penduduk, COUNT(DISTINCT no_kk) as kk FROM penduduk GROUP BY dusun_name`);
+    const [agamaRows] = await db.query(`SELECT ${sqlCase} AS dusun_name, agama, COUNT(*) as cnt FROM penduduk GROUP BY dusun_name, agama`);
+    const [jobRows] = await db.query(`SELECT ${sqlCase} AS dusun_name, pekerjaan, COUNT(*) as cnt FROM penduduk WHERE pekerjaan != 'Belum/Tidak Bekerja' AND pekerjaan != 'Mengurus Rumah Tangga' AND pekerjaan != 'Pelajar/Mahasiswa' GROUP BY dusun_name, pekerjaan`);
+
+    const [globalStatsRows] = await db.query(`
+      SELECT 
+        COUNT(*) as jumlah_penduduk, 
+        COUNT(DISTINCT no_kk) as jumlah_kk,
+        SUM(CASE WHEN jenis_kelamin='Lk' THEN 1 ELSE 0 END) as laki_laki,
+        SUM(CASE WHEN jenis_kelamin='Pr' THEN 1 ELSE 0 END) as perempuan
+      FROM penduduk
+    `);
+    
+    if (globalStatsRows && globalStatsRows.length > 0) {
+      desa.statistik = {
+        jumlah_penduduk: globalStatsRows[0].jumlah_penduduk || 0,
+        jumlah_kk: globalStatsRows[0].jumlah_kk || 0,
+        laki_laki: globalStatsRows[0].laki_laki || 0,
+        perempuan: globalStatsRows[0].perempuan || 0
+      };
+    }
+
+    if (desa.dusun_detail) {
+      desa.dusun_detail = desa.dusun_detail.map(d => {
+        const pstat = popStats.find(p => p.dusun_name === d.nama);
+        if (pstat) {
+          d.jumlah_penduduk = pstat.penduduk;
+          d.jumlah_kk = pstat.kk;
+        }
+        const dAgamas = agamaRows.filter(a => a.dusun_name === d.nama).sort((a,b) => b.cnt - a.cnt);
+        if (dAgamas.length > 0) d.mayoritas_agama = dAgamas[0].agama;
+        
+        const dJobs = jobRows.filter(j => j.dusun_name === d.nama).sort((a,b) => b.cnt - a.cnt);
+        const totalJobs = dJobs.reduce((sum, j) => sum + j.cnt, 0);
+        if (totalJobs > 0) {
+          d.mayoritas_pekerjaan = dJobs.slice(0, 3).map(j => ({
+            nama: j.pekerjaan,
+            persen: Math.round((j.cnt / totalJobs) * 100)
+          }));
+        }
+        return d;
+      });
+    }
+  } catch(err) {
+    console.error('Gagal auto-fetch stats dusun:', err);
+  }
+  res.json(desa);
+});
 app.put('/api/desa', authMiddleware, (req, res) => {
   const existing = readData('desa.json');
   const updated = { ...existing, ...req.body };
@@ -713,6 +770,12 @@ app.delete('/api/statistik-tambahan/:katId/item/:itemId', authMiddleware, (req, 
   kat.items = (kat.items || []).filter(i => i.id != req.params.itemId);
   writeData('statistik-tambahan.json', data);
   res.json({ message: 'Dihapus' });
+});
+// ====================== PENDIDIKAN ======================
+app.get('/api/pendidikan', (req, res) => res.json(readData('pendidikan.json') || []));
+app.put('/api/pendidikan', authMiddleware, (req, res) => {
+  writeData('pendidikan.json', req.body);
+  res.json({ message: 'Tersimpan' });
 });
 
 app.get('/api/stats', authMiddleware, async (req, res) => {

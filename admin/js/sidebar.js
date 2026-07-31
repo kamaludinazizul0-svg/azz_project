@@ -21,11 +21,9 @@ function getSidebarHTML(activePage) {
       <span class="icon">🖼️</span> Hero Slider
     </a>
     <a href="/admin/berita.html" class="sidebar-link ${activePage==='berita'?'active':''}">
-      <span class="icon">📰</span> Berita
+      <span class="icon">📰</span> Portal Desa
     </a>
-    <a href="/admin/agenda.html" class="sidebar-link ${activePage==='agenda'?'active':''}">
-      <span class="icon">📅</span> Agenda Desa
-    </a>
+
     <a href="/admin/galeri.html" class="sidebar-link ${activePage==='galeri'?'active':''}">
       <span class="icon">📷</span> Galeri Foto
     </a>
@@ -53,6 +51,12 @@ function getSidebarHTML(activePage) {
     <div class="sidebar-section-label">Profil Desa</div>
     <a href="/admin/profil-desa.html" class="sidebar-link ${activePage==='profil-desa'?'active':''}">
       <span class="icon">🏡</span> Profil Desa
+    </a>
+    <a href="/admin/pendidikan.html" class="sidebar-link ${activePage==='pendidikan'?'active':''}">
+      <span class="icon">🎓</span> Pendidikan
+    </a>
+    <a href="/admin/kenali-desa.html" class="sidebar-link ${activePage==='kenali-desa'?'active':''}">
+      <span class="icon">🏘️</span> Kenali Desa
     </a>
     <a href="/admin/perangkat.html" class="sidebar-link ${activePage==='perangkat'?'active':''}">
       <span class="icon">👥</span> Perangkat Desa

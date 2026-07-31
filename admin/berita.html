@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kelola Berita - Admin Desa Kauman</title>
+  <title>Kelola Portal Desa - Admin Desa Kauman</title>
   <link rel="icon" href="/images/logo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/admin/css/admin.css" />
@@ -12,17 +12,17 @@
   <aside class="sidebar" id="sidebar" data-page="berita"></aside>
   <main class="admin-main">
     <div class="topbar">
-      <div class="topbar-left"><div class="topbar-title">Kelola Berita</div><div class="topbar-breadcrumb"><span>Admin</span> / <span>Berita</span></div></div>
-      <div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Lihat Website</a></div>
+      <div class="topbar-left"><div class="topbar-title">Kelola Portal Desa</div><div class="topbar-breadcrumb"><span>Admin</span> / <span>Portal Desa</span></div></div>
+      <div class="topbar-right"><a href="/berita.html" target="_blank" class="topbar-btn topbar-view-site">🌐 Lihat Portal</a></div>
     </div>
     <div class="page-content">
       <div class="page-header-admin">
-        <div><h1>📰 Kelola Berita</h1><p>Tambah, edit, dan hapus berita desa</p></div>
-        <button class="btn-admin btn-primary-admin" onclick="openAdd()">➕ Tambah Berita</button>
+        <div><h1>📰 Kelola Portal Desa</h1><p>Tambah, edit, dan hapus konten Portal Desa</p></div>
+        <button class="btn-admin btn-primary-admin" onclick="openAdd()">➕ Tambah Konten</button>
       </div>
       <div class="admin-card">
-        <div class="admin-card-header"><h3>Daftar Berita</h3>
-          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari berita..." style="max-width:250px" oninput="filterBerita()" />
+        <div class="admin-card-header"><h3>Daftar Konten</h3>
+          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari konten..." style="max-width:250px" oninput="filterBerita()" />
         </div>
         <div class="admin-card-body"><div class="admin-table-wrap">
           <table class="admin-table"><thead><tr><th>No</th><th>Gambar</th><th>Judul</th><th>Kategori</th><th>Tanggal</th><th>Views</th><th>Aksi</th></tr></thead>
@@ -36,14 +36,18 @@
 <!-- Modal -->
 <div class="admin-modal-overlay" id="formModal">
   <div class="admin-modal" style="max-width:700px">
-    <div class="admin-modal-header"><span class="admin-modal-title" id="modalTitle">Tambah Berita</span><button class="modal-close-btn" onclick="closeModal('formModal')">✕</button></div>
+    <div class="admin-modal-header"><span class="admin-modal-title" id="modalTitle">Tambah Konten</span><button class="modal-close-btn" onclick="closeModal('formModal')">✕</button></div>
     <div class="admin-modal-body">
       <form id="beritaForm" onsubmit="saveBerita(event)">
         <input type="hidden" id="editId" />
         <div class="form-group"><label class="form-label">Judul *</label><input type="text" id="fJudul" class="form-control" required /></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-          <div class="form-group"><label class="form-label">Kategori</label><select id="fKategori" class="form-control"><option>Pemerintahan</option><option>Prestasi</option><option>Pariwisata</option><option>UMKM</option><option>Infrastruktur</option><option>Kesehatan</option></select></div>
+          <div class="form-group"><label class="form-label">Kategori</label><select id="fKategori" class="form-control" onchange="toggleAgendaFields()"><option value="Berita">Berita</option><option value="Pengumuman">Pengumuman</option><option value="Agenda">Agenda</option><option value="Artikel">Artikel</option><option value="Kegiatan">Kegiatan</option></select></div>
           <div class="form-group"><label class="form-label">Tanggal</label><input type="date" id="fTanggal" class="form-control" /></div>
+        </div>
+        <div id="agendaFields" style="display:none;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div class="form-group"><label class="form-label">Waktu (Agenda)</label><input type="text" id="fWaktu" class="form-control" placeholder="Mulai - Selesai" /></div>
+          <div class="form-group"><label class="form-label">Lokasi (Agenda)</label><input type="text" id="fLokasi" class="form-control" placeholder="Tempat kegiatan" /></div>
         </div>
         <div class="form-group"><label class="form-label">Ringkasan</label><textarea id="fRingkasan" class="form-control" rows="2"></textarea></div>
         <div class="form-group"><label class="form-label">Konten (HTML)</label><textarea id="fKonten" class="form-control" rows="6"></textarea></div>
@@ -82,7 +86,7 @@ async function loadBerita() {
 
 function renderTable(data) {
   const tb = document.getElementById('beritaTable');
-  if (!data.length) { tb.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="icon">📰</div><h3>Belum ada berita</h3></td></tr>'; return; }
+  if (!data.length) { tb.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="icon">📰</div><h3>Belum ada konten</h3></td></tr>'; return; }
   tb.innerHTML = data.map((b, i) => `<tr>
     <td>${i+1}</td>
     <td><img src="${b.gambar || '/images/hero1.jpg'}" style="width:60px;height:40px;object-fit:cover;border-radius:6px" onerror="this.src='/images/hero1.jpg'" /></td>
@@ -91,8 +95,9 @@ function renderTable(data) {
     <td style="white-space:nowrap;font-size:0.85rem">${formatDate(b.tanggal)}</td>
     <td style="text-align:center">${b.dilihat||0}</td>
     <td><div style="display:flex;gap:6px">
-      <button class="btn-admin btn-warning btn-sm-admin" onclick="openEdit(${b.id})">✏️</button>
-      <button class="btn-admin btn-danger btn-sm-admin" onclick="hapus(${b.id})">🗑️</button>
+      <a href="/berita-detail.html?id=${b.id}" target="_blank" class="btn-admin btn-light btn-sm-admin" title="Lihat">👁️</a>
+      <button class="btn-admin btn-warning btn-sm-admin" onclick="openEdit(${b.id})" title="Edit">✏️</button>
+      <button class="btn-admin btn-danger btn-sm-admin" onclick="hapus(${b.id})" title="Hapus">🗑️</button>
     </div></td>
   </tr>`).join('');
 }
@@ -103,25 +108,29 @@ function filterBerita() {
 }
 
 function openAdd() {
-  document.getElementById('modalTitle').textContent = 'Tambah Berita';
+  document.getElementById('modalTitle').textContent = 'Tambah Konten';
   document.getElementById('beritaForm').reset();
   document.getElementById('editId').value = '';
   document.getElementById('fTanggal').value = new Date().toISOString().split('T')[0];
+  toggleAgendaFields();
   openModal('formModal');
 }
 
 function openEdit(id) {
   const b = allBerita.find(x => x.id === id);
   if (!b) return;
-  document.getElementById('modalTitle').textContent = 'Edit Berita';
+  document.getElementById('modalTitle').textContent = 'Edit Konten';
   document.getElementById('editId').value = b.id;
   document.getElementById('fJudul').value = b.judul;
   document.getElementById('fKategori').value = b.kategori;
   document.getElementById('fTanggal').value = b.tanggal;
+  document.getElementById('fWaktu').value = b.waktu || '';
+  document.getElementById('fLokasi').value = b.lokasi || '';
   document.getElementById('fRingkasan').value = b.ringkasan || '';
   document.getElementById('fKonten').value = b.konten || '';
   document.getElementById('fGambar').value = b.gambar || '';
   document.getElementById('fPenulis').value = b.penulis || 'Admin Desa';
+  toggleAgendaFields();
   openModal('formModal');
 }
 
@@ -132,6 +141,8 @@ async function saveBerita(e) {
     judul: document.getElementById('fJudul').value,
     kategori: document.getElementById('fKategori').value,
     tanggal: document.getElementById('fTanggal').value,
+    waktu: document.getElementById('fWaktu').value,
+    lokasi: document.getElementById('fLokasi').value,
     ringkasan: document.getElementById('fRingkasan').value,
     konten: document.getElementById('fKonten').value,
     gambar: document.getElementById('fGambar').value,
@@ -140,15 +151,25 @@ async function saveBerita(e) {
   const res = id
     ? await adminFetch(`/berita/${id}`, { method: 'PUT', body: JSON.stringify(body) })
     : await adminFetch('/berita', { method: 'POST', body: JSON.stringify(body) });
-  if (res) { showToast(id ? 'Berita berhasil diperbarui' : 'Berita berhasil ditambah'); closeModal('formModal'); loadBerita(); }
+  if (res) { showToast(id ? 'Konten berhasil diperbarui' : 'Konten berhasil ditambah'); closeModal('formModal'); loadBerita(); }
 }
 
 function hapus(id) {
-  confirmDialog('Yakin ingin menghapus berita ini?', async () => {
+  confirmDialog('Yakin ingin menghapus konten ini?', async () => {
     await adminFetch(`/berita/${id}`, { method: 'DELETE' });
-    showToast('Berita dihapus');
+    showToast('Konten dihapus');
     loadBerita();
   });
+}
+
+function toggleAgendaFields() {
+  const cat = document.getElementById('fKategori').value;
+  const af = document.getElementById('agendaFields');
+  if (cat === 'Agenda') {
+    af.style.display = 'grid';
+  } else {
+    af.style.display = 'none';
+  }
 }
 </script>
 </body>
