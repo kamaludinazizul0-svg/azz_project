@@ -50,12 +50,12 @@
   },
   "sambutan_kades": "HALO GAIS",
   "foto_kades": "/uploads/1784394283861.jpeg",
-  "video_profil": "https://www.youtube.com/embed/V6_V9Cfs0m4",
+  "video_profil": "https://youtu.be/2szg0Lu7Fv0?si=PeVGTLBK3m6Fk3Fu",
   "statistik": {
-    "jumlah_penduduk": 3850,
-    "jumlah_kk": 1120,
-    "laki_laki": 1920,
-    "perempuan": 1930
+    "jumlah_penduduk": 5085,
+    "jumlah_kk": 1610,
+    "laki_laki": "2565",
+    "perempuan": "2520"
   },
   "potensi_desa": [
     {
@@ -280,5 +280,6 @@
       "deskripsi": "Tradisi sambatan adalah praktik gotong royong di mana warga saling membantu tanpa pamrih dalam kegiatan berat seperti membangun rumah, membersihkan saluran air, atau menyiapkan hajatan. Nilai ini merupakan pondasi sosial masyarakat Desa Kauman yang masih sangat kuat hingga kini.",
       "waktu_pelaksanaan": "Dilakukan sewaktu-waktu sesuai kebutuhan warga"
     }
-  ]
+  ],
+  "pengumuman_teks": ""
 }

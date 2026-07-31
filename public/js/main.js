@@ -144,13 +144,28 @@ async function loadDesaInfo() {
   
   if (desa.video_profil && document.getElementById('iframeVideo')) {
     let videoUrl = desa.video_profil;
-    // Extract video ID to create embed URL if it's a standard youtube link
-    const ytMatch = videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-    if (ytMatch && ytMatch[1]) {
-      videoUrl = 'https://www.youtube.com/embed/' + ytMatch[1];
+    let videoId = null;
+    
+    try {
+      if (videoUrl.includes('youtu.be/')) {
+        videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
+      } else if (videoUrl.includes('youtube.com/watch')) {
+        const urlParams = new URLSearchParams(new URL(videoUrl).search);
+        videoId = urlParams.get('v');
+      } else if (videoUrl.includes('youtube.com/shorts/')) {
+        videoId = videoUrl.split('shorts/')[1].split('?')[0];
+      } else if (videoUrl.includes('youtube.com/embed/')) {
+        videoId = videoUrl.split('embed/')[1].split('?')[0];
+      }
+    } catch (e) {}
+
+    if (videoId) {
+      document.getElementById('iframeVideo').src = 'https://www.youtube.com/embed/' + videoId;
+      document.getElementById('secVideo').style.display = 'block';
+    } else if (videoUrl.includes('youtube.com/embed/')) {
+      document.getElementById('iframeVideo').src = videoUrl;
+      document.getElementById('secVideo').style.display = 'block';
     }
-    document.getElementById('iframeVideo').src = videoUrl;
-    document.getElementById('secVideo').style.display = 'block';
   }
 
   // Sambutan Kades
