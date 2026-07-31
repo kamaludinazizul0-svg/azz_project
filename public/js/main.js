@@ -157,14 +157,22 @@ async function loadDesaInfo() {
       } else if (videoUrl.includes('youtube.com/embed/')) {
         videoId = videoUrl.split('embed/')[1].split('?')[0];
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error("Error parsing video URL:", e);
+    }
+
+    console.log("Original videoUrl:", videoUrl, "Parsed videoId:", videoId);
 
     if (videoId) {
       document.getElementById('iframeVideo').src = 'https://www.youtube.com/embed/' + videoId;
+      document.getElementById('iframeVideo').style.border = '5px solid red'; // DEBUG VISUAL
       document.getElementById('secVideo').style.display = 'block';
     } else if (videoUrl.includes('youtube.com/embed/')) {
       document.getElementById('iframeVideo').src = videoUrl;
+      document.getElementById('iframeVideo').style.border = '5px solid blue'; // DEBUG VISUAL
       document.getElementById('secVideo').style.display = 'block';
+    } else {
+      console.error("Video ID not found for URL:", videoUrl);
     }
   }
 

@@ -654,10 +654,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('secPengumuman').style.display = 'block';
       document.getElementById('txtPengumuman').textContent = desa.pengumuman_teks;
     }
-    if (desa.video_profil) {
-      document.getElementById('secVideo').style.display = 'block';
-      document.getElementById('iframeVideo').src = desa.video_profil;
-    }
+
     if (desa.sambutan_kades) {
       document.getElementById('secSambutan').style.display = 'block';
       document.getElementById('txtSambutan').textContent = '"' + desa.sambutan_kades + '"';
