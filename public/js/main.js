@@ -137,6 +137,22 @@ async function loadDesaInfo() {
   if (desa.sosmed?.instagram) document.querySelectorAll('[data-sosmed-ig]').forEach(el => el.href = desa.sosmed.instagram);
   if (desa.sosmed?.youtube) document.querySelectorAll('[data-sosmed-yt]').forEach(el => el.href = desa.sosmed.youtube);
 
+  // Deskripsi & Video Profil
+  if (document.getElementById('desaDeskripsi')) {
+    document.getElementById('desaDeskripsi').textContent = desa.deskripsi_singkat || '';
+  }
+  
+  if (desa.video_profil && document.getElementById('iframeVideo')) {
+    let videoUrl = desa.video_profil;
+    // Extract video ID to create embed URL if it's a standard youtube link
+    const ytMatch = videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    if (ytMatch && ytMatch[1]) {
+      videoUrl = 'https://www.youtube.com/embed/' + ytMatch[1];
+    }
+    document.getElementById('iframeVideo').src = videoUrl;
+    document.getElementById('secVideo').style.display = 'block';
+  }
+
   // Sambutan Kades
   if (desa.sambutan_kades && document.getElementById('secSambutan')) {
     document.getElementById('secSambutan').style.display = 'block';
