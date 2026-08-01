@@ -1154,7 +1154,7 @@ tbody tr:hover { background: var(--bg-light); }
   transition: var(--transition);
 }
 .modal-close:hover { background: #fee2e2; color: #ef4444; }
-.modal-body { padding: 20px 28px 28px; }
+.modal-body { padding: 20px 28px 28px; max-height: 75vh; overflow-y: auto; }
 
 /* ===== ANIMATIONS ===== */
 .fade-in {

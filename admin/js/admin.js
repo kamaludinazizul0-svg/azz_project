@@ -31,7 +31,9 @@ async function adminFetch(endpoint, options = {}) {
     if (!res.ok) throw new Error(data.error || 'Terjadi kesalahan');
     return data;
   } catch (e) {
-    showToast(e.message, 'error');
+    let msg = e.message;
+    if (msg === 'Failed to fetch') msg = 'Koneksi ke server terputus. Pastikan server berjalan.';
+    showToast(msg, 'error');
     return null;
   }
 }

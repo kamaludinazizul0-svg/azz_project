@@ -8,7 +8,13 @@ async function apiFetch(endpoint, options = {}) {
     return await res.json();
   } catch (e) {
     console.error('API Error:', e);
-    return null;
+    // Graceful degradation fallback
+    if (endpoint.includes('berita') || endpoint.includes('penduduk')) {
+      return { data: [], total: 0 };
+    } else if (endpoint.includes('desa')) {
+      return { nama: "Desa", kontak: {}, dusun_detail: [], statistik: {} };
+    }
+    return [];
   }
 }
 
