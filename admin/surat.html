@@ -105,12 +105,36 @@
       
       <form id="dataForm" onsubmit="saveData(event)">
         <input type="hidden" id="editId" />
-        <div class="form-group"><label class="form-label">Ubah Status</label>
-          <select id="fStatus" class="form-control">
-            <option value="Menunggu">⏳ Menunggu Pemeriksaan</option>
-            <option value="Disetujui">✅ Disetujui / Selesai</option>
-            <option value="Ditolak">❌ Ditolak (Data Tidak Valid)</option>
-          </select>
+        <!-- Workflow Stepper -->
+        <div class="workflow-stepper" id="workflowStepper">
+          <div class="workflow-step" data-step="Warga"><div class="step-circle">1</div><div class="step-label">Warga</div></div>
+          <div class="workflow-step" data-step="Operator"><div class="step-circle">2</div><div class="step-label">Operator</div></div>
+          <div class="workflow-step" data-step="Kasi"><div class="step-circle">3</div><div class="step-label">Kasi</div></div>
+          <div class="workflow-step" data-step="Sekdes"><div class="step-circle">4</div><div class="step-label">Sekdes</div></div>
+          <div class="workflow-step" data-step="Kepala Desa"><div class="step-circle">5</div><div class="step-label">Kepala Desa</div></div>
+          <div class="workflow-step" data-step="Selesai"><div class="step-circle">6</div><div class="step-label">Selesai</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div class="form-group"><label class="form-label">Tahap Saat Ini</label>
+            <select id="fWorkflowStage" class="form-control" onchange="checkSelesaiStage()">
+              <option value="Operator">Operator</option>
+              <option value="Kasi">Kasi</option>
+              <option value="Sekdes">Sekdes</option>
+              <option value="Kepala Desa">Kepala Desa</option>
+              <option value="Selesai">Selesai</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Status Tahap</label>
+            <select id="fStatus" class="form-control" onchange="updateStepper(document.getElementById('fWorkflowStage').value, this.value)">
+              <option value="Pending">Pending</option>
+              <option value="Review">Review</option>
+              <option value="Revisi">Revisi</option>
+              <option value="Disetujui">Disetujui</option>
+              <option value="Ditolak">Ditolak</option>
+              <option value="Selesai">Selesai</option>
+            </select>
+          </div>
         </div>
         <div class="form-group" id="grpUploadHasil" style="background:#f0f9ff;padding:12px;border-radius:8px;border:1px solid #bae6fd">
           <label class="form-label" style="color:#0369a1;font-weight:600">Upload Hasil Surat (Word/PDF)</label>
@@ -198,7 +222,10 @@ function renderTable() {
         ${d.lampiran_ktp ? `<button onclick="openPreview('${d.lampiran_ktp}')" class="badge bg-blue-100 text-blue-800" style="text-decoration:none;margin-bottom:4px;display:inline-block;border:none;cursor:pointer">🖼️ KTP</button><br>` : ''}
         ${d.lampiran ? `<button onclick="openPreview('${d.lampiran}')" class="badge bg-blue-100 text-blue-800" style="text-decoration:none;display:inline-block;border:none;cursor:pointer">📄 Surat RT</button>` : '-'}
       </td>
-      <td><span class="${statusClass}">${d.status}</span></td>
+      <td>
+        <span class="${statusClass}" style="display:block;margin-bottom:4px;font-size:0.7rem;font-weight:700">[${d.workflow_stage || 'Operator'}]</span>
+        <span class="${statusClass}">${d.status || 'Pending'}</span>
+      </td>
       <td>
         <button class="btn-admin btn-light btn-sm-admin" onclick="openEdit(${d.id})">🔍 Proses</button>
         <button class="btn-admin btn-danger btn-sm-admin" onclick="deleteData(${d.id})">🗑️</button>
@@ -272,13 +299,16 @@ function openEdit(id) {
   renderLampiran(d.lampiran, 'previewLampiranContainer');
   document.getElementById('detTgl').textContent = new Date(d.created_at).toLocaleString('id-ID');
   
-  document.getElementById('fStatus').value = d.status || 'Menunggu';
+  document.getElementById('fWorkflowStage').value = d.workflow_stage || 'Operator';
+  document.getElementById('fStatus').value = d.status || 'Pending';
+  updateStepper(d.workflow_stage || 'Operator', d.status || 'Pending');
+  checkSelesaiStage();
   document.getElementById('fCatatan').value = d.catatan || '';
   
   document.getElementById('fHasilSurat').value = d.hasil_surat || '';
   document.getElementById('linkHasil').innerHTML = d.hasil_surat ? `<a href="${d.hasil_surat}" target="_blank">📄 Lihat File Hasil Saat Ini</a>` : '';
   
-  document.getElementById('btnPrint').style.display = (d.status === 'Disetujui') ? 'block' : 'none';
+  document.getElementById('btnPrint').style.display = (d.status === 'Disetujui' || d.status === 'Selesai' || d.workflow_stage === 'Selesai') ? 'block' : 'none';
   document.getElementById('btnWa').style.display = d.no_wa ? 'inline-block' : 'none';
   
   openModal('formModal');
@@ -330,6 +360,7 @@ async function saveData(e) {
   e.preventDefault();
   const id = document.getElementById('editId').value;
   const payload = {
+    workflow_stage: document.getElementById('fWorkflowStage').value,
     status: document.getElementById('fStatus').value,
     catatan: document.getElementById('fCatatan').value,
     hasil_surat: document.getElementById('fHasilSurat').value
@@ -340,6 +371,35 @@ async function saveData(e) {
     closeModal('formModal');
     loadData();
   }
+}
+
+
+function updateStepper(stage, status) {
+  const steps = ['Warga', 'Operator', 'Kasi', 'Sekdes', 'Kepala Desa', 'Selesai'];
+  const currentIndex = steps.indexOf(stage);
+  
+  document.querySelectorAll('.workflow-step').forEach((el, idx) => {
+    el.classList.remove('active', 'completed', 'rejected');
+    if (idx < currentIndex) {
+      el.classList.add('completed');
+    } else if (idx === currentIndex) {
+      if (status === 'Ditolak') el.classList.add('rejected');
+      else if (status === 'Disetujui' || status === 'Selesai') el.classList.add('completed');
+      else el.classList.add('active');
+    }
+  });
+}
+
+function checkSelesaiStage() {
+  const stage = document.getElementById('fWorkflowStage').value;
+  const status = document.getElementById('fStatus').value;
+  const grpUpload = document.getElementById('grpUploadHasil');
+  if (stage === 'Kepala Desa' || stage === 'Selesai') {
+    grpUpload.style.display = 'block';
+  } else {
+    grpUpload.style.display = 'none';
+  }
+  updateStepper(stage, status);
 }
 
 async function deleteData(id) {

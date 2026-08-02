@@ -157,6 +157,64 @@ function initSidebar() {
   });
 }
 
+// ===== NOTIFICATIONS =====
+async function initNotifications() {
+  const topbarRight = document.querySelector('.topbar-right');
+  if (!topbarRight) return;
+
+  const notifContainer = document.createElement('div');
+  notifContainer.className = 'notif-container';
+  notifContainer.innerHTML = `
+    <button class="notif-btn" id="notifBtn">
+      🔔<span class="notif-badge" id="notifBadge" style="display:none">0</span>
+    </button>
+    <div class="notif-dropdown" id="notifDropdown">
+      <div class="notif-header">Notifikasi Terbaru</div>
+      <div class="notif-list" id="notifList">
+        <div class="notif-empty">Memuat...</div>
+      </div>
+    </div>
+  `;
+  // Insert before the first button (Lihat Website or Keluar)
+  topbarRight.insertBefore(notifContainer, topbarRight.firstChild);
+
+  const notifBtn = document.getElementById('notifBtn');
+  const notifDropdown = document.getElementById('notifDropdown');
+  const notifBadge = document.getElementById('notifBadge');
+  const notifList = document.getElementById('notifList');
+
+  // Toggle Dropdown
+  notifBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    notifDropdown.classList.toggle('show');
+  });
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!notifContainer.contains(e.target)) {
+      notifDropdown.classList.remove('show');
+    }
+  });
+
+  // Fetch data
+  const data = await adminFetch('/notifications');
+  if (data && data.length > 0) {
+    notifBadge.textContent = data.length;
+    notifBadge.style.display = 'block';
+    notifList.innerHTML = data.map(n => `
+      <div class="notif-item">
+        <div class="notif-icon">${n.icon}</div>
+        <div class="notif-content">
+          <div class="notif-title">${n.title}</div>
+          <div class="notif-time">${n.time}</div>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    notifList.innerHTML = '<div class="notif-empty">Belum ada notifikasi baru</div>';
+  }
+}
+
 // ===== Image Upload Preview =====
 function initImageUpload(inputId, previewId) {
   const input = document.getElementById(inputId);
@@ -192,6 +250,7 @@ function createPagination(total, limit, current, onPage) {
 document.addEventListener('DOMContentLoaded', () => {
   if (!requireAuth()) return;
   initSidebar();
+  initNotifications();
   
   // Close modals on overlay click
   document.querySelectorAll('.admin-modal-overlay').forEach(overlay => {

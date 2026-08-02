@@ -89,6 +89,9 @@ function getSidebarHTML(activePage) {
     <a href="/admin/pengaturan.html" class="sidebar-link ${activePage==='pengaturan'?'active':''}">
       <span class="icon">⚙️</span> Pengaturan
     </a>
+    <a href="/admin/log-aktivitas.html" class="sidebar-link ${activePage==='log-aktivitas'?'active':''}">
+      <span class="icon">📖</span> Log Aktivitas
+    </a>
   </nav>
   <div class="sidebar-footer">
     <div class="sidebar-user">

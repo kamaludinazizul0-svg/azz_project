@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Aktivitas - Admin Desa Kauman</title>
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/css/admin.css" />
+</head>
+<body>
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar" data-page="log-aktivitas"></aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Log Aktivitas</div>
+        <div class="topbar-breadcrumb">
+          <span>Admin</span> / <span>Pengaturan</span> / <span>Log Aktivitas</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn" data-logout>🚪 Keluar</button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="page-content">
+      <div class="admin-card">
+        <div class="admin-card-header" style="justify-content: space-between;">
+          <h2 class="admin-card-title">📖 Audit Trails (Riwayat Aktivitas)</h2>
+          <button class="btn-admin btn-light" onclick="loadLogs()">🔄 Segarkan</button>
+        </div>
+        <div class="admin-card-body">
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Waktu</th>
+                  <th>Pengguna</th>
+                  <th>Aksi</th>
+                  <th>Detail Keterangan</th>
+                </tr>
+              </thead>
+              <tbody id="logTableBody">
+                <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted)">⏳ Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="pagination"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/admin/js/admin.js"></script>
+<script src="/admin/js/sidebar.js"></script>
+<script>
+  let logs = [];
+  let currentPage = 1;
+  const itemsPerPage = 15;
+
+  async function loadLogs() {
+    const data = await adminFetch('/logs');
+    if (data) {
+      logs = data;
+      renderLogs();
+    }
+  }
+
+  function renderLogs() {
+    const tbody = document.getElementById('logTableBody');
+    if (logs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted)">Belum ada log aktivitas.</td></tr>';
+      return;
+    }
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const paginated = logs.slice(start, start + itemsPerPage);
+
+    tbody.innerHTML = paginated.map(log => `
+      <tr>
+        <td style="white-space:nowrap">${new Date(log.waktu).toLocaleString('id-ID')}</td>
+        <td><span class="badge" style="background:var(--primary-pale);color:var(--primary)">👤 ${log.username}</span></td>
+        <td><strong>${log.aksi}</strong></td>
+        <td>${log.detail}</td>
+      </tr>
+    `).join('');
+
+    document.getElementById('pagination').innerHTML = createPagination(logs.length, itemsPerPage, currentPage, 'goToPage');
+  }
+
+  function goToPage(page) {
+    currentPage = page;
+    renderLogs();
+  }
+
+  document.addEventListener('DOMContentLoaded', loadLogs);
+</script>
+</body>
+</html>

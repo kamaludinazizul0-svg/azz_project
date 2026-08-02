@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "nama": "KAMAL",
+    "nik": "3545676787654356",
+    "alamat": "SEDATI",
+    "no_wa": "085745875630",
+    "jenis_surat": "Surat Keterangan Usaha",
+    "keperluan": "KERJA",
+    "lampiran_ktp": "/uploads/1785654671663.jpeg",
+    "lampiran": "/uploads/1785654683780.doc",
+    "id": 1785654715244,
+    "created_at": "2026-08-02T07:11:55.244Z",
+    "workflow_stage": "Selesai",
+    "status": "Disetujui",
+    "catatan": "",
+    "hasil_surat": "/uploads/1785654766524.pdf"
+  }
+]
