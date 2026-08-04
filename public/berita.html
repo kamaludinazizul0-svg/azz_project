@@ -86,13 +86,14 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      height: 400px;
+      height: auto;
       display: block;
       text-decoration: none;
     }
     .news-featured img {
-      width: 100%; height: 100%;
-      object-fit: cover;
+      width: 100%; height: auto;
+      display: block;
+      object-fit: contain;
       transition: transform 0.5s;
     }
     .news-featured:hover img { transform: scale(1.05); }
@@ -283,7 +284,7 @@
       <a href="/ppid.html" class="nav-link">&#128194; PPID</a>
       <a href="/layanan-masyarakat.html" style="background:var(--primary,#2e7d32);color:#fff;padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 4px 12px rgba(46,125,50,0.4);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s,box-shadow 0.2s" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 6px 20px rgba(46,125,50,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 12px rgba(46,125,50,0.4)'">&#127963; Layanan</a>
     </div>
-    <div class="nav-burger" id="navBurger"><span></span><span></span><span></span></div>
+    <div class="nav-burger" id="navBurger"><span class="sep">&raquo;</span><span class="sep">&raquo;</span><span class="sep">&raquo;</span></div>
   </div>
 </nav>
 <div class="nav-mobile" id="navMobile">
@@ -386,38 +387,38 @@
         <div>
           <h4 class="footer-col-title">MENU</h4>
           <div class="footer-links">
-            <a href="/index.html">→ Beranda</a>
-            <a href="/profil.html">→ Profil Desa</a>
-            <a href="/kenali-desa.html">→ Kenali Desa</a>
-            <a href="/infografis.html">→ Infografis</a>
-            <a href="/idm.html">→ IDM</a>
-            <a href="/berita.html">→ Portal Desa</a>
-            <a href="/galeri.html">→ Galeri</a>
+            <a href="/index.html">&rarr; Beranda</a>
+            <a href="/profil.html">&rarr; Profil Desa</a>
+            <a href="/kenali-desa.html">&rarr; Kenali Desa</a>
+            <a href="/infografis.html">&rarr; Infografis</a>
+            <a href="/idm.html">&rarr; IDM</a>
+            <a href="/berita.html">&rarr; Portal Desa</a>
+            <a href="/galeri.html">&rarr; Galeri</a>
           </div>
         </div>
         <div>
           <h4 class="footer-col-title">LAYANAN</h4>
           <div class="footer-links">
-            <a href="/listing.html">→ Listing UMKM</a>
-            <a href="/belanja.html">→ APBDesa</a>
-            <a href="/ppid.html">→ PPID</a>
-            <a href="/pengaduan.html">→ Pengaduan</a>
-            <a href="/admin">→ Admin Panel</a>
+            <a href="/listing.html">&rarr; Listing UMKM</a>
+            <a href="/belanja.html">&rarr; APBDesa</a>
+            <a href="/ppid.html">&rarr; PPID</a>
+            <a href="/pengaduan.html">&rarr; Pengaduan</a>
+            <a href="/admin">&rarr; Admin Panel</a>
           </div>
         </div>
         <div>
           <h4 class="footer-col-title">KONTAK</h4>
           <div class="footer-contact">
             <div class="footer-contact-item">
-              <span>📍</span>
+              <span>&#128205;</span>
               <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
             </div>
             <div class="footer-contact-item">
-              <span>📞</span>
+              <span>&#128222;</span>
               <span data-desa-telp>(0321) 123456</span>
             </div>
             <div class="footer-contact-item">
-              <span>✉️</span>
+              <span>&#9993;&#65039;</span>
               <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
             </div>
           </div>
@@ -466,7 +467,6 @@
               <div class="news-featured-content">
                 <span class="news-badge">Liputan Utama</span>
                 <h3>${main.judul}</h3>
-                <p>${main.ringkasan || ''}</p>
               </div>
             </a>
             <div class="news-side-list">
@@ -485,7 +485,7 @@
               <span class="board-date">${formatDate(p.tanggal)}</span>
               <h3 class="board-title">${p.judul}</h3>
               <p class="board-desc">${p.ringkasan || ''}</p>
-              ${p.konten ? `<a href="/berita-detail.html?id=${p.id}" style="color:var(--board-border);font-weight:700;font-size:0.85rem;margin-top:12px;display:inline-block;text-decoration:none">Baca Selengkapnya →</a>` : ''}
+              ${p.konten ? `<a href="/berita-detail.html?id=${p.id}" style="color:var(--board-border);font-weight:700;font-size:0.85rem;margin-top:12px;display:inline-block;text-decoration:none">Baca Selengkapnya &rarr;</a>` : ''}
             </div>
           `).join('');
         }
@@ -505,7 +505,7 @@
                 <h3 class="timeline-title">${a.judul}</h3>
                 <div class="timeline-meta">
                   <span>⏰ ${a.waktu || '-'}</span>
-                  <span>📍 ${a.lokasi || '-'}</span>
+                  <span>&#128205; ${a.lokasi || '-'}</span>
                 </div>
                 <p class="timeline-desc">${(a.ringkasan || '').substring(0,100)}...</p>
               </div>

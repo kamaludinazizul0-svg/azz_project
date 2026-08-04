@@ -31,7 +31,7 @@
       <a href="/ppid.html" class="nav-link">&#128194; PPID</a>
       <a href="/layanan-masyarakat.html" style="background:var(--primary,#2e7d32);color:#fff;padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 4px 12px rgba(46,125,50,0.4);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s,box-shadow 0.2s" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 6px 20px rgba(46,125,50,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 12px rgba(46,125,50,0.4)'">&#127963; Layanan</a>
     </div>
-    <div class="nav-burger" id="navBurger"><span></span><span></span><span></span></div>
+    <div class="nav-burger" id="navBurger"><span class="sep">&raquo;</span><span class="sep">&raquo;</span><span class="sep">&raquo;</span></div>
   </div>
 </nav>
 <div class="nav-mobile" id="navMobile">
@@ -52,7 +52,7 @@
 
 <div class="page-header">
   <div class="container">
-    <div class="breadcrumb"><a href="/">🏠 Beranda</a> / <span>Profil Desa</span></div>
+    <div class="breadcrumb"><a href="/">&#127968; Beranda</a> / <span>Profil Desa</span></div>
     <h1>Profil Desa Kauman</h1>
     <p>Mengenal lebih dekat Desa Kauman — sejarah, visi misi, dan struktur pemerintahan</p>
   </div>
@@ -63,7 +63,7 @@
   <div class="container">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center" class="fade-in">
       <div>
-        <div class="section-tag" style="margin-bottom:16px">📜 Sejarah</div>
+        <div class="section-tag" style="margin-bottom:16px">&#128220; Sejarah</div>
         <h2 class="section-title" style="text-align:left">Sejarah Desa Kauman</h2>
         <div id="sejarahText" style="color:var(--text-muted);line-height:1.9;font-size:0.96rem;margin-top:16px">Memuat...</div>
       </div>
@@ -158,7 +158,7 @@
 <section class="section section-alt">
   <div class="container">
     <div class="section-header fade-in">
-      <div class="section-tag">📜 Regulasi</div>
+      <div class="section-tag">&#128220; Regulasi</div>
       <h2 class="section-title">Regulasi Desa Kauman</h2>
     </div>
     <div id="regulasiSection" class="fade-in" style="margin-top:20px; display:flex; flex-direction:column; gap:15px;"></div>
@@ -187,38 +187,38 @@
       <div>
         <h4 class="footer-col-title">MENU</h4>
         <div class="footer-links">
-          <a href="/index.html">→ Beranda</a>
-          <a href="/profil.html">→ Profil Desa</a>
-          <a href="/kenali-desa.html">→ Kenali Desa</a>
-          <a href="/infografis.html">→ Infografis</a>
-          <a href="/idm.html">→ IDM</a>
-          <a href="/berita.html">→ Berita</a>
-          <a href="/galeri.html">→ Galeri</a>
+          <a href="/index.html">&rarr; Beranda</a>
+          <a href="/profil.html">&rarr; Profil Desa</a>
+          <a href="/kenali-desa.html">&rarr; Kenali Desa</a>
+          <a href="/infografis.html">&rarr; Infografis</a>
+          <a href="/idm.html">&rarr; IDM</a>
+          <a href="/berita.html">&rarr; Berita</a>
+          <a href="/galeri.html">&rarr; Galeri</a>
         </div>
       </div>
       <div>
         <h4 class="footer-col-title">LAYANAN</h4>
         <div class="footer-links">
-          <a href="/listing.html">→ Listing UMKM</a>
-          <a href="/belanja.html">→ APBDesa</a>
-          <a href="/ppid.html">→ PPID</a>
-          <a href="/pengaduan.html">→ Pengaduan</a>
-          <a href="/admin">→ Admin Panel</a>
+          <a href="/listing.html">&rarr; Listing UMKM</a>
+          <a href="/belanja.html">&rarr; APBDesa</a>
+          <a href="/ppid.html">&rarr; PPID</a>
+          <a href="/pengaduan.html">&rarr; Pengaduan</a>
+          <a href="/admin">&rarr; Admin Panel</a>
         </div>
       </div>
       <div>
         <h4 class="footer-col-title">KONTAK</h4>
         <div class="footer-contact">
           <div class="footer-contact-item">
-            <span>📍</span>
+            <span>&#128205;</span>
             <span data-desa-alamat>Jl. Kauman No. 01, Desa Kauman, Kec. Ngoro, Kab. Jombang, Jawa Timur 61473</span>
           </div>
           <div class="footer-contact-item">
-            <span>📞</span>
+            <span>&#128222;</span>
             <span data-desa-telp>(0321) 123456</span>
           </div>
           <div class="footer-contact-item">
-            <span>✉️</span>
+            <span>&#9993;&#65039;</span>
             <a href="#" data-desa-email style="color:inherit">desaKauman@jombangkab.go.id</a>
           </div>
         </div>
@@ -229,7 +229,7 @@
     </div>
   </div>
 </footer>
-<button class="back-to-top" id="backToTop">↑</button>
+<button class="back-to-top" id="backToTop">&uarr;</button>
 
 <script src="/js/api.js"></script>
 <script src="/js/main.js?v=2"></script>
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const perangkat = await API.perangkat();
   if (perangkat?.length) {
     document.getElementById('perangkatGrid').innerHTML = perangkat.map(p =>
-      `<div class="perangkat-card fade-in"><div class="perangkat-foto"><img src="${p.foto}" alt="${p.nama}" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem>👤</span>'" /></div><div class="perangkat-nama">${p.nama}</div><div class="perangkat-jabatan">${p.jabatan}</div></div>`).join('');
+      `<div class="perangkat-card fade-in"><div class="perangkat-foto"><img src="${p.foto}" alt="${p.nama}" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem>&#128100;</span>'" /></div><div class="perangkat-nama">${p.nama}</div><div class="perangkat-jabatan">${p.jabatan}</div></div>`).join('');
     initScrollAnimations();
   }
 

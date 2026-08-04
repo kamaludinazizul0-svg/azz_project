@@ -68,9 +68,7 @@ function getSidebarHTML(activePage) {
     <a href="/admin/mitra.html" class="sidebar-link ${activePage==='mitra'?'active':''}">
       <span class="icon">🤝</span> Mitra Desa
     </a>
-    <a href="/admin/agenda.html" class="sidebar-link ${activePage==='agenda'?'active':''}">
-      <span class="icon">📅</span> Agenda Kegiatan
-    </a>
+
 
     <div class="sidebar-section-label">Keuangan &amp; Administrasi</div>
     <a href="/admin/apbdesa.html" class="sidebar-link ${activePage==='apbdesa'?'active':''}">
