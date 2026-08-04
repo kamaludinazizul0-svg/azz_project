@@ -57,19 +57,15 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
 }));
 
 // ====================== HELPERS ======================
-const dataPath = path.join(__dirname, 'data');
 
-function readData(file) {
+
+async function logActivity(username, aksi, keterangan) {
   try {
-    const raw = fs.readFileSync(path.join(dataPath, file), 'utf-8');
-    return JSON.parse(raw);
-  } catch (e) {
-    return null;
+    const time = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    await db.query('INSERT INTO logs (username, aksi, keterangan, created_at) VALUES (?, ?, ?, ?)', [username || 'system', aksi, keterangan, time]);
+  } catch(e) {
+    console.error('Failed to log activity:', e.message);
   }
-}
-
-function writeData(file, data) {
-  fs.writeFileSync(path.join(dataPath, file), JSON.stringify(data, null, 2), 'utf-8');
 }
 
 function authMiddleware(req, res, next) {
@@ -107,7 +103,10 @@ const fileFilter = (req, file, cb) => {
 };
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 }, fileFilter });
 
-
+app.post('/api/upload', authMiddleware, upload.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'Tidak ada file yang diunggah' });
+  res.json({ url: '/uploads/' + req.file.filename });
+});
 
 // ====================== AUTH ======================
 app.post('/api/auth/login', loginRateLimit, async (req, res) => {
@@ -139,6 +138,41 @@ app.put('/api/auth/change-password', authMiddleware, async (req, res) => {
     await db.query('UPDATE users SET password = ? WHERE id = ?', [hashed, req.user.id]);
     res.json({ message: 'Password berhasil diubah' });
   } catch(e) { res.status(500).json({error: e.message}); }
+});
+
+// ====================== AI CHATBOT ======================
+app.post('/api/chat', async (req, res) => {
+  const { message } = req.body;
+  if (!message) return res.status(400).json({ error: 'Pesan kosong' });
+
+  const msg = message.toLowerCase();
+  let reply = "Maaf, saya belum mengerti pertanyaan tersebut. Coba tanyakan tentang profil desa, jumlah penduduk, luas wilayah, kontak, atau visi misi.";
+
+  try {
+    const [dRows] = await db.query('SELECT data FROM desa_profil LIMIT 1');
+    if (dRows.length > 0) {
+      const profil = typeof dRows[0].data === 'string' ? JSON.parse(dRows[0].data) : dRows[0].data;
+      
+      if (msg.includes('penduduk') || msg.includes('warga') || msg.includes('jumlah orang')) {
+        reply = `Total penduduk Desa Kauman saat ini adalah ${profil.statistik?.jumlah_penduduk || '-'} jiwa, terdiri dari ${profil.statistik?.laki_laki || '-'} laki-laki dan ${profil.statistik?.perempuan || '-'} perempuan.`;
+      } else if (msg.includes('kepala desa') || msg.includes('kades')) {
+        reply = `Kepala Desa Kauman saat ini dijabat oleh Bapak/Ibu ${profil.kepala_desa || '-'}.`;
+      } else if (msg.includes('kontak') || msg.includes('hubungi') || msg.includes('whatsapp') || msg.includes('telepon')) {
+        reply = `Anda dapat menghubungi kami melalui WhatsApp di ${profil.kontak?.whatsapp || '-'} atau telepon di ${profil.kontak?.telepon || '-'}. Email resmi kami adalah ${profil.kontak?.email || '-'}.`;
+      } else if (msg.includes('lokasi') || msg.includes('alamat') || msg.includes('dimana')) {
+        reply = `Kantor Desa Kauman berlokasi di ${profil.kontak?.alamat || profil.alamat || '-'}.`;
+      } else if (msg.includes('luas')) {
+        reply = `Luas wilayah Desa Kauman adalah ${profil.luas_wilayah || '-'} hektar.`;
+      } else if (msg.includes('visi') || msg.includes('misi')) {
+        reply = `Visi Desa Kauman: "${profil.visi || '-'}". Misi: ${profil.misi || '-'}.`;
+      }
+    }
+  } catch (err) {
+    console.error('Chat API Error:', err);
+    reply = "Maaf, sedang ada gangguan sistem saat mengakses data desa.";
+  }
+
+  setTimeout(() => res.json({ reply }), 800);
 });
 
 // ====================== DESA (Profil) ======================
@@ -212,13 +246,13 @@ app.put('/api/desa', authMiddleware, async (req, res) => {
     const data = req.body;
     const [existing] = await db.query('SELECT * FROM desa_profil LIMIT 1');
     if (existing.length === 0) {
-      await db.query('INSERT INTO desa_profil (id, nama, alamat, telepon, email, deskripsi, logo) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-        [1, data.nama, data.alamat, data.telepon, data.email, data.deskripsi, data.logo]);
+      await db.query('INSERT INTO desa_profil (id, data) VALUES (?, ?)', 
+        [1, JSON.stringify(data)]);
     } else {
-      await db.query('UPDATE desa_profil SET nama=?, alamat=?, telepon=?, email=?, deskripsi=?, logo=? WHERE id=?', 
-        [data.nama, data.alamat, data.telepon, data.email, data.deskripsi, data.logo, existing[0].id]);
+      await db.query('UPDATE desa_profil SET data=? WHERE id=?', 
+        [JSON.stringify(data), existing[0].id]);
     }
-    res.json(data);
+    res.json({ message: 'Profil desa berhasil diperbarui' });
   } catch(e) { res.status(500).json({error: e.message}); }
 });
 
@@ -319,16 +353,9 @@ app.get('/api/penduduk', async (req, res) => {
       limit: l
     });
   } catch (error) {
-    console.error('DB error - using fallback:', error.message);
-    // Fallback if DB error or table not found
-    const fallback = readData('penduduk.json') || {};
-    if (!isAdmin && fallback.data) delete fallback.data;
-    res.json(fallback);
+    console.error('DB error:', error.message);
+    res.status(500).json({error: error.message});
   }
-});
-app.put('/api/penduduk', authMiddleware, (req, res) => {
-  writeData('penduduk.json', req.body);
-  res.json(req.body);
 });
 
 // ====================== SLIDER ======================
@@ -407,32 +434,30 @@ app.delete('/api/perangkat/:id', authMiddleware, async (req, res) => {
 // ====================== AGENDA ======================
 app.get('/api/agenda', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM agenda');
-    res.json(rows);
+    const [rows] = await db.query('SELECT data FROM agenda');
+    res.json(rows.map(r => typeof r.data === 'string' ? JSON.parse(r.data) : r.data));
   } catch (err) { res.status(500).json({error: err.message}); }
 });
 app.get('/api/agenda/:id', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM agenda WHERE id = ?', [req.params.id]);
-    res.json(rows[0] || {});
+    const [rows] = await db.query('SELECT data FROM agenda WHERE id = ?', [req.params.id]);
+    res.json(rows.length ? (typeof rows[0].data === 'string' ? JSON.parse(rows[0].data) : rows[0].data) : {});
   } catch (err) { res.status(500).json({error: err.message}); }
 });
 app.post('/api/agenda', authMiddleware, async (req, res) => {
   logActivity(req.user?.username, 'POST /api/agenda', 'Menambahkan data');
   try {
     const newId = Date.now();
-    const { judul, tanggal, waktu, lokasi, status, deskripsi } = req.body;
-    await db.query('INSERT INTO agenda (id, judul, tanggal, waktu, lokasi, status, deskripsi) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [newId, judul, tanggal, waktu, lokasi, status, deskripsi]);
+    const data = { id: newId, ...req.body };
+    await db.query('INSERT INTO agenda (id, data) VALUES (?, ?)', [newId, JSON.stringify(data)]);
     res.json({ message: 'Berhasil ditambahkan', id: newId });
   } catch (err) { res.status(500).json({error: err.message}); }
 });
 app.put('/api/agenda/:id', authMiddleware, async (req, res) => {
   logActivity(req.user?.username, 'PUT /api/agenda/:id', 'Mengubah data');
   try {
-    const { judul, tanggal, waktu, lokasi, status, deskripsi } = req.body;
-    await db.query('UPDATE agenda SET judul=?, tanggal=?, waktu=?, lokasi=?, status=?, deskripsi=? WHERE id=?',
-      [judul, tanggal, waktu, lokasi, status, deskripsi, req.params.id]);
+    const data = req.body;
+    await db.query('UPDATE agenda SET data=? WHERE id=?', [JSON.stringify(data), req.params.id]);
     res.json({ message: 'Berhasil diubah' });
   } catch (err) { res.status(500).json({error: err.message}); }
 });
@@ -473,7 +498,11 @@ app.get('/api/berita', async (req, res) => {
 });
 app.get('/api/berita/:id', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM berita WHERE id = ?', [req.params.id]);
+    const param = req.params.id;
+    const isNum = !isNaN(param);
+    const query = isNum ? 'SELECT * FROM berita WHERE id = ? OR slug = ?' : 'SELECT * FROM berita WHERE slug = ?';
+    const params = isNum ? [param, param] : [param];
+    const [rows] = await db.query(query, params);
     if (rows.length === 0) return res.status(404).json({error: 'Not found'});
     res.json(rows[0]);
   } catch (err) { res.status(500).json({error: err.message}); }
@@ -961,25 +990,22 @@ app.delete('/api/listing/:id', authMiddleware, async (req, res) => {
 
 
 // ====================== PROGRAM KERJA ======================
-app.get('/api/program', async (req, res) => { try { const [rows] = await db.query('SELECT * FROM program'); res.json(rows); } catch (err) { res.status(500).json({error: err.message}); } });
-app.get('/api/program/:id', async (req, res) => { try { const [rows] = await db.query('SELECT * FROM program WHERE id = ?', [req.params.id]); res.json(rows.length ? rows[0] : {}); } catch (err) { res.status(500).json({error: err.message}); } });
-app.post('/api/program', authMiddleware, upload.single('foto'), async (req, res) => {
+app.get('/api/program', async (req, res) => { try { const [rows] = await db.query('SELECT data FROM program'); res.json(rows.map(r => typeof r.data === 'string' ? JSON.parse(r.data) : r.data)); } catch (err) { res.status(500).json({error: err.message}); } });
+app.get('/api/program/:id', async (req, res) => { try { const [rows] = await db.query('SELECT data FROM program WHERE id = ?', [req.params.id]); res.json(rows.length ? (typeof rows[0].data === 'string' ? JSON.parse(rows[0].data) : rows[0].data) : {}); } catch (err) { res.status(500).json({error: err.message}); } });
+app.post('/api/program', authMiddleware, async (req, res) => {
   logActivity(req.user?.username, 'POST /api/program', 'Menambahkan data');
   try {
     const newId = Date.now();
-    const foto = req.file ? '/uploads/' + req.file.filename : '';
-    await db.query('INSERT INTO program (id, nama, deskripsi, anggaran, status, progress, foto) VALUES (?, ?, ?, ?, ?, ?, ?)', [newId, req.body.nama || '', req.body.deskripsi || '', req.body.anggaran || '', req.body.status || '', req.body.progress || 0, foto]);
+    const data = { id: newId, ...req.body };
+    await db.query('INSERT INTO program (id, data) VALUES (?, ?)', [newId, JSON.stringify(data)]);
     res.json({ message: 'Berhasil ditambahkan', id: newId });
   } catch (err) { res.status(500).json({error: err.message}); }
 });
-app.put('/api/program/:id', authMiddleware, upload.single('foto'), async (req, res) => {
+app.put('/api/program/:id', authMiddleware, async (req, res) => {
   logActivity(req.user?.username, 'PUT /api/program/:id', 'Mengubah data');
   try {
-    if (req.file) {
-      await db.query('UPDATE program SET nama=?, deskripsi=?, anggaran=?, status=?, progress=?, foto=? WHERE id=?', [req.body.nama, req.body.deskripsi, req.body.anggaran, req.body.status, req.body.progress, '/uploads/' + req.file.filename, req.params.id]);
-    } else {
-      await db.query('UPDATE program SET nama=?, deskripsi=?, anggaran=?, status=?, progress=? WHERE id=?', [req.body.nama, req.body.deskripsi, req.body.anggaran, req.body.status, req.body.progress, req.params.id]);
-    }
+    const data = req.body;
+    await db.query('UPDATE program SET data=? WHERE id=?', [JSON.stringify(data), req.params.id]);
     res.json({ message: 'Berhasil diubah' });
   } catch (err) { res.status(500).json({error: err.message}); }
 });
@@ -989,54 +1015,89 @@ app.delete('/api/program/:id', authMiddleware, async (req, res) => {
 });
 
 
-// ====================== PEMBANGUNAN ======================
-app.get('/api/pembangunan', async (req, res) => { try { const [rows] = await db.query('SELECT * FROM pembangunan'); res.json(rows); } catch (err) { res.status(500).json({error: err.message}); } });
-app.get('/api/pembangunan/:id', async (req, res) => { try { const [rows] = await db.query('SELECT * FROM pembangunan WHERE id = ?', [req.params.id]); res.json(rows.length ? rows[0] : {}); } catch (err) { res.status(500).json({error: err.message}); } });
-app.post('/api/pembangunan', authMiddleware, upload.single('foto'), async (req, res) => {
-  logActivity(req.user?.username, 'POST /api/pembangunan', 'Menambahkan data');
-  try {
-    const newId = Date.now();
-    const foto = req.file ? '/uploads/' + req.file.filename : '';
-    await db.query('INSERT INTO pembangunan (id, nama, lokasi, anggaran, sumber_dana, progress, foto) VALUES (?, ?, ?, ?, ?, ?, ?)', [newId, req.body.nama || '', req.body.lokasi || '', req.body.anggaran || '', req.body.sumber_dana || '', req.body.progress || 0, foto]);
-    res.json({ message: 'Berhasil ditambahkan', id: newId });
-  } catch (err) { res.status(500).json({error: err.message}); }
-});
-app.put('/api/pembangunan/:id', authMiddleware, upload.single('foto'), async (req, res) => {
-  logActivity(req.user?.username, 'PUT /api/pembangunan/:id', 'Mengubah data');
-  try {
-    if (req.file) {
-      await db.query('UPDATE pembangunan SET nama=?, lokasi=?, anggaran=?, sumber_dana=?, progress=?, foto=? WHERE id=?', [req.body.nama, req.body.lokasi, req.body.anggaran, req.body.sumber_dana, req.body.progress, '/uploads/' + req.file.filename, req.params.id]);
-    } else {
-      await db.query('UPDATE pembangunan SET nama=?, lokasi=?, anggaran=?, sumber_dana=?, progress=? WHERE id=?', [req.body.nama, req.body.lokasi, req.body.anggaran, req.body.sumber_dana, req.body.progress, req.params.id]);
-    }
-    res.json({ message: 'Berhasil diubah' });
-  } catch (err) { res.status(500).json({error: err.message}); }
-});
-app.delete('/api/pembangunan/:id', authMiddleware, async (req, res) => {
-  logActivity(req.user?.username, 'DELETE /api/pembangunan/:id', 'Menghapus data');
-  try { await db.query('DELETE FROM pembangunan WHERE id = ?', [req.params.id]); res.json({ message: 'Dihapus' }); } catch (err) { res.status(500).json({error: err.message}); }
-});
 
-
-// ====================== STATISTIK TAMBAHAN ======================
-app.get('/api/statistik-tambahan', async (req, res) => { try { const [rows] = await db.query('SELECT * FROM statistik_tambahan LIMIT 1'); res.json(rows.length ? rows[0] : {}); } catch (err) { res.status(500).json({error: err.message}); } });
-app.get('/api/statistik-tambahan/:id', async (req, res) => { try { const [rows] = await db.query('SELECT * FROM statistik_tambahan WHERE id = ?', [req.params.id]); res.json(rows.length ? rows[0] : {}); } catch (err) { res.status(500).json({error: err.message}); } });
+app.get('/api/statistik-tambahan', async (req, res) => { try { const [rows] = await db.query('SELECT data FROM statistik_tambahan'); res.json(rows.map(r => typeof r.data === 'string' ? JSON.parse(r.data) : r.data)); } catch (err) { res.status(500).json({error: err.message}); } });
+app.get('/api/statistik-tambahan/:id', async (req, res) => { try { const [rows] = await db.query('SELECT data FROM statistik_tambahan WHERE id = ?', [req.params.id]); res.json(rows.length ? (typeof rows[0].data === 'string' ? JSON.parse(rows[0].data) : rows[0].data) : {}); } catch (err) { res.status(500).json({error: err.message}); } });
 app.post('/api/statistik-tambahan', authMiddleware, async (req, res) => {
   logActivity(req.user?.username, 'POST /api/statistik-tambahan', 'Menambahkan data');
   try {
     const newId = Date.now();
-    await db.query('INSERT INTO statistik_tambahan (id, kategori, label, nilai, warna) VALUES (?, ?, ?, ?, ?)', [newId, req.body.kategori || '', req.body.label || '', req.body.nilai || 0, req.body.warna || '']);
+    const data = { id: newId, ...req.body };
+    await db.query('INSERT INTO statistik_tambahan (id, data) VALUES (?, ?)', [newId, JSON.stringify(data)]);
     res.json({ message: 'Berhasil ditambahkan', id: newId });
   } catch (err) { res.status(500).json({error: err.message}); }
 });
 app.put('/api/statistik-tambahan/:id', authMiddleware, async (req, res) => {
   logActivity(req.user?.username, 'PUT /api/statistik-tambahan/:id', 'Mengubah data');
   try {
-    await db.query('UPDATE statistik_tambahan SET kategori=?, label=?, nilai=?, warna=? WHERE id = ?', [req.body.kategori || '', req.body.label || '', req.body.nilai || 0, req.body.warna || '', req.params.id]);
+    const [existing] = await db.query('SELECT data FROM statistik_tambahan WHERE id = ?', [req.params.id]);
+    if (existing.length === 0) return res.status(404).json({error: 'Not found'});
+    const data = { ...(typeof existing[0].data === 'string' ? JSON.parse(existing[0].data) : existing[0].data), ...req.body };
+    await db.query('UPDATE statistik_tambahan SET data=? WHERE id = ?', [JSON.stringify(data), req.params.id]);
     res.json({ message: 'Berhasil diubah' });
   } catch (err) { res.status(500).json({error: err.message}); }
 });
 app.delete('/api/statistik-tambahan/:id', authMiddleware, async (req, res) => {
   logActivity(req.user?.username, 'DELETE /api/statistik-tambahan/:id', 'Menghapus data');
   try { await db.query('DELETE FROM statistik_tambahan WHERE id = ?', [req.params.id]); res.json({ message: 'Dihapus' }); } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.post('/api/statistik-tambahan/:katId/item', authMiddleware, async (req, res) => {
+  logActivity(req.user?.username, 'POST /api/statistik-tambahan/:katId/item', 'Menambahkan item');
+  try {
+    const [existing] = await db.query('SELECT data FROM statistik_tambahan WHERE id = ?', [req.params.katId]);
+    if (existing.length === 0) return res.status(404).json({error: 'Not found'});
+    const data = typeof existing[0].data === 'string' ? JSON.parse(existing[0].data) : existing[0].data;
+    if(!data.items) data.items = [];
+    data.items.push({ id: Date.now(), ...req.body });
+    await db.query('UPDATE statistik_tambahan SET data=? WHERE id = ?', [JSON.stringify(data), req.params.katId]);
+    res.json({ message: 'Item berhasil ditambahkan' });
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.put('/api/statistik-tambahan/:katId/item/:itemId', authMiddleware, async (req, res) => {
+  logActivity(req.user?.username, 'PUT /api/statistik-tambahan/:katId/item/:itemId', 'Mengubah item');
+  try {
+    const [existing] = await db.query('SELECT data FROM statistik_tambahan WHERE id = ?', [req.params.katId]);
+    if (existing.length === 0) return res.status(404).json({error: 'Not found'});
+    const data = typeof existing[0].data === 'string' ? JSON.parse(existing[0].data) : existing[0].data;
+    if(!data.items) data.items = [];
+    const idx = data.items.findIndex(i => i.id == req.params.itemId);
+    if(idx !== -1) {
+      data.items[idx] = { ...data.items[idx], ...req.body };
+      await db.query('UPDATE statistik_tambahan SET data=? WHERE id = ?', [JSON.stringify(data), req.params.katId]);
+      res.json({ message: 'Item berhasil diubah' });
+    } else {
+      res.status(404).json({error: 'Item not found'});
+    }
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.delete('/api/statistik-tambahan/:katId/item/:itemId', authMiddleware, async (req, res) => {
+  logActivity(req.user?.username, 'DELETE /api/statistik-tambahan/:katId/item/:itemId', 'Menghapus item');
+  try {
+    const [existing] = await db.query('SELECT data FROM statistik_tambahan WHERE id = ?', [req.params.katId]);
+    if (existing.length === 0) return res.status(404).json({error: 'Not found'});
+    const data = typeof existing[0].data === 'string' ? JSON.parse(existing[0].data) : existing[0].data;
+    if(data.items) {
+      data.items = data.items.filter(i => i.id != req.params.itemId);
+      await db.query('UPDATE statistik_tambahan SET data=? WHERE id = ?', [JSON.stringify(data), req.params.katId]);
+    }
+    res.json({ message: 'Item dihapus' });
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+
+// ====================== GLOBAL 404 HANDLER ======================
+app.use('/api', (req, res) => {
+  fs.appendFileSync('404_logs.txt', `[${new Date().toISOString()}] 404: ${req.method} ${req.originalUrl}\n`);
+  res.status(404).json({ error: `API Route not found: ${req.method} ${req.originalUrl}` });
+});
+
+// ====================== GLOBAL ERROR HANDLER ======================
+app.use((err, req, res, next) => {
+  if (err && err.name === 'MulterError' && err.code === 'LIMIT_FILE_SIZE') {
+    return res.status(413).json({ error: 'Ukuran file terlalu besar. Maksimal 5MB.' });
+  } else if (err && err.message) {
+    return res.status(500).json({ error: err.message });
+  } else if (err) {
+    return res.status(500).json({ error: 'Terjadi kesalahan pada server' });
+  }
+  next();
 });

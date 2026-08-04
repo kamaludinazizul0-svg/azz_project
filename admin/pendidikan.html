@@ -229,13 +229,6 @@ function editData(idx) {
   openModalForm(idx);
 }
 
-async function deleteData(idx) {
-  if (confirm('Yakin ingin menghapus data lembaga pendidikan ini?')) {
-    eduList.splice(idx, 1);
-    await syncToServer();
-  }
-}
-
 async function saveData(e) {
   e.preventDefault();
   
@@ -256,29 +249,34 @@ async function saveData(e) {
   };
 
   const id = document.getElementById('eduId').value;
+  let res;
   if (id) {
-    const idx = eduList.findIndex(e => e.id == id);
-    if (idx !== -1) {
-      payload.id = eduList[idx].id;
-      eduList[idx] = payload;
-    }
+    res = await adminFetch(`/pendidikan/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload)
+    });
   } else {
-    payload.id = Date.now();
-    eduList.push(payload);
+    res = await adminFetch('/pendidikan', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
   }
 
-  closeAllModals();
-  await syncToServer();
-}
-
-async function syncToServer() {
-  const res = await adminFetch('/pendidikan', {
-    method: 'PUT',
-    body: JSON.stringify(eduList)
-  });
   if (res) {
     showToast('Data pendidikan berhasil disimpan!');
-    renderTable();
+    closeAllModals();
+    await loadData();
+  }
+}
+
+async function deleteData(idx) {
+  const id = eduList[idx].id;
+  if (confirm('Yakin ingin menghapus data lembaga pendidikan ini?')) {
+    const res = await adminFetch(`/pendidikan/${id}`, { method: 'DELETE' });
+    if (res) {
+      showToast('Data pendidikan berhasil dihapus!');
+      await loadData();
+    }
   }
 }
 

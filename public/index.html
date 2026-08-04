@@ -11,19 +11,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <style>
-    /* ORG CHART */
-    .org-chart { display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
-    .org-level-top { display: flex; justify-content: center; position: relative; z-index: 2; }
-    .org-connector-vertical { width: 3px; height: 35px; background: var(--primary); }
-    .org-level-bottom { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; position: relative; padding-top: 35px; width: 100%; max-width: 900px; }
-    .org-level-bottom::before { content: ''; position: absolute; top: 0; left: 16%; right: 16%; height: 3px; background: var(--primary); }
-    .org-node-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 220px; z-index: 2; }
-    .org-connector-top { width: 3px; height: 35px; background: var(--primary); position: absolute; top: -35px; }
-    @media (max-width: 768px) {
-      .org-level-bottom { flex-direction: column; gap: 20px; padding-top: 0; }
-      .org-level-bottom::before, .org-connector-vertical, .org-connector-top { display: none; }
+
+    /* NEW ORG CHART - PERFECTLY ALIGNED */
+    .org-chart-wrapper { width: 100%; overflow-x: auto; padding: 40px 20px; display: flex; justify-content: center; background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border: 12px solid #cfd8dc; border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.1), 0 10px 30px rgba(0,0,0,0.1); margin-top: 30px; }
+    .org-chart { display: flex; flex-direction: column; align-items: center; min-width: 1250px; position: relative; padding-top: 140px; }
+    
+    .org-board-card { width: 210px; background: #1c3d70; border: 4px solid #eceff1; border-radius: 4px; box-shadow: 3px 3px 8px rgba(0,0,0,0.5); text-align: center; z-index: 2; position: relative; display: flex; flex-direction: column; overflow: hidden; margin: 0 auto; }
+    
+    .org-board-jabatan { background: linear-gradient(to bottom, #5c8fc4, #396ba6); color: #ffe082; font-weight: 800; font-size: 0.85rem; padding: 12px 5px; border-bottom: 2px solid #eceff1; text-transform: uppercase; font-family: 'Arial Black', Impact, sans-serif; text-shadow: 1px 1px 2px rgba(0,0,0,0.6); min-height: 55px; display: flex; align-items: center; justify-content: center; line-height:1.2; margin: 0; }
+    
+    .org-board-nama { background: linear-gradient(to bottom, #1c3d70, #0d2345); color: #ffffff; font-weight: 700; font-size: 0.85rem; padding: 12px 5px; text-transform: uppercase; font-family: 'Arial Black', Impact, sans-serif; letter-spacing: 0.5px; min-height: 50px; display: flex; align-items: center; justify-content: center; line-height:1.2; margin: 0; }
+    
+    .org-board-bpd { width: 210px; background: linear-gradient(to bottom, #8b1010, #4a0000); border: 4px solid #eceff1; color: #ffe082; border-radius: 4px; padding: 15px 10px; text-align: center; font-weight: 800; font-size: 0.9rem; box-shadow: 3px 3px 8px rgba(0,0,0,0.5); text-shadow: 1px 1px 2px rgba(0,0,0,0.8); z-index: 2; position: relative; display: flex; align-items: center; justify-content: center; height: 107px; font-family: 'Arial Black', Impact, sans-serif; text-transform: uppercase; line-height:1.2; margin: 0 auto; }
+    
+    /* Lines */
+    .lines-layer { position: absolute; top: 140px; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+    .l-h { position: absolute; height: 3px; background: #263238; box-shadow: 1px 1px 1px rgba(0,0,0,0.3); }
+    .l-v { position: absolute; width: 3px; background: #263238; box-shadow: 1px 1px 1px rgba(0,0,0,0.3); }
+    
+    @media (max-width: 1250px) {
+      .org-chart-wrapper { justify-content: flex-start; }
     }
-  </style>
+
+    </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -46,6 +56,7 @@
       <a href="/galeri.html" class="nav-link">&#128247; Galeri</a>
       <a href="/listing.html" class="nav-link">&#128188; UMKM</a>
       <a href="/belanja.html" class="nav-link">&#128176; APBDesa</a>
+
       <a href="/ppid.html" class="nav-link">&#128194; PPID</a>
       <a href="/layanan-masyarakat.html" style="background:var(--primary,#2e7d32);color:#fff;padding:8px 18px;margin-left:12px;border-radius:100px;font-size:0.85rem;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 4px 12px rgba(46,125,50,0.4);display:inline-flex;align-items:center;gap:6px;transition:transform 0.2s,box-shadow 0.2s" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 6px 20px rgba(46,125,50,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 12px rgba(46,125,50,0.4)'">&#127963; Layanan</a>
     </div>
@@ -63,6 +74,7 @@
   <a href="/galeri.html" class="nav-link">&#128247; Galeri</a>
   <a href="/listing.html" class="nav-link">&#128188; UMKM</a>
   <a href="/belanja.html" class="nav-link">&#128176; APBDesa</a>
+
   <a href="/ppid.html" class="nav-link">&#128194; PPID</a>
   <a href="/layanan-masyarakat.html" class="nav-link">&#127963; Layanan Masyarakat</a>
 </div>
@@ -583,19 +595,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Load listing (3 items)
   const listingData = await API.listing();
+  window.allListing = listingData || [];
   const listingGrid = document.getElementById('listingGrid');
-  if (listingGrid && listingData?.length) {
-    const items = listingData.slice(0, 3);
+  if (listingGrid && window.allListing.length) {
+    const items = window.allListing.slice(0, 3);
     listingGrid.innerHTML = items.map(l => `
-      <div class="card listing-card fade-in">
-        <img class="card-img" src="${l.gambar || '/images/jamu.jpg'}" alt="${l.nama}" onerror="this.src='${imgPlaceholder(l.kategori)}'" />
+      <div class="card listing-card fade-in" onclick="showListingDetail(${l.id})" style="cursor:pointer">
+        <img class="card-img" src="${Array.isArray(l.gambar) ? (l.gambar[0]||'') : (l.gambar||'/images/jamu.jpg')}" alt="${l.nama}" onerror="this.src='${imgPlaceholder(l.kategori)}'" />
         <div class="card-body">
           <div class="card-kategori">${l.kategori}</div>
           <div class="card-title">${l.nama}</div>
           <div class="card-desc">${l.deskripsi}</div>
           <div class="card-price">${l.harga}</div>
           <div class="card-footer">
-            <a href="https://api.whatsapp.com/send?phone=${(l.kontak?.replace(/[^0-9]/g,'')||'').replace(/^0/,'62')}&text=${encodeURIComponent('Halo, saya tertarik dengan produk ' + l.nama + ' yang ada di website Desa Kauman.')}" target="_blank" class="btn btn-whatsapp btn-sm">💬 Hubungi</a>
+            <a href="https://api.whatsapp.com/send?phone=${(l.kontak?.replace(/[^0-9]/g,'')||'').replace(/^0/,'62')}&text=${encodeURIComponent('Halo, saya tertarik dengan produk ' + l.nama + ' yang ada di website Desa Kauman.')}" target="_blank" class="btn btn-whatsapp btn-sm" onclick="event.stopPropagation()">💬 Hubungi</a>
             <span style="font-size:0.8rem;color:var(--text-muted);margin-left:auto">👤 ${l.pemilik}</span>
           </div>
         </div>
@@ -604,46 +617,119 @@ document.addEventListener('DOMContentLoaded', async () => {
     initScrollAnimations();
   }
 
-  // Load perangkat (show first 4 chief positions)
+  
+  // Load perangkat
   const perangkatData = await API.perangkat();
   const perangkatGrid = document.getElementById('perangkatGrid');
   if (perangkatGrid && perangkatData?.length) {
-    const kades = perangkatData[0] || {};
-    const subItems = perangkatData.slice(1, 4);
+    const getP = (keyword) => perangkatData.find(p => p.jabatan.toLowerCase().includes(keyword.toLowerCase())) || {};
     
-    perangkatGrid.className = 'org-chart fade-in';
+    const kades = getP('kepala desa');
+    const sekdes = getP('sekretaris');
+    const kaurUmum = getP('umum');
+    const kaurKeu = getP('keuangan');
+    const kaurPer = getP('perencanaan');
+    const kasiKes = getP('kesejahteraan');
+    const kasiPem = getP('pemerintahan');
+    const kadusKau = getP('kauman');
+    const kadusSed = getP('sedati');
+    const kadusKre = getP('krenggan');
+    const kadusTeg = getP('tegalan');
+    
+    const cardHTML = (p, overrideJabatan = null) => {
+      if(!p.nama) return '<div class="org-board-card" style="visibility:hidden"></div>';
+      return `
+        <div class="org-board-card">
+          <div class="org-board-jabatan">${overrideJabatan || p.jabatan}</div>
+          <div class="org-board-nama">${p.nama}</div>
+        </div>`;
+    };
+
+    perangkatGrid.className = 'org-chart-wrapper fade-in';
     perangkatGrid.innerHTML = `
-      <div class="org-level-top">
-        <div class="perangkat-card" style="width:280px">
-          <div class="perangkat-foto">
-            <img src="${kades.foto}" alt="${kades.nama}" onerror="this.outerHTML='<div class=perangkat-foto style=display:flex;align-items:center;justify-content:center;font-size:3rem>👤</div>'" />
+      <div class="org-chart">
+        <!-- HEADER TITLE -->
+        <div style="position:absolute; top:30px; width:100%; text-align:center; z-index:0; font-family:'Arial Black', Impact, sans-serif;">
+            <h2 style="margin:0; font-size:1.8rem; color:#f39c12; text-shadow:2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000; letter-spacing:1px; text-transform:uppercase;">STRUKTUR ORGANISASI PEMERINTAHAN DESA KAUMAN</h2>
+            <h3 style="margin:5px 0 0 0; font-size:1.2rem; color:#2980b9; text-shadow:1px 1px 2px rgba(255,255,255,0.8); letter-spacing:2px; text-transform:uppercase;">KECAMATAN NGORO - KABUPATEN JOMBANG</h3>
+        </div>
+
+        <div class="lines-layer">
+          <!-- Coordinates relative to lines-layer (top: 80px) -->
+          <!-- BPD to Kades (Dashed) -->
+          <div class="l-h" style="top:53px; left:410px; width:150px; border-top:3px dashed #263238; background:transparent; box-shadow:none;"></div>
+          
+          <!-- Main V line (From Kades down to Kadus) -->
+          <div class="l-v" style="top:107px; left:623px; height:418px;"></div>
+          
+          <!-- Kades to Sekdes H line -->
+          <div class="l-h" style="top:135px; left:623px; width:267px;"></div>
+          <!-- Sekdes V drop -->
+          <div class="l-v" style="top:135px; left:890px; height:32px;"></div>
+          
+          <!-- Sekdes down to Kaurs V drop -->
+          <div class="l-v" style="top:274px; left:890px; height:40px;"></div>
+          <!-- Kaurs H line -->
+          <div class="l-h" style="top:314px; left:650px; width:480px;"></div>
+          <!-- Kaurs drops -->
+          <div class="l-v" style="top:314px; left:650px; height:26px;"></div>
+          <div class="l-v" style="top:314px; left:890px; height:26px;"></div>
+          <div class="l-v" style="top:314px; left:1130px; height:26px;"></div>
+          
+          <!-- Kades down to Kasis H line -->
+          <div class="l-h" style="top:314px; left:235px; width:390px;"></div>
+          <!-- Kasis drops -->
+          <div class="l-v" style="top:314px; left:235px; height:26px;"></div>
+          <div class="l-v" style="top:314px; left:475px; height:26px;"></div>
+          
+          <!-- Main V drop to Kadus H line -->
+          <div class="l-h" style="top:525px; left:165px; width:916px;"></div>
+          <!-- Kadus drops -->
+          <div class="l-v" style="top:525px; left:165px; height:25px;"></div>
+          <div class="l-v" style="top:525px; left:470px; height:25px;"></div>
+          <div class="l-v" style="top:525px; left:775px; height:25px;"></div>
+          <div class="l-v" style="top:525px; left:1080px; height:25px;"></div>
+        </div>
+
+        <!-- ROW 1 (Top) -->
+        <div style="display:flex; justify-content:center; width:100%; gap:80px; margin-bottom: 60px;">
+          <div style="width:210px"><div class="org-board-bpd">BADAN PERMUSYAWARATAN<br>DESA</div></div>
+          <div style="width:210px">${cardHTML(kades)}</div>
+          <div style="width:210px"></div>
+        </div>
+        
+        <!-- ROW 2 (Sekdes) -->
+        <div style="display:flex; justify-content:flex-end; width:100%; padding-right: 155px; margin-bottom: 60px;">
+          <div style="width:210px">${cardHTML(sekdes)}</div>
+        </div>
+        
+        <!-- ROW 3 (Kasis & Kaurs) -->
+        <div style="display:flex; justify-content:space-between; width:100%; padding: 0 20px; margin-bottom: 104px;">
+          <!-- Left side: Kasi (2 items) -->
+          <div style="display:flex; gap:30px; width:450px; justify-content:center; margin-left: 10px;">
+            <div style="width:210px">${cardHTML(kasiKes)}</div>
+            <div style="width:210px">${cardHTML(kasiPem)}</div>
           </div>
-          <div class="perangkat-info">
-            <h3 class="perangkat-nama">${kades.nama}</h3>
-            <div class="perangkat-jabatan">${kades.jabatan}</div>
+          <!-- Right side: Kaur (3 items) -->
+          <div style="display:flex; gap:30px; width:690px; justify-content:center; margin-right: 10px;">
+            <div style="width:210px">${cardHTML(kaurUmum, "KAUR TATA USAHA & UMUM")}</div>
+            <div style="width:210px">${cardHTML(kaurKeu)}</div>
+            <div style="width:210px">${cardHTML(kaurPer)}</div>
           </div>
         </div>
-      </div>
-      <div class="org-connector-vertical"></div>
-      <div class="org-level-bottom">
-        ${subItems.map(p => `
-          <div class="org-node-wrapper">
-            <div class="org-connector-top"></div>
-            <div class="perangkat-card" style="width:100%">
-              <div class="perangkat-foto">
-                <img src="${p.foto}" alt="${p.nama}" onerror="this.outerHTML='<div class=perangkat-foto style=display:flex;align-items:center;justify-content:center;font-size:3rem>👤</div>'" />
-              </div>
-              <div class="perangkat-info">
-                <h3 class="perangkat-nama">${p.nama}</h3>
-                <div class="perangkat-jabatan">${p.jabatan}</div>
-              </div>
-            </div>
-          </div>
-        `).join('')}
+        
+        <!-- ROW 4 (Kadus) -->
+        <div style="display:flex; justify-content:space-between; width:100%; padding: 0 60px;">
+          <div style="width:210px">${cardHTML(kadusKau)}</div>
+          <div style="width:210px">${cardHTML(kadusSed)}</div>
+          <div style="width:210px">${cardHTML(kadusKre)}</div>
+          <div style="width:210px">${cardHTML(kadusTeg)}</div>
+        </div>
       </div>
     `;
     initScrollAnimations();
   }
+
 
   // Init maps
   initMaps(desa);
@@ -751,6 +837,65 @@ function initMaps(desa) {
       <a href="https://maps.google.com/maps?q=${query}" target="_blank" style="position:absolute; bottom:15px; left:50%; transform:translateX(-50%); background:#0d6efd; padding:10px 20px; border-radius:30px; box-shadow:0 4px 10px rgba(0,0,0,0.3); font-weight:bold; color:#fff; text-decoration:none; font-size:14px; z-index:10; display:flex; align-items:center; gap:8px; transition:0.3s;" onmouseover="this.style.background='#0b5ed7';this.style.transform='translateX(-50%) translateY(-3px)'" onmouseout="this.style.background='#0d6efd';this.style.transform='translateX(-50%) translateY(0)'"><i class="fas fa-map-marker-alt"></i> Buka Google Maps</a>
     </div>`;
   }
+}
+
+function showListingDetail(id) {
+  if (!window.allListing) return;
+  const l = window.allListing.find(x => x.id === id);
+  if (!l) return;
+  
+  let imgHtml = '';
+  const images = Array.isArray(l.gambar) ? l.gambar : (l.gambar ? [l.gambar] : []);
+  if (images.length > 0) {
+    imgHtml = `
+      <img id="mainImagePreview" src="${images[0]}" alt="${l.nama}" onerror="this.src='${imgPlaceholder(l.kategori)}'" style="width:100%;height:280px;object-fit:cover;border-radius:var(--radius);margin-bottom:12px;background:var(--bg-section)" />
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px" id="thumbnailContainer">
+        ${images.map((img, idx) => `<img src="${img}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid ${idx===0?'var(--primary)':'transparent'};background:var(--bg-section)" onclick="document.getElementById('mainImagePreview').src=this.src; Array.from(this.parentElement.children).forEach(c=>c.style.borderColor='transparent'); this.style.borderColor='var(--primary)';" onerror="this.src='${imgPlaceholder(l.kategori)}'" />`).join('')}
+      </div>
+    `;
+  } else {
+    imgHtml = `<img src="${imgPlaceholder(l.kategori)}" alt="${l.nama}" style="width:100%;height:280px;object-fit:cover;border-radius:var(--radius);margin-bottom:20px" />`;
+  }
+
+  const alamatHtml = l.map_url 
+    ? `<strong>${l.alamat}</strong> <br><a href="${l.map_url}" target="_blank" style="color:var(--primary);font-size:0.85rem;text-decoration:none">📍 Buka di Google Maps</a>`
+    : `<strong>${l.alamat}</strong>`;
+
+  // Create modal if it doesn't exist
+  let modal = document.getElementById('detailModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'detailModal';
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <button class="modal-close" onclick="document.getElementById('detailModal').classList.remove('open')">×</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e => { if (e.target.id === 'detailModal') e.target.classList.remove('open'); });
+  }
+
+  const formatWA = (wa) => (wa?.replace(/[^0-9]/g,'')||'').replace(/^0/,'62');
+  
+  document.getElementById('modalTitle').textContent = l.nama;
+  document.getElementById('modalBody').innerHTML = `
+    ${imgHtml}
+    <span style="display:inline-block;background:linear-gradient(135deg,var(--secondary),var(--secondary-light));color:#fff;padding:4px 14px;border-radius:100px;font-size:0.78rem;font-weight:700;margin-bottom:12px">${l.kategori}</span>
+    <h3 style="font-size:1.3rem;font-weight:700;margin-bottom:10px;color:var(--text-dark)">${l.nama}</h3>
+    <p style="color:var(--text-muted);line-height:1.8;margin-bottom:16px">${l.deskripsi}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;font-size:0.9rem">
+      <div><span style="color:var(--text-muted)">💰 Harga:</span><br><strong style="color:var(--primary);font-size:1rem">${l.harga}</strong></div>
+      <div><span style="color:var(--text-muted)">👤 Pemilik:</span><br><strong>${l.pemilik}</strong></div>
+      <div><span style="color:var(--text-muted)">📍 Alamat:</span><br>${alamatHtml}</div>
+      <div><span style="color:var(--text-muted)">📜 Sertifikasi:</span><br><strong>${l.sertifikasi || '-'}</strong></div>
+    </div>
+    <a href="https://api.whatsapp.com/send?phone=${formatWA(l.kontak)}&text=${encodeURIComponent('Halo, saya tertarik dengan produk ' + l.nama + ' yang ada di website Desa Kauman.')}" target="_blank" class="btn btn-whatsapp btn-lg btn-block">💬 Hubungi via WhatsApp</a>`;
+  modal.classList.add('open');
 }
 </script>
 

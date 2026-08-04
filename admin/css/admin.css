@@ -497,7 +497,7 @@ select.form-control { cursor: pointer; }
   z-index: 9999;
   transition: transform 0.3s ease;
   box-shadow: 0 6px 24px rgba(0,0,0,0.2);
-  white-space: nowrap;
+  white-space: normal;
   font-family: 'Outfit', sans-serif;
 }
 .toast.show { transform: translateX(-50%) translateY(0); }

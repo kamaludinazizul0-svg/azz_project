@@ -33,9 +33,7 @@ function getSidebarHTML(activePage) {
     <a href="/admin/program.html" class="sidebar-link ${activePage==='program'?'active':''}">
       <span class="icon">🎯</span> Program Prioritas
     </a>
-    <a href="/admin/pembangunan.html" class="sidebar-link ${activePage==='pembangunan'?'active':''}">
-      <span class="icon">🏗️</span> Pembangunan
-    </a>
+
 
     <div class="sidebar-section-label">Layanan Publik</div>
     <a href="/admin/surat.html" class="sidebar-link ${activePage==='surat'?'active':''}">

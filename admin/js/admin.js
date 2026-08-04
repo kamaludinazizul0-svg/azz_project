@@ -58,20 +58,26 @@ async function uploadFile(file) {
 }
 
 async function handleUploadUI(input, targetId) {
-  if (!input.files || !input.files[0]) return;
   const file = input.files[0];
-  const originalText = input.nextElementSibling ? input.nextElementSibling.textContent : '';
-  const btn = input.nextElementSibling;
-  if(btn) btn.textContent = '⏳ Mengunggah...';
-  input.disabled = true;
+  if (!file) return;
+  
+  const b = input.previousElementSibling;
+  let oldText = 'Upload';
+  if (b) {
+    oldText = b.textContent;
+    b.textContent = '⏳ Mengunggah...';
+  }
   
   const res = await uploadFile(file);
-  input.disabled = false;
+  
+  if (b) {
+    b.textContent = oldText;
+  }
+  
   if (res && res.url) {
     document.getElementById(targetId).value = res.url;
-    showToast('File berhasil diunggah');
+    showToast('Gambar berhasil diupload');
   }
-  if(btn) btn.textContent = originalText || 'Upload';
   input.value = ''; // Reset input
 }
 
