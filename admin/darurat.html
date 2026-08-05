@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Telepon Darurat - Admin Desa Kauman</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/css/admin.css" />
+  <script src="/js/api.js"></script>
+</head>
+<body class="admin-body">
+
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <h1 class="page-title">Kelola Telepon Darurat</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary" onclick="openModal()">+ Tambah Kontak</button>
+      </div>
+    </header>
+
+    <div class="content-wrapper">
+      <div class="admin-card">
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Nama Instansi / Petugas</th>
+                <th>Nomor Telepon</th>
+                <th>Kategori</th>
+                <th width="120">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="daruratTable">
+              <tr><td colspan="4" style="text-align:center">Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Form -->
+  <div class="modal" id="modalForm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Tambah Kontak Darurat</h2>
+        <button class="close-modal" onclick="closeModal()">×</button>
+      </div>
+      <form id="formDarurat" onsubmit="saveDarurat(event)">
+        <input type="hidden" id="fId" />
+        <div class="form-group">
+          <label class="form-label">Nama Instansi / Petugas</label>
+          <input type="text" id="fNama" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nomor Telepon</label>
+          <input type="text" id="fNomor" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kategori</label>
+          <select id="fKategori" class="form-control" required>
+            <option value="Kesehatan">Kesehatan</option>
+            <option value="Keamanan & Penyelamatan">Keamanan & Penyelamatan</option>
+            <option value="Layanan Umum">Layanan Umum</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-actions" style="display:flex;justify-content:flex-end;gap:12px;margin-top:24px">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/admin/js/sidebar.js"></script>
+  <script src="/admin/js/admin.js"></script>
+  <script>
+    document.getElementById('sidebar').innerHTML = getSidebarHTML('darurat');
+    let daruratList = [];
+
+    async function loadData() {
+      try {
+        const res = await adminFetch('/darurat');
+        daruratList = res || [];
+        renderTable();
+      } catch(e) {
+        alert('Gagal memuat data');
+      }
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('daruratTable');
+      if(daruratList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--text-muted)">Belum ada data kontak darurat.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = daruratList.map(d => `
+        <tr>
+          <td><strong>${d.nama}</strong></td>
+          <td><span class="badge bg-emerald-100 text-emerald-800" style="font-size:0.9rem">📞 ${d.nomor}</span></td>
+          <td>${d.kategori}</td>
+          <td>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-outline" style="padding:4px 8px;font-size:0.8rem" onclick="editData('${d.id}')">Edit</button>
+              <button class="btn btn-danger" style="padding:4px 8px;font-size:0.8rem" onclick="deleteData('${d.id}')">Hapus</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openModal() {
+      document.getElementById('formDarurat').reset();
+      document.getElementById('fId').value = '';
+      document.getElementById('modalTitle').textContent = 'Tambah Kontak Darurat';
+      document.getElementById('modalForm').classList.add('show');
+    }
+    
+    function closeModal() {
+      document.getElementById('modalForm').classList.remove('show');
+    }
+
+    function editData(id) {
+      const data = daruratList.find(d => d.id == id);
+      if(!data) return;
+      document.getElementById('fId').value = data.id;
+      document.getElementById('fNama').value = data.nama;
+      document.getElementById('fNomor').value = data.nomor;
+      document.getElementById('fKategori').value = data.kategori;
+      document.getElementById('modalTitle').textContent = 'Edit Kontak Darurat';
+      document.getElementById('modalForm').classList.add('show');
+    }
+
+    async function saveDarurat(e) {
+      e.preventDefault();
+      const id = document.getElementById('fId').value;
+      const payload = {
+        nama: document.getElementById('fNama').value,
+        nomor: document.getElementById('fNomor').value,
+        kategori: document.getElementById('fKategori').value
+      };
+
+      try {
+        if(id) {
+          await adminFetch('/darurat/' + id, { method: 'PUT', body: JSON.stringify(payload) });
+        } else {
+          await adminFetch('/darurat', { method: 'POST', body: JSON.stringify(payload) });
+        }
+        closeModal();
+        loadData();
+      } catch(err) {
+        alert('Gagal menyimpan data');
+      }
+    }
+
+    async function deleteData(id) {
+      if(!confirm('Hapus kontak ini?')) return;
+      try {
+        await adminFetch('/darurat/' + id, { method: 'DELETE' });
+        loadData();
+      } catch(err) {
+        alert('Gagal menghapus');
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

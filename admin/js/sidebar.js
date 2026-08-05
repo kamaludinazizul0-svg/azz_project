@@ -45,6 +45,9 @@ function getSidebarHTML(activePage) {
     <a href="/admin/pengaduan.html" class="sidebar-link ${activePage==='pengaduan'?'active':''}">
       <span class="icon">📢</span> Layanan Pengaduan
     </a>
+    <a href="/admin/darurat.html" class="sidebar-link ${activePage==='darurat'?'active':''}">
+      <span class="icon">☎️</span> Telepon Darurat
+    </a>
 
     <div class="sidebar-section-label">Profil Desa</div>
     <a href="/admin/profil-desa.html" class="sidebar-link ${activePage==='profil-desa'?'active':''}">

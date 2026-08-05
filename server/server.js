@@ -62,7 +62,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
 async function logActivity(username, aksi, keterangan) {
   try {
     const time = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    await db.query('INSERT INTO logs (username, aksi, keterangan, created_at) VALUES (?, ?, ?, ?)', [username || 'system', aksi, keterangan, time]);
+    const id = Date.now();
+    await db.query('INSERT INTO logs (id, username, aksi, detail, waktu) VALUES (?, ?, ?, ?, ?)', [id, username || 'system', aksi, keterangan, time]);
   } catch(e) {
     console.error('Failed to log activity:', e.message);
   }
@@ -249,8 +250,10 @@ app.put('/api/desa', authMiddleware, async (req, res) => {
       await db.query('INSERT INTO desa_profil (id, data) VALUES (?, ?)', 
         [1, JSON.stringify(data)]);
     } else {
+      const existingData = typeof existing[0].data === 'string' ? JSON.parse(existing[0].data) : existing[0].data;
+      const mergedData = { ...existingData, ...data };
       await db.query('UPDATE desa_profil SET data=? WHERE id=?', 
-        [JSON.stringify(data), existing[0].id]);
+        [JSON.stringify(mergedData), existing[0].id]);
     }
     res.json({ message: 'Profil desa berhasil diperbarui' });
   } catch(e) { res.status(500).json({error: e.message}); }
@@ -626,6 +629,21 @@ app.post('/api/apbdesa', authMiddleware, async (req, res) => {
     
     await db.query('INSERT INTO apbdesa (id, data) VALUES (?, ?)', [newId, JSON.stringify(data)]);
     res.json({ message: 'Berhasil ditambahkan', id: newId });
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.put('/api/apbdesa', authMiddleware, async (req, res) => {
+  logActivity(req.user?.username, 'PUT /api/apbdesa', 'Mengubah data');
+  try {
+    const [existing] = await db.query('SELECT id, data FROM apbdesa LIMIT 1');
+    if (!existing.length) {
+      const newId = Date.now();
+      const data = { id: newId, ...req.body };
+      await db.query('INSERT INTO apbdesa (id, data) VALUES (?, ?)', [newId, JSON.stringify(data)]);
+      return res.json({ message: 'Berhasil ditambahkan' });
+    }
+    const data = { ...(typeof existing[0].data === 'string' ? JSON.parse(existing[0].data) : existing[0].data), ...req.body };
+    await db.query('UPDATE apbdesa SET data = ? WHERE id = ?', [JSON.stringify(data), existing[0].id]);
+    res.json({ message: 'Berhasil diubah' });
   } catch (err) { res.status(500).json({error: err.message}); }
 });
 app.put('/api/apbdesa/:id', authMiddleware, async (req, res) => {
@@ -1081,6 +1099,45 @@ app.delete('/api/statistik-tambahan/:katId/item/:itemId', authMiddleware, async 
       await db.query('UPDATE statistik_tambahan SET data=? WHERE id = ?', [JSON.stringify(data), req.params.katId]);
     }
     res.json({ message: 'Item dihapus' });
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+
+// ====================== TELEPON DARURAT ======================
+app.get('/api/darurat', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM telepon_darurat');
+    res.json(rows);
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.get('/api/darurat/:id', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM telepon_darurat WHERE id = ?', [req.params.id]);
+    if (rows.length === 0) return res.status(404).json({error: 'Not found'});
+    res.json(rows[0]);
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.post('/api/darurat', authMiddleware, async (req, res) => {
+  logActivity(req.user?.username, 'POST /api/darurat', 'Menambahkan kontak darurat');
+  try {
+    const newId = Date.now();
+    const { nama, nomor, kategori } = req.body;
+    await db.query('INSERT INTO telepon_darurat (id, nama, nomor, kategori) VALUES (?, ?, ?, ?)', [newId, nama, nomor, kategori]);
+    res.json({ message: 'Berhasil ditambahkan', id: newId });
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.put('/api/darurat/:id', authMiddleware, async (req, res) => {
+  logActivity(req.user?.username, 'PUT /api/darurat/:id', 'Mengubah kontak darurat');
+  try {
+    const { nama, nomor, kategori } = req.body;
+    await db.query('UPDATE telepon_darurat SET nama=?, nomor=?, kategori=? WHERE id=?', [nama, nomor, kategori, req.params.id]);
+    res.json({ message: 'Berhasil diubah' });
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.delete('/api/darurat/:id', authMiddleware, async (req, res) => {
+  logActivity(req.user?.username, 'DELETE /api/darurat/:id', 'Menghapus kontak darurat');
+  try {
+    await db.query('DELETE FROM telepon_darurat WHERE id = ?', [req.params.id]);
+    res.json({ message: 'Dihapus' });
   } catch (err) { res.status(500).json({error: err.message}); }
 });
 

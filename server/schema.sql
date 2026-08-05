@@ -25,6 +25,14 @@ CREATE TABLE IF NOT EXISTS agenda (
   deskripsi TEXT
 );
 
+DROP TABLE IF EXISTS telepon_darurat;
+CREATE TABLE IF NOT EXISTS telepon_darurat (
+  id BIGINT PRIMARY KEY,
+  nama VARCHAR(255),
+  nomor VARCHAR(50),
+  kategori VARCHAR(100)
+);
+
 DROP TABLE IF EXISTS surat;
 CREATE TABLE IF NOT EXISTS surat (
   id BIGINT PRIMARY KEY,

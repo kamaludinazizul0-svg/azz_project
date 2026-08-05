@@ -111,6 +111,7 @@ function renderDusun() {
           <div class="form-group"><label class="form-label">Jumlah KK <small style="color:var(--primary)">(Otomatis)</small></label><input type="number" class="form-control" id="d_kk_${i}" value="${d.jumlah_kk||0}" readonly style="background:#f0f0f0;cursor:not-allowed"></div>
           <div class="form-group"><label class="form-label">Warna Utama (Hex)</label><input type="text" class="form-control" id="d_warna_${i}" value="${d.warna||''}"></div>
           <div class="form-group"><label class="form-label">Warna BG (Hex)</label><input type="text" class="form-control" id="d_warnabg_${i}" value="${d.warna_bg||''}"></div>
+          <div class="form-group"><label class="form-label">Kepala Dusun</label><input type="text" class="form-control" id="d_kadus_${i}" value="${d.kepala_dusun||''}"></div>
         </div>
         <div class="form-group"><label class="form-label">Sejarah Singkat</label><textarea class="form-control" rows="2" id="d_sejarah_${i}">${d.sejarah_singkat||''}</textarea></div>
         <div class="form-group"><label class="form-label">Karakteristik Warga</label><textarea class="form-control" rows="2" id="d_karakteristik_${i}">${d.karakteristik||''}</textarea></div>
@@ -144,6 +145,7 @@ async function saveDusun() {
       jumlah_kk: parseInt(document.getElementById(`d_kk_${i}`).value) || 0,
       mayoritas_agama: document.getElementById(`d_agama_${i}`).value,
       landmark: document.getElementById(`d_landmark_${i}`).value,
+      kepala_dusun: document.getElementById(`d_kadus_${i}`).value,
       karakteristik: document.getElementById(`d_karakteristik_${i}`).value,
       tradisi_khas: document.getElementById(`d_tradisi_${i}`).value.split(',').map(s=>s.trim()).filter(s=>s),
       mayoritas_pekerjaan: pekerjaan,
