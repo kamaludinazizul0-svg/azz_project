@@ -206,10 +206,13 @@ Aturan menjawab:
 - Jika tidak tahu informasi spesifik, sarankan warga menghubungi kantor desa`;
 
       const result = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-1.5-flash-8b',
         contents: [{ role: 'user', parts: [{ text: message }] }],
-        systemInstruction: systemPrompt,
-        config: { maxOutputTokens: 512, temperature: 0.7 }
+        config: {
+          systemInstruction: systemPrompt,
+          maxOutputTokens: 300,
+          temperature: 0.7
+        }
       });
 
       const reply = result.text || 'Maaf, saya tidak dapat memproses pertanyaan Anda saat ini.';
