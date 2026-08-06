@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +8,48 @@
 <link rel="stylesheet" href="/admin/css/admin.css" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
+.page-header-premium {
+  background: url('/images/hero1.jpg') center/cover no-repeat;
+  position: relative;
+  border-radius: 16px;
+  padding: 24px 30px;
+  color: white;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+  overflow: hidden;
+  z-index: 1;
+}
+.page-header-premium::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(27,94,32,0.95), rgba(46,125,50,0.85));
+  z-index: -1;
+}
+.page-header-premium::after {
+  content: '📊';
+  position: absolute;
+  right: -20px;
+  bottom: -40px;
+  font-size: 100px;
+  opacity: 0.1;
+  transform: rotate(-15deg);
+}
+.page-header-premium h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: white;
+}
+.page-header-premium p {
+  opacity: 0.9;
+  font-size: 0.95rem;
+  max-width: 500px;
+  color: white;
+}
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
 .stat-card{background:white;border-radius:12px;padding:24px 20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);border-left:4px solid var(--primary)}
 .stat-card.kk{border-left-color:#f59e0b}.stat-card.laki{border-left-color:#3b82f6}.stat-card.perempuan{border-left-color:#ec4899}
@@ -37,9 +79,9 @@
       <div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div>
     </div>
     <div class="page-content">
-      <div class="page-header-admin">
+      <div class="page-header-premium">
         <div><h1>📊 Statistik Kependudukan</h1><p>Data agregat penduduk Desa Kauman — dihitung otomatis dari database</p></div>
-        <button class="btn-admin btn-light" onclick="loadData()">🔄 Refresh Data</button>
+        <button class="btn-admin btn-light" style="color:#1b5e20;font-weight:700" onclick="loadData()">🔄 Refresh Data</button>
       </div>
       <div class="privacy-notice">
         🔒 <span><strong>Data Dilindungi:</strong> Halaman ini hanya menampilkan statistik agregat. Data individual warga (NIK, nama lengkap, tanggal lahir) tidak ditampilkan di sini untuk melindungi privasi warga.</span>
