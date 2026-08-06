@@ -559,62 +559,7 @@ app.delete('/api/berita/:id', authMiddleware, async (req, res) => {
 });
 
 
-// ====================== LISTING UMKM ======================
 
-app.post('/api/listing', authMiddleware, upload.single('gambar'), async (req, res) => {
-  logActivity(req.user?.username, 'POST /api/listing', 'Menambahkan data');
-  try {
-    const newId = Date.now();
-    const data = { id: newId, ...req.body };
-    if (req.file) data.gambar = '/uploads/' + req.file.filename;
-    if (data.nama === undefined) data.nama = null;
-    if (data.deskripsi === undefined) data.deskripsi = null;
-    if (data.kategori === undefined) data.kategori = null;
-    if (data.harga === undefined) data.harga = null;
-    if (data.kontak === undefined) data.kontak = null;
-    if (data.gambar === undefined) data.gambar = null;
-    if (data.penjual === undefined) data.penjual = null;
-    
-    // For JSON fields like rincian or indikator
-    if (typeof data.nama === 'object') data.nama = JSON.stringify(data.nama);
-    if (typeof data.deskripsi === 'object') data.deskripsi = JSON.stringify(data.deskripsi);
-    if (typeof data.kategori === 'object') data.kategori = JSON.stringify(data.kategori);
-    if (typeof data.harga === 'object') data.harga = JSON.stringify(data.harga);
-    if (typeof data.kontak === 'object') data.kontak = JSON.stringify(data.kontak);
-    if (typeof data.gambar === 'object') data.gambar = JSON.stringify(data.gambar);
-    if (typeof data.penjual === 'object') data.penjual = JSON.stringify(data.penjual);
-    
-    const query = 'INSERT INTO listing (id, nama, deskripsi, kategori, harga, kontak, gambar, penjual) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const values = [newId, data.nama, data.deskripsi, data.kategori, data.harga, data.kontak, data.gambar, data.penjual];
-    await db.query(query, values);
-    res.json({ message: 'Berhasil ditambahkan', id: newId });
-  } catch (err) { res.status(500).json({error: err.message}); }
-});
-app.put('/api/listing/:id', authMiddleware, upload.single('gambar'), async (req, res) => {
-  logActivity(req.user?.username, 'PUT /api/listing/:id', 'Mengubah data');
-  try {
-    const [existing] = await db.query('SELECT * FROM listing WHERE id = ?', [req.params.id]);
-    const data = { ...existing[0], ...req.body };
-    if (req.file) data.gambar = '/uploads/' + req.file.filename;
-    
-    if (typeof data.nama === 'object') data.nama = JSON.stringify(data.nama);
-    if (typeof data.deskripsi === 'object') data.deskripsi = JSON.stringify(data.deskripsi);
-    if (typeof data.kategori === 'object') data.kategori = JSON.stringify(data.kategori);
-    if (typeof data.harga === 'object') data.harga = JSON.stringify(data.harga);
-    if (typeof data.kontak === 'object') data.kontak = JSON.stringify(data.kontak);
-    if (typeof data.gambar === 'object') data.gambar = JSON.stringify(data.gambar);
-    if (typeof data.penjual === 'object') data.penjual = JSON.stringify(data.penjual);
-    
-    const query = 'UPDATE listing SET nama = ?, deskripsi = ?, kategori = ?, harga = ?, kontak = ?, gambar = ?, penjual = ? WHERE id = ?';
-    const values = [data.nama, data.deskripsi, data.kategori, data.harga, data.kontak, data.gambar, data.penjual, req.params.id];
-    await db.query(query, values);
-    res.json({ message: 'Berhasil diubah' });
-  } catch (err) { res.status(500).json({error: err.message}); }
-});
-app.delete('/api/listing/:id', authMiddleware, async (req, res) => {
-  logActivity(req.user?.username, 'DELETE /api/listing/:id', 'Menghapus data');
-  try { await db.query('DELETE FROM listing WHERE id = ?', [req.params.id]); res.json({ message: 'Dihapus' }); } catch (err) { res.status(500).json({error: err.message}); }
-});
 
 
 // ====================== APBDesa ======================
@@ -977,8 +922,8 @@ app.get('/api/notifications', authMiddleware, async (req, res) => {
 });
 
 // ====================== LISTING UMKM ======================
-app.get('/api/listing', async (req, res) => { try { const [rows] = await db.query('SELECT data FROM listing'); res.json(rows.map(r => typeof r.data === 'string' ? JSON.parse(r.data) : r.data)); } catch (err) { res.status(500).json({error: err.message}); } });
-app.get('/api/listing/:id', async (req, res) => { try { const [rows] = await db.query('SELECT data FROM listing WHERE id = ?', [req.params.id]); res.json(rows.length ? (typeof rows[0].data === 'string' ? JSON.parse(rows[0].data) : rows[0].data) : {}); } catch (err) { res.status(500).json({error: err.message}); } });
+app.get('/api/listing', async (req, res) => { try { const [rows] = await db.query('SELECT id, data FROM listing'); res.json(rows.map(r => { let d = typeof r.data === 'string' ? JSON.parse(r.data) : (r.data || {}); d.id = r.id; return d; })); } catch (err) { res.status(500).json({error: err.message}); } });
+app.get('/api/listing/:id', async (req, res) => { try { const [rows] = await db.query('SELECT id, data FROM listing WHERE id = ?', [req.params.id]); if (rows.length) { let d = typeof rows[0].data === 'string' ? JSON.parse(rows[0].data) : (rows[0].data || {}); d.id = rows[0].id; res.json(d); } else { res.json({}); } } catch (err) { res.status(500).json({error: err.message}); } });
 app.post('/api/listing', authMiddleware, upload.single('gambar'), async (req, res) => {
   logActivity(req.user?.username, 'POST /api/listing', 'Menambahkan data');
   try {
@@ -1008,8 +953,8 @@ app.delete('/api/listing/:id', authMiddleware, async (req, res) => {
 
 
 // ====================== PROGRAM KERJA ======================
-app.get('/api/program', async (req, res) => { try { const [rows] = await db.query('SELECT data FROM program'); res.json(rows.map(r => typeof r.data === 'string' ? JSON.parse(r.data) : r.data)); } catch (err) { res.status(500).json({error: err.message}); } });
-app.get('/api/program/:id', async (req, res) => { try { const [rows] = await db.query('SELECT data FROM program WHERE id = ?', [req.params.id]); res.json(rows.length ? (typeof rows[0].data === 'string' ? JSON.parse(rows[0].data) : rows[0].data) : {}); } catch (err) { res.status(500).json({error: err.message}); } });
+app.get('/api/program', async (req, res) => { try { const [rows] = await db.query('SELECT id, data FROM program'); res.json(rows.map(r => { let d = typeof r.data === 'string' ? JSON.parse(r.data) : (r.data || {}); d.id = r.id; return d; })); } catch (err) { res.status(500).json({error: err.message}); } });
+app.get('/api/program/:id', async (req, res) => { try { const [rows] = await db.query('SELECT id, data FROM program WHERE id = ?', [req.params.id]); if(rows.length) { let d = typeof rows[0].data === 'string' ? JSON.parse(rows[0].data) : (rows[0].data || {}); d.id = rows[0].id; res.json(d); } else { res.json({}); } } catch (err) { res.status(500).json({error: err.message}); } });
 app.post('/api/program', authMiddleware, async (req, res) => {
   logActivity(req.user?.username, 'POST /api/program', 'Menambahkan data');
   try {

@@ -316,34 +316,73 @@
 <script>
 // ===== BELANJA PAGE LOGIC =====
 var FALLBACK_APB = {
-  tahun: 2024,
-  total_anggaran: 1850000000,
-  total_realisasi: 1628500000,
+  tahun: 2026,
+  total_anggaran: 1386462018.56,
+  total_realisasi: 0,
   pendapatan: {
     rincian: [
-      { sumber: 'Dana Desa (DD)', anggaran: 900000000, realisasi: 832000000 },
-      { sumber: 'Alokasi Dana Desa (ADD)', anggaran: 450000000, realisasi: 418000000 },
-      { sumber: 'Bagian Hasil Pajak & Retribusi', anggaran: 200000000, realisasi: 185000000 },
-      { sumber: 'Pendapatan Asli Desa (PADes)', anggaran: 150000000, realisasi: 132500000 },
-      { sumber: 'Bantuan Keuangan Provinsi/Kab', anggaran: 150000000, realisasi: 61000000 },
+      { sumber: 'Pendapatan Asli Desa', anggaran: 96000000, realisasi: 0 },
+      { sumber: 'Dana Desa', anggaran: 373456000, realisasi: 0 },
+      { sumber: 'Pajak & Retribusi', anggaran: 111882600, realisasi: 0 },
+      { sumber: 'Alokasi Dana Desa', anggaran: 366649000, realisasi: 0 },
+      { sumber: 'BK Kabupaten', anggaran: 358617659, realisasi: 0 },
+      { sumber: 'Pendapatan lain-lain', anggaran: 3000000, realisasi: 0 }
     ]
   },
   belanja: {
     rincian: [
-      { bidang: 'Bidang Penyelenggaraan Pemerintahan', anggaran: 420000000, realisasi: 398000000 },
-      { bidang: 'Bidang Pembangunan Desa', anggaran: 680000000, realisasi: 605000000 },
-      { bidang: 'Bidang Pemberdayaan Masyarakat', anggaran: 280000000, realisasi: 240000000 },
-      { bidang: 'Bidang Penanggulangan Bencana', anggaran: 120000000, realisasi: 98000000 },
-      { bidang: 'Bidang Pembinaan Kemasyarakatan', anggaran: 200000000, realisasi: 165000000 },
-      { bidang: 'Bidang Tak Terduga', anggaran: 150000000, realisasi: 122500000 },
+      {
+        bidang: 'BIDANG PENYELENGGARAAN PEMERINTAHAN DESA', anggaran: 740383578.56, realisasi: 0,
+        sub_bidang: [
+          { nama: 'Penyelenggaran Belanja Siltap, Tunjangan & Operasional Pemdes', anggaran: 658167387.56, realisasi: 0 },
+          { nama: 'Penyediaan Sarana Prasarana Pemerintahan Desa', anggaran: 78266191, realisasi: 0 },
+          { nama: 'Pengelolaan Administrasi Kependudukan, Pencatatan Sipil, Statistik & Kearsipan', anggaran: 3950000, realisasi: 0 }
+        ]
+      },
+      {
+        bidang: 'BIDANG PELAKSANAAN PEMBANGUNAN DESA', anggaran: 459878440, realisasi: 0,
+        sub_bidang: [
+          { nama: 'Sub Bidang Pendidikan', anggaran: 10850000, realisasi: 0 },
+          { nama: 'Sub Bidang Kesehatan', anggaran: 161417000, realisasi: 0 },
+          { nama: 'Sub Bidang Pekerjaan Umum dan Penataan Ruang', anggaran: 272811440, realisasi: 0 },
+          { nama: 'Sub Bidang Perhubungan, Komunikasi & Informatika', anggaran: 14800000, realisasi: 0 }
+        ]
+      },
+      {
+        bidang: 'BIDANG PEMBINAAN KEMASYARAKATAN', anggaran: 29900000, realisasi: 0,
+        sub_bidang: [
+          { nama: 'Sub Bidang Ketenteraman, Ketertiban Umum & Perlin. Masy.', anggaran: 6250000, realisasi: 0 },
+          { nama: 'Sub Bidang Kebudayaan & Keagamaan', anggaran: 16750000, realisasi: 0 },
+          { nama: 'Sub Bidang Kelembagaan Masyarakat', anggaran: 6900000, realisasi: 0 }
+        ]
+      },
+      {
+        bidang: 'BIDANG PEMBERDAYAAN MASYARAKAT', anggaran: 127500000, realisasi: 0,
+        sub_bidang: [
+          { nama: 'Sub Bid. Kelautan dan Perikanan', anggaran: 60000000, realisasi: 0 },
+          { nama: 'Sub Bid. Pertanian dan Peternakan', anggaran: 12700000, realisasi: 0 },
+          { nama: 'Sub Bid. Peningkatan Kapasitas Aparatur Desa', anggaran: 9800000, realisasi: 0 },
+          { nama: 'Sub Bid. Perdagangan dan Perindustrian', anggaran: 45000000, realisasi: 0 }
+        ]
+      },
+      {
+        bidang: 'BIDANG PENANGGULANGAN BENCANA DARURAT, & MENDESAK DESA', anggaran: 28800000, realisasi: 0,
+        sub_bidang: [
+          { nama: 'Sub Bidang Keadaan Mendesak', anggaran: 28800000, realisasi: 0 }
+        ]
+      }
     ]
   },
+  pembiayaan: {
+    penerimaan: { jumlah: 76856759.56, realisasi: 0 },
+    pengeluaran: { jumlah: 0, realisasi: 0 }
+  },
   riwayat: [
-    { tahun: 2020, anggaran: 1320000000, realisasi: 1180000000 },
-    { tahun: 2021, anggaran: 1450000000, realisasi: 1290000000 },
     { tahun: 2022, anggaran: 1620000000, realisasi: 1450000000 },
     { tahun: 2023, anggaran: 1740000000, realisasi: 1560000000 },
     { tahun: 2024, anggaran: 1850000000, realisasi: 1628500000 },
+    { tahun: 2025, anggaran: 1950000000, realisasi: 1800000000 },
+    { tahun: 2026, anggaran: 1386462018.56, realisasi: 0 }
   ]
 };
 
@@ -557,7 +596,10 @@ function renderRiwayatChart(riwayat) {
       scales: {
         y: {
           ticks: {
-            callback: function(v) { return 'Rp ' + (v / 1000000).toFixed(0) + ' Jt'; },
+            callback: function(v) { 
+              if (v >= 1000000000) return 'Rp ' + (v / 1000000000).toFixed(1).replace('.0', '').replace('.', ',') + ' M';
+              return 'Rp ' + (v / 1000000).toFixed(0) + ' Jt'; 
+            },
             font: { family: 'Outfit', size: 11 }
           },
           grid: { color: 'rgba(0,0,0,0.06)' }

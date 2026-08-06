@@ -7,74 +7,283 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/admin/css/admin.css" />
   <script src="/js/api.js"></script>
+  <style>
+    /* PREMIUM DARURAT UI */
+    .page-header-premium {
+      background: linear-gradient(135deg, #1b5e20, #4caf50);
+      border-radius: 16px;
+      padding: 24px 30px;
+      color: white;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header-premium::after {
+      content: '🚨';
+      position: absolute;
+      right: -20px;
+      bottom: -40px;
+      font-size: 100px;
+      opacity: 0.1;
+      transform: rotate(-15deg);
+    }
+    .page-header-premium h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 2;
+    }
+    .page-header-premium p {
+      opacity: 0.9;
+      font-size: 0.95rem;
+      max-width: 500px;
+      position: relative;
+      z-index: 2;
+    }
+    .btn-premium-add {
+      background: white;
+      color: #1b5e20;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+    .btn-premium-add:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+    .darurat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .darurat-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .darurat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+      border-color: rgba(76, 175, 80, 0.3);
+    }
+    .darurat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #4caf50, #81c784);
+    }
+    .dc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .dc-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    .dc-icon.kesehatan { background: #ffebee; color: #d32f2f; }
+    .dc-icon.keamanan { background: #e3f2fd; color: #1976d2; }
+    .dc-icon.layanan { background: #fff8e1; color: #f57f17; }
+    .dc-icon.lainnya { background: #f3e5f5; color: #7b1fa2; }
+    
+    .dc-actions {
+      display: flex;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .darurat-card:hover .dc-actions {
+      opacity: 1;
+    }
+    .dc-btn {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+    .dc-btn.edit { background: #f1f5f9; color: #475569; }
+    .dc-btn.edit:hover { background: #e2e8f0; color: #1e293b; }
+    .dc-btn.delete { background: #fee2e2; color: #ef4444; }
+    .dc-btn.delete:hover { background: #fca5a5; color: #b91c1c; }
+    
+    .dc-body h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+    .dc-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .dc-badge.kesehatan { background: #ffebee; color: #d32f2f; }
+    .dc-badge.keamanan { background: #e3f2fd; color: #1976d2; }
+    .dc-badge.layanan { background: #fff8e1; color: #f57f17; }
+    .dc-badge.lainnya { background: #f3e5f5; color: #7b1fa2; }
+    
+    .dc-phone {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f8fafc;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-top: auto;
+      border: 1px dashed #cbd5e1;
+      transition: all 0.3s;
+    }
+    .darurat-card:hover .dc-phone {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .dc-phone-icon {
+      width: 38px; height: 38px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      font-size: 1.1rem;
+    }
+    .dc-phone-number {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: 0.5px;
+    }
+    
+    .empty-darurat {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 24px;
+      border: 2px dashed #e2e8f0;
+    }
+    .empty-darurat span {
+      font-size: 4rem;
+      display: block;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    .empty-darurat h3 { font-size: 1.2rem; color: #475569; margin-bottom: 8px;}
+    
+    @media (max-width: 768px) {
+      .page-header-premium {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+    }
+  </style>
 </head>
 <body class="admin-body">
-
+<div class="admin-layout">
   <aside class="sidebar" id="sidebar"></aside>
 
-  <main class="main-content">
+  <main class="admin-main">
     <header class="topbar">
       <div class="topbar-left">
         <button class="menu-toggle" id="menuToggle">☰</button>
-        <h1 class="page-title">Kelola Telepon Darurat</h1>
-      </div>
-      <div class="topbar-right">
-        <button class="btn btn-primary" onclick="openModal()">+ Tambah Kontak</button>
+        <div class="topbar-breadcrumb">
+          <a href="/admin/index.html">Dashboard</a> / <span>Telepon Darurat</span>
+        </div>
       </div>
     </header>
 
-    <div class="content-wrapper">
-      <div class="admin-card">
-        <div class="table-responsive">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Nama Instansi / Petugas</th>
-                <th>Nomor Telepon</th>
-                <th>Kategori</th>
-                <th width="120">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="daruratTable">
-              <tr><td colspan="4" style="text-align:center">Memuat data...</td></tr>
-            </tbody>
-          </table>
+    <div class="page-content">
+      <div class="page-header-premium">
+        <div>
+          <h1>Kontak Darurat Desa</h1>
+          <p>Kelola nomor telepon penting seperti ambulan, polisi, pemadam kebakaran, dan layanan krusial lainnya untuk warga.</p>
+        </div>
+        <button class="btn-premium-add" onclick="openModal()">
+          <span style="font-size: 1.2rem;">+</span> Tambah Kontak
+        </button>
+      </div>
+
+      <div class="darurat-grid" id="daruratGrid">
+        <div class="empty-darurat">
+          <span>⏳</span>
+          <h3>Memuat data...</h3>
         </div>
       </div>
     </div>
   </main>
+</div>
 
   <!-- Modal Form -->
-  <div class="modal" id="modalForm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title" id="modalTitle">Tambah Kontak Darurat</h2>
-        <button class="close-modal" onclick="closeModal()">×</button>
+  <div class="admin-modal-overlay" id="modalForm">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h2 class="admin-modal-title" id="modalTitle">Tambah Kontak Darurat</h2>
+        <button type="button" class="modal-close-btn" onclick="closeModal()">×</button>
       </div>
-      <form id="formDarurat" onsubmit="saveDarurat(event)">
-        <input type="hidden" id="fId" />
-        <div class="form-group">
-          <label class="form-label">Nama Instansi / Petugas</label>
-          <input type="text" id="fNama" class="form-control" required />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Nomor Telepon</label>
-          <input type="text" id="fNomor" class="form-control" required />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Kategori</label>
-          <select id="fKategori" class="form-control" required>
-            <option value="Kesehatan">Kesehatan</option>
-            <option value="Keamanan & Penyelamatan">Keamanan & Penyelamatan</option>
-            <option value="Layanan Umum">Layanan Umum</option>
-            <option value="Lainnya">Lainnya</option>
-          </select>
-        </div>
-        <div class="form-actions" style="display:flex;justify-content:flex-end;gap:12px;margin-top:24px">
-          <button type="button" class="btn btn-outline" onclick="closeModal()">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan</button>
-        </div>
-      </form>
+      <div class="admin-modal-body">
+        <form id="formDarurat" onsubmit="saveDarurat(event)">
+          <input type="hidden" id="fId" />
+          <div class="form-group">
+            <label class="form-label">Nama Instansi / Petugas</label>
+            <input type="text" id="fNama" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nomor Telepon</label>
+            <input type="text" id="fNomor" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kategori</label>
+            <select id="fKategori" class="form-control" required>
+              <option value="Kesehatan">Kesehatan</option>
+              <option value="Keamanan & Penyelamatan">Keamanan & Penyelamatan</option>
+              <option value="Layanan Umum">Layanan Umum</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="btn-admin btn-light" onclick="closeModal()">Batal</button>
+        <button type="submit" class="btn-admin btn-primary-admin" form="formDarurat">Simpan</button>
+      </div>
     </div>
   </div>
 
@@ -94,24 +303,52 @@
       }
     }
 
+    function getIcon(kat) {
+      if(kat === 'Kesehatan') return '🚑';
+      if(kat === 'Keamanan & Penyelamatan') return '🚓';
+      if(kat === 'Layanan Umum') return '🏢';
+      return '☎️';
+    }
+    
+    function getClass(kat) {
+      if(kat === 'Kesehatan') return 'kesehatan';
+      if(kat === 'Keamanan & Penyelamatan') return 'keamanan';
+      if(kat === 'Layanan Umum') return 'layanan';
+      return 'lainnya';
+    }
+
     function renderTable() {
-      const tbody = document.getElementById('daruratTable');
+      const grid = document.getElementById('daruratGrid');
       if(daruratList.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--text-muted)">Belum ada data kontak darurat.</td></tr>';
+        grid.innerHTML = `
+          <div class="empty-darurat">
+            <span>📭</span>
+            <h3>Belum Ada Kontak Darurat</h3>
+            <p style="color:#94a3b8; font-size:0.9rem;">Klik tombol "Tambah Kontak" untuk mulai menambahkan nomor penting.</p>
+          </div>
+        `;
         return;
       }
-      tbody.innerHTML = daruratList.map(d => `
-        <tr>
-          <td><strong>${d.nama}</strong></td>
-          <td><span class="badge bg-emerald-100 text-emerald-800" style="font-size:0.9rem">📞 ${d.nomor}</span></td>
-          <td>${d.kategori}</td>
-          <td>
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-outline" style="padding:4px 8px;font-size:0.8rem" onclick="editData('${d.id}')">Edit</button>
-              <button class="btn btn-danger" style="padding:4px 8px;font-size:0.8rem" onclick="deleteData('${d.id}')">Hapus</button>
+      grid.innerHTML = daruratList.map(d => `
+        <div class="darurat-card">
+          <div class="dc-header">
+            <div class="dc-icon ${getClass(d.kategori)}">
+              ${getIcon(d.kategori)}
             </div>
-          </td>
-        </tr>
+            <div class="dc-actions">
+              <button class="dc-btn edit" onclick="editData('${d.id}')" title="Edit">✏️</button>
+              <button class="dc-btn delete" onclick="deleteData('${d.id}')" title="Hapus">🗑️</button>
+            </div>
+          </div>
+          <div class="dc-body">
+            <h3>${d.nama}</h3>
+            <div class="dc-badge ${getClass(d.kategori)}">${d.kategori}</div>
+          </div>
+          <div class="dc-phone">
+            <div class="dc-phone-icon">📞</div>
+            <div class="dc-phone-number">${d.nomor}</div>
+          </div>
+        </div>
       `).join('');
     }
 
@@ -119,11 +356,11 @@
       document.getElementById('formDarurat').reset();
       document.getElementById('fId').value = '';
       document.getElementById('modalTitle').textContent = 'Tambah Kontak Darurat';
-      document.getElementById('modalForm').classList.add('show');
+      document.getElementById('modalForm').classList.add('open');
     }
     
     function closeModal() {
-      document.getElementById('modalForm').classList.remove('show');
+      document.getElementById('modalForm').classList.remove('open');
     }
 
     function editData(id) {
@@ -134,7 +371,7 @@
       document.getElementById('fNomor').value = data.nomor;
       document.getElementById('fKategori').value = data.kategori;
       document.getElementById('modalTitle').textContent = 'Edit Kontak Darurat';
-      document.getElementById('modalForm').classList.add('show');
+      document.getElementById('modalForm').classList.add('open');
     }
 
     async function saveDarurat(e) {
