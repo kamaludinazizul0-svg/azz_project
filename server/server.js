@@ -544,7 +544,7 @@ app.post('/api/berita', authMiddleware, upload.single('gambar'), async (req, res
     if (data.gambar === undefined) data.gambar = null;
     if (data.penulis === undefined) data.penulis = null;
     if (data.dilihat === undefined) data.dilihat = null;
-    if (data.aktif === undefined) data.aktif = null;
+    if (data.aktif === undefined || data.aktif === null) data.aktif = 1;
     if (data.slug === undefined) data.slug = null;
     if (data.lokasi === undefined) data.lokasi = null;
     
