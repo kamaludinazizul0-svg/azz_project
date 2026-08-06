@@ -1,267 +1,108 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
-<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Data Penduduk - Admin</title><link rel="icon" href="/images/logo.png" /><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/admin/css/admin.css" />
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Statistik Kependudukan - Admin</title>
+<link rel="icon" href="/images/logo.png" />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/admin/css/admin.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-.admin-table-row-hover:hover {
-  background-color: #f1f5f9;
-}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:white;border-radius:12px;padding:24px 20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);border-left:4px solid var(--primary)}
+.stat-card.kk{border-left-color:#f59e0b}.stat-card.laki{border-left-color:#3b82f6}.stat-card.perempuan{border-left-color:#ec4899}
+.stat-card .num{font-size:2.2rem;font-weight:800;color:var(--primary);line-height:1}
+.stat-card.kk .num{color:#f59e0b}.stat-card.laki .num{color:#3b82f6}.stat-card.perempuan .num{color:#ec4899}
+.stat-card .lbl{font-size:.85rem;color:var(--text-muted);margin-top:6px;font-weight:500}
+.chart-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:24px}
+.chart-card{background:white;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.chart-card h3{font-size:.95rem;font-weight:700;color:var(--text-dark);margin-bottom:16px}
+.chart-canvas-wrap{position:relative;height:240px}
+.bar-list{display:flex;flex-direction:column;gap:10px;max-height:320px;overflow-y:auto}
+.bar-item{display:flex;align-items:center;gap:10px}
+.bar-label{font-size:.82rem;color:var(--text-dark);min-width:130px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;height:10px;background:#f1f5f9;border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;transition:width 1s ease}
+.bar-num{font-size:.82rem;font-weight:700;color:var(--text-muted);min-width:50px;text-align:right}
+.privacy-notice{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #86efac;border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:20px;font-size:.87rem;color:#166534}
+@media(max-width:900px){.stat-grid{grid-template-columns:repeat(2,1fr)}.chart-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="admin-layout">
   <aside class="sidebar" id="sidebar" data-page="penduduk"></aside>
   <main class="admin-main">
-    <div class="topbar"><div class="topbar-left"><div class="topbar-title">Data Kependudukan</div></div><div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div></div>
+    <div class="topbar">
+      <div class="topbar-left"><div class="topbar-title">Statistik Kependudukan</div></div>
+      <div class="topbar-right"><a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Website</a></div>
+    </div>
     <div class="page-content">
-      <div class="page-header-admin"><div><h1>📊 Data Kependudukan</h1><p>Kelola statistik penduduk desa</p></div><button class="btn-admin btn-primary-admin" onclick="saveAll()">💾 Simpan Semua</button></div>
-
-      <!-- Statistik Umum (Auto dari DB) -->
-      <div class="admin-card" style="margin-bottom:24px"><div class="admin-card-header"><h3>👥 Statistik Umum (Otomatis)</h3></div><div class="admin-card-body">
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
-          <div class="form-group"><label class="form-label">Jumlah Penduduk</label><input type="number" id="fJmlPenduduk" class="form-control" readonly style="background:#f1f5f9" /></div>
-          <div class="form-group"><label class="form-label">Jumlah KK</label><input type="number" id="fJmlKK" class="form-control" readonly style="background:#f1f5f9" /></div>
-          <div class="form-group"><label class="form-label">Laki-laki</label><input type="number" id="fLaki" class="form-control" readonly style="background:#f1f5f9" /></div>
-          <div class="form-group"><label class="form-label">Perempuan</label><input type="number" id="fPerempuan" class="form-control" readonly style="background:#f1f5f9" /></div>
-        </div>
-      </div></div>
-
-      <!-- Database Penduduk -->
+      <div class="page-header-admin">
+        <div><h1>📊 Statistik Kependudukan</h1><p>Data agregat penduduk Desa Kauman — dihitung otomatis dari database</p></div>
+        <button class="btn-admin btn-light" onclick="loadData()">🔄 Refresh Data</button>
+      </div>
+      <div class="privacy-notice">
+        🔒 <span><strong>Data Dilindungi:</strong> Halaman ini hanya menampilkan statistik agregat. Data individual warga (NIK, nama lengkap, tanggal lahir) tidak ditampilkan di sini untuk melindungi privasi warga.</span>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="num" id="numPenduduk">—</div><div class="lbl">👥 Total Penduduk</div></div>
+        <div class="stat-card kk"><div class="num" id="numKK">—</div><div class="lbl">🏠 Kepala Keluarga (KK)</div></div>
+        <div class="stat-card laki"><div class="num" id="numLaki">—</div><div class="lbl">♂️ Laki-laki</div></div>
+        <div class="stat-card perempuan"><div class="num" id="numPerempuan">—</div><div class="lbl">♀️ Perempuan</div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card"><h3>🕌 Distribusi Agama</h3><div class="chart-canvas-wrap"><canvas id="chartAgama"></canvas></div></div>
+        <div class="chart-card"><h3>♀️♂️ Komposisi Jenis Kelamin</h3><div class="chart-canvas-wrap"><canvas id="chartGender"></canvas></div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card"><h3>🎓 Distribusi Pendidikan</h3><div class="bar-list" id="barPendidikan"><div style="color:#94a3b8;text-align:center;padding:20px">Memuat data...</div></div></div>
+        <div class="chart-card"><h3>💼 Distribusi Pekerjaan</h3><div class="bar-list" id="barPekerjaan"><div style="color:#94a3b8;text-align:center;padding:20px">Memuat data...</div></div></div>
+      </div>
       <div class="admin-card" style="margin-bottom:24px">
-        <div class="admin-card-header">
-          <h3>📂 Database Penduduk Asli</h3>
-          <div style="display:flex;gap:10px;">
-             <input type="text" id="searchPenduduk" class="form-control" placeholder="Cari Nama / NIK..." oninput="debounceSearch()" style="width:250px;">
-          </div>
-        </div>
-        <div class="admin-card-body">
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th style="width:50px">No</th>
-                  <th>Nama Lengkap</th>
-                  <th>NIK</th>
-                  <th>Tmp / Tgl Lahir</th>
-                  <th>No. KK</th>
-                  <th>Alamat</th>
-                </tr>
-              </thead>
-              <tbody id="tbPendudukDb">
-                <tr><td colspan="6" style="text-align:center">Loading data...</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
-            <span id="pageInfo">Menampilkan halaman 1</span>
-            <div style="display:flex;gap:8px;">
-               <button class="btn-admin btn-light btn-sm-admin" onclick="prevPage()">⬅️ Sebelumnya</button>
-               <button class="btn-admin btn-light btn-sm-admin" onclick="nextPage()">Selanjutnya ➡️</button>
-            </div>
-          </div>
-        </div>
+        <div class="admin-card-header"><h3>👶 Distribusi Kelompok Umur</h3><span style="font-size:.8rem;color:var(--text-muted);background:#f1f5f9;padding:4px 8px;border-radius:4px">Otomatis dari Database</span></div>
+        <div class="admin-card-body"><div style="position:relative;height:280px"><canvas id="chartUmur"></canvas></div></div>
       </div>
-
-      <!-- Modal Detail Warga -->
-      <div id="wargaModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
-        <div class="admin-card" style="width:100%; max-width:600px; margin:20px; max-height:90vh; overflow-y:auto; position:relative;">
-          <div class="admin-card-header" style="position:sticky; top:0; background:white; z-index:10;">
-            <h3>📄 Detail Data Warga</h3>
-            <button class="btn-admin btn-light btn-sm-admin" onclick="closeWargaModal()">❌ Tutup</button>
-          </div>
-          <div class="admin-card-body" id="wargaModalBody" style="padding:24px;">
-            <!-- Content will be injected here -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Editable Tables -->
-      <div id="editableSections"></div>
-
-      <div style="text-align:center;margin-top:24px"><button class="btn-admin btn-primary-admin" onclick="saveAll()" style="padding:14px 48px;font-size:1rem">💾 Simpan Semua Perubahan</button></div>
     </div>
   </main>
 </div>
 <script src="/admin/js/sidebar.js"></script>
 <script src="/admin/js/admin.js"></script>
 <script>
-let pendData={};
-const sections = [
-  {key:'kelompok_umur', title:'👶 Kelompok Umur', icon:''},
-  {key:'pendidikan', title:'🎓 Pendidikan', icon:''},
-  {key:'pekerjaan', title:'💼 Pekerjaan', icon:''},
-  {key:'agama', title:'🕌 Agama', icon:''}
-];
-
+const PIE_COLORS=['#2e7d32','#f59e0b','#3b82f6','#ec4899','#8b5cf6','#06b6d4','#f97316','#10b981'];
+let chartUmurInst;
 document.addEventListener('DOMContentLoaded',loadData);
-
 async function loadData(){
-  pendData = await adminFetch('/penduduk') || {};
-  const s = pendData.statistik || {};
-  document.getElementById('fJmlPenduduk').value = s.jumlah_penduduk || 0;
-  document.getElementById('fJmlKK').value = s.jumlah_kk || 0;
-  document.getElementById('fLaki').value = s.laki_laki || 0;
-  document.getElementById('fPerempuan').value = s.perempuan || 0;
-  
-  renderSections();
-  if (pendData.data) {
-     renderDbTableData(pendData.data, pendData.total);
-  } else {
-     fetchDbTable();
-  }
+  const data=await adminFetch('/penduduk/stats')||{};
+  const s=data.statistik||{};
+  animNum('numPenduduk',s.jumlah_penduduk||0);
+  animNum('numKK',s.jumlah_kk||0);
+  animNum('numLaki',Number(s.laki_laki)||0);
+  animNum('numPerempuan',Number(s.perempuan)||0);
+  renderPie('chartAgama',data.agama||[]);
+  renderPie('chartGender',[{label:'Laki-laki',jumlah:Number(s.laki_laki)||0},{label:'Perempuan',jumlah:Number(s.perempuan)||0}],['#3b82f6','#ec4899']);
+  renderBar('barPendidikan',data.pendidikan||[],'#3b82f6');
+  renderBar('barPekerjaan',data.pekerjaan||[],'#f59e0b');
+  renderUmur(data.kelompok_umur||[]);
 }
-
-let currentPage = 1;
-let currentSearch = '';
-let searchTimeout;
-let totalDataCount = 0;
-let currentDbData = [];
-
-function debounceSearch() {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => {
-    currentSearch = document.getElementById('searchPenduduk').value;
-    currentPage = 1;
-    fetchDbTable();
-  }, 500);
+function animNum(id,target){
+  const el=document.getElementById(id);let c=0;
+  const step=Math.max(1,Math.ceil(target/50));
+  const t=setInterval(()=>{c=Math.min(c+step,target);el.textContent=c.toLocaleString('id');if(c>=target)clearInterval(t);},25);
 }
-
-async function fetchDbTable() {
-  const tb = document.getElementById('tbPendudukDb');
-  tb.innerHTML = '<tr><td colspan="6" style="text-align:center">Loading data...</td></tr>';
-  const res = await adminFetch(`/penduduk?page=${currentPage}&limit=10&search=${encodeURIComponent(currentSearch)}`);
-  if(res && res.data) {
-     renderDbTableData(res.data, res.total);
-  }
+function renderPie(id,arr,colors){
+  const ctx=document.getElementById(id).getContext('2d');
+  new Chart(ctx,{type:'doughnut',data:{labels:arr.map(d=>d.label),datasets:[{data:arr.map(d=>d.jumlah),backgroundColor:colors||PIE_COLORS.slice(0,arr.length),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{family:'Outfit',size:11},boxWidth:12,padding:10}}}}});
 }
-
-function renderDbTableData(data, total) {
-  totalDataCount = total;
-  currentDbData = data;
-  const tb = document.getElementById('tbPendudukDb');
-  if(!data || data.length === 0) {
-    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#64748b;">Tidak ada data penduduk yang ditemukan.</td></tr>';
-    document.getElementById('pageInfo').innerText = `Total: ${total} data`;
-    return;
-  }
-  
-  tb.innerHTML = data.map((d, i) => `
-    <tr onclick="showWargaDetail(${i})" style="cursor:pointer;" class="admin-table-row-hover" title="Klik untuk melihat detail lengkap">
-      <td>${(currentPage-1)*10 + i + 1}</td>
-      <td><strong>${d.nama_lengkap}</strong></td>
-      <td><span style="font-family:monospace;background:#f1f5f9;padding:2px 6px;border-radius:4px;color:#0f172a">${d.nik}</span></td>
-      <td>${d.tempat_lahir}, ${d.tanggal_lahir}</td>
-      <td>${d.no_kk}</td>
-      <td><div style="max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${d.alamat}</div></td>
-    </tr>
-  `).join('');
-  
-  const totalPages = Math.ceil(total / 10) || 1;
-  document.getElementById('pageInfo').innerText = `Halaman ${currentPage} dari ${totalPages} (Total: ${total} Penduduk)`;
+function renderBar(containerId,arr,color){
+  const el=document.getElementById(containerId);
+  if(!arr.length){el.innerHTML='<div style="color:#94a3b8;text-align:center;padding:20px">Tidak ada data</div>';return;}
+  const max=Math.max(...arr.map(d=>d.jumlah));
+  el.innerHTML=arr.map(d=>`<div class="bar-item"><div class="bar-label" title="${d.label}">${d.label}</div><div class="bar-track"><div class="bar-fill" style="width:${max?Math.round((d.jumlah/max)*100):0}%;background:${color}"></div></div><div class="bar-num">${Number(d.jumlah).toLocaleString('id')}</div></div>`).join('');
 }
-
-function prevPage() {
-  if(currentPage > 1) {
-    currentPage--;
-    fetchDbTable();
-  }
-}
-
-function nextPage() {
-  const totalPages = Math.ceil(totalDataCount / 10);
-  if(currentPage < totalPages) {
-    currentPage++;
-    fetchDbTable();
-  }
-}
-
-function showWargaDetail(index) {
-  const d = currentDbData[index];
-  if (!d) return;
-  
-  const html = `
-    <div style="display:grid; grid-template-columns: 150px 1fr; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
-      <div style="color:var(--text-muted); font-size:0.9rem;">Nomor KK</div>
-      <div style="font-weight:600; font-family:monospace; font-size:1.1rem;">${d.no_kk}</div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">NIK</div>
-      <div style="font-weight:600; font-family:monospace; font-size:1.1rem;">${d.nik}</div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">Nama Lengkap</div>
-      <div style="font-weight:700; font-size:1.2rem; color:var(--primary);">${d.nama_lengkap}</div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">Tempat, Tgl Lahir</div>
-      <div>${d.tempat_lahir}, ${d.tanggal_lahir}</div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">Jenis Kelamin</div>
-      <div>${d.jenis_kelamin === 'Lk' ? 'Laki-laki' : 'Perempuan'}</div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">Agama</div>
-      <div>${d.agama}</div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">Pendidikan</div>
-      <div>${d.pendidikan}</div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">Pekerjaan</div>
-      <div>${d.pekerjaan}</div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">Status Hubungan</div>
-      <div><span style="background:var(--primary-light); color:var(--primary); padding:2px 8px; border-radius:4px; font-size:0.85rem; font-weight:600;">${d.shdk}</span></div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">Nama Ayah</div>
-      <div>${d.nama_ayah}</div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">Nama Ibu</div>
-      <div>${d.nama_ibu}</div>
-      
-      <div style="color:var(--text-muted); font-size:0.9rem;">Alamat Lengkap</div>
-      <div style="line-height:1.5;">${d.alamat}</div>
-    </div>
-  `;
-  
-  document.getElementById('wargaModalBody').innerHTML = html;
-  document.getElementById('wargaModal').style.display = 'flex';
-}
-
-function closeWargaModal() {
-  document.getElementById('wargaModal').style.display = 'none';
-}
-
-function renderSections(){
-  const container=document.getElementById('editableSections');
-  container.innerHTML=sections.map(sec=>{
-    const data=pendData[sec.key]||[];
-    return `<div class="admin-card" style="margin-bottom:24px">
-      <div class="admin-card-header">
-        <h3>${sec.title}</h3>
-        <span style="font-size: 0.8rem; color: var(--text-muted); background: #f1f5f9; padding: 4px 8px; border-radius: 4px;">Otomatis dari Database</span>
-      </div>
-      <div class="admin-card-body">
-        <div class="admin-table-wrap">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Label</th>
-                <th style="width:150px">Jumlah</th>
-              </tr>
-            </thead>
-            <tbody id="tb_${sec.key}">
-              ${data.length === 0 ? '<tr><td colspan="2" style="text-align:center;color:#64748b;">Belum ada data</td></tr>' : ''}
-              ${data.map((r)=>`
-                <tr>
-                  <td><strong>${r.label}</strong></td>
-                  <td>${r.jumlah}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-async function saveAll(){
-  alert('Statistik kependudukan (Agama, Pendidikan, dll) sekarang dihitung otomatis dari tabel Database dan tidak perlu disimpan manual.');
+function renderUmur(arr){
+  if(chartUmurInst)chartUmurInst.destroy();
+  const ctx=document.getElementById('chartUmur').getContext('2d');
+  chartUmurInst=new Chart(ctx,{type:'bar',data:{labels:arr.map(d=>d.label),datasets:[{label:'Jumlah',data:arr.map(d=>d.jumlah),backgroundColor:'#2e7d32aa',borderColor:'#2e7d32',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{family:'Outfit',size:10}}},x:{ticks:{font:{family:'Outfit',size:9},maxRotation:45}}}}});
 }
 </script>
 </body></html>
