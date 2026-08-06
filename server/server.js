@@ -159,35 +159,93 @@ app.post('/api/chat', async (req, res) => {
   const { message } = req.body;
   if (!message) return res.status(400).json({ error: 'Pesan kosong' });
 
-  const msg = message.toLowerCase();
-  let reply = "Maaf, saya belum mengerti pertanyaan tersebut. Coba tanyakan tentang profil desa, jumlah penduduk, luas wilayah, kontak, atau visi misi.";
-
   try {
-    const [dRows] = await db.query('SELECT data FROM desa_profil LIMIT 1');
-    if (dRows.length > 0) {
-      const profil = typeof dRows[0].data === 'string' ? JSON.parse(dRows[0].data) : dRows[0].data;
-      
-      if (msg.includes('penduduk') || msg.includes('warga') || msg.includes('jumlah orang')) {
-        reply = `Total penduduk Desa Kauman saat ini adalah ${profil.statistik?.jumlah_penduduk || '-'} jiwa, terdiri dari ${profil.statistik?.laki_laki || '-'} laki-laki dan ${profil.statistik?.perempuan || '-'} perempuan.`;
-      } else if (msg.includes('kepala desa') || msg.includes('kades')) {
-        reply = `Kepala Desa Kauman saat ini dijabat oleh Bapak/Ibu ${profil.kepala_desa || '-'}.`;
-      } else if (msg.includes('kontak') || msg.includes('hubungi') || msg.includes('whatsapp') || msg.includes('telepon')) {
-        reply = `Anda dapat menghubungi kami melalui WhatsApp di ${profil.kontak?.whatsapp || '-'} atau telepon di ${profil.kontak?.telepon || '-'}. Email resmi kami adalah ${profil.kontak?.email || '-'}.`;
-      } else if (msg.includes('lokasi') || msg.includes('alamat') || msg.includes('dimana')) {
-        reply = `Kantor Desa Kauman berlokasi di ${profil.kontak?.alamat || profil.alamat || '-'}.`;
-      } else if (msg.includes('luas')) {
-        reply = `Luas wilayah Desa Kauman adalah ${profil.luas_wilayah || '-'} hektar.`;
-      } else if (msg.includes('visi') || msg.includes('misi')) {
-        reply = `Visi Desa Kauman: "${profil.visi || '-'}". Misi: ${profil.misi || '-'}.`;
+    // Ambil data desa dari database sebagai konteks untuk AI
+    let desaContext = 'Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang, Jawa Timur.';
+    try {
+      const [dRows] = await db.query('SELECT data FROM desa_profil LIMIT 1');
+      if (dRows.length > 0) {
+        const profil = typeof dRows[0].data === 'string' ? JSON.parse(dRows[0].data) : dRows[0].data;
+        desaContext = `
+Nama Desa: ${profil.nama || 'Kauman'}
+Kecamatan: ${profil.kecamatan || 'Ngoro'}
+Kabupaten: ${profil.kabupaten || 'Jombang'}
+Provinsi: ${profil.provinsi || 'Jawa Timur'}
+Kepala Desa: ${profil.kepala_desa || '-'}
+Visi: ${profil.visi || '-'}
+Misi: ${profil.misi || '-'}
+Luas Wilayah: ${profil.luas_wilayah || '-'} hektar
+Jumlah Penduduk: ${profil.statistik?.jumlah_penduduk || '-'} jiwa
+Jumlah KK: ${profil.statistik?.jumlah_kk || '-'} KK
+Laki-laki: ${profil.statistik?.laki_laki || '-'} jiwa
+Perempuan: ${profil.statistik?.perempuan || '-'} jiwa
+Kontak WhatsApp: ${profil.kontak?.whatsapp || '-'}
+Email: ${profil.kontak?.email || '-'}
+Alamat Kantor: ${profil.kontak?.alamat || '-'}
+Keunggulan Desa: Kampung Jamu Tradisional
+        `.trim();
       }
+    } catch(e) { /* gunakan context default */ }
+
+    // Coba gunakan Gemini AI
+    const GEMINI_KEY = process.env.GEMINI_API_KEY;
+    if (GEMINI_KEY) {
+      const { GoogleGenAI } = require('@google/genai');
+      const ai = new GoogleGenAI({ apiKey: GEMINI_KEY });
+      const systemPrompt = `Kamu adalah asisten virtual resmi Desa Kauman. Tugasmu membantu warga dan pengunjung mendapatkan informasi seputar desa dengan ramah, sopan, dan menggunakan Bahasa Indonesia yang baik.
+
+Data Desa Kauman:
+${desaContext}
+
+Aturan menjawab:
+- Jawab dalam Bahasa Indonesia yang ramah dan mudah dipahami
+- Fokus pada informasi seputar Desa Kauman dan layanannya
+- Jika ditanya hal di luar desa (politik, hiburan, dll), arahkan kembali ke topik desa
+- Jawaban singkat, padat, dan jelas (maksimal 3-4 kalimat)
+- Gunakan emoji yang sesuai untuk membuat jawaban lebih menarik
+- Jika tidak tahu informasi spesifik, sarankan warga menghubungi kantor desa`;
+
+      const result = await ai.models.generateContent({
+        model: 'gemini-2.0-flash',
+        contents: [{ role: 'user', parts: [{ text: message }] }],
+        systemInstruction: systemPrompt,
+        config: { maxOutputTokens: 512, temperature: 0.7 }
+      });
+
+      const reply = result.text || 'Maaf, saya tidak dapat memproses pertanyaan Anda saat ini.';
+      return res.json({ reply });
     }
+
+    // Fallback: jawaban berbasis kata kunci jika tidak ada API key
+    const msg = message.toLowerCase();
+    let reply = 'Maaf, saya belum mengerti pertanyaan tersebut. Coba tanyakan tentang profil desa, jumlah penduduk, luas wilayah, kontak, atau visi misi.';
+    try {
+      const [dRows] = await db.query('SELECT data FROM desa_profil LIMIT 1');
+      if (dRows.length > 0) {
+        const profil = typeof dRows[0].data === 'string' ? JSON.parse(dRows[0].data) : dRows[0].data;
+        if (msg.includes('penduduk') || msg.includes('warga') || msg.includes('jumlah orang')) {
+          reply = `Total penduduk Desa Kauman saat ini adalah ${profil.statistik?.jumlah_penduduk || '-'} jiwa, terdiri dari ${profil.statistik?.laki_laki || '-'} laki-laki dan ${profil.statistik?.perempuan || '-'} perempuan.`;
+        } else if (msg.includes('kepala desa') || msg.includes('kades')) {
+          reply = `Kepala Desa Kauman saat ini dijabat oleh Bapak/Ibu ${profil.kepala_desa || '-'}.`;
+        } else if (msg.includes('kontak') || msg.includes('hubungi') || msg.includes('whatsapp') || msg.includes('telepon')) {
+          reply = `Anda dapat menghubungi kami melalui WhatsApp di ${profil.kontak?.whatsapp || '-'} atau telepon di ${profil.kontak?.telepon || '-'}. Email resmi kami adalah ${profil.kontak?.email || '-'}.`;
+        } else if (msg.includes('lokasi') || msg.includes('alamat') || msg.includes('dimana')) {
+          reply = `Kantor Desa Kauman berlokasi di ${profil.kontak?.alamat || profil.alamat || '-'}.`;
+        } else if (msg.includes('luas')) {
+          reply = `Luas wilayah Desa Kauman adalah ${profil.luas_wilayah || '-'} hektar.`;
+        } else if (msg.includes('visi') || msg.includes('misi')) {
+          reply = `Visi Desa Kauman: "${profil.visi || '-'}". Misi: ${profil.misi || '-'}.`;
+        }
+      }
+    } catch(e) { /* abaikan error fallback */ }
+
+    setTimeout(() => res.json({ reply }), 800);
   } catch (err) {
     console.error('Chat API Error:', err);
-    reply = "Maaf, sedang ada gangguan sistem saat mengakses data desa.";
+    res.json({ reply: 'Maaf, sedang ada gangguan pada sistem AI. Silakan coba beberapa saat lagi.' });
   }
-
-  setTimeout(() => res.json({ reply }), 800);
 });
+
 
 // ====================== DESA (Profil) ======================
 app.get('/api/desa', async (req, res) => {
