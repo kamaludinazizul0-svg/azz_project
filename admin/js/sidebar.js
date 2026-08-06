@@ -46,7 +46,7 @@ function getSidebarHTML(activePage) {
       <span class="icon">📢</span> Layanan Pengaduan
     </a>
     <a href="/admin/darurat.html" class="sidebar-link ${activePage==='darurat'?'active':''}">
-      <span class="icon">☎️</span> Telepon Darurat
+      <span class="icon">🚨</span> Telepon Darurat
     </a>
 
     <div class="sidebar-section-label">Profil Desa</div>
