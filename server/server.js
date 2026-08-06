@@ -13,7 +13,20 @@ const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'desa-kauman-secret-key-2024';
 
 // ====================== MIDDLEWARE ======================
-app.use(cors());
+// CORS: Izinkan localhost (development) dan domain resmi desa (production)
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  process.env.ALLOWED_ORIGIN // isi di .env saat deploy: ALLOWED_ORIGIN=https://desakauman.id
+].filter(Boolean);
+app.use(cors({
+  origin: function(origin, callback) {
+    // Izinkan request tanpa origin (curl, mobile app, Postman di dev)
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Akses tidak diizinkan oleh CORS'));
+  },
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -260,104 +273,50 @@ app.put('/api/desa', authMiddleware, async (req, res) => {
 });
 
 // ====================== PENDUDUK (Statistik & DB) ======================
-app.get('/api/penduduk', async (req, res) => {
-  // Cek otorisasi manual
-  let isAdmin = false;
-  const token = req.headers['authorization']?.split(' ')[1];
-  if (token) {
-    try {
-      jwt.verify(token, process.env.JWT_SECRET || 'desa-kauman-secret-key-2024');
-      isAdmin = true;
-    } catch(e){}
-  }
+// GET /api/penduduk/stats - Statistik agregat PUBLIK (tanpa data personal)
+app.get('/api/penduduk/stats', async (req, res) => {
   try {
-    const { search, limit, page } = req.query;
-    
-    // Auto-calculate stats from DB
-    const [stats] = await db.query(`
-      SELECT 
-        COUNT(*) as jumlah_penduduk,
-        COUNT(DISTINCT no_kk) as jumlah_kk,
-        SUM(CASE WHEN jenis_kelamin = 'Lk' THEN 1 ELSE 0 END) as laki_laki,
-        SUM(CASE WHEN jenis_kelamin = 'Pr' THEN 1 ELSE 0 END) as perempuan
-      FROM penduduk
-    `);
-
-    let query = "SELECT * FROM penduduk";
-    let countQuery = "SELECT COUNT(*) as total FROM penduduk";
-    let queryParams = [];
-
-    if (search) {
-       query += " WHERE nama_lengkap LIKE ? OR nik LIKE ?";
-       countQuery += " WHERE nama_lengkap LIKE ? OR nik LIKE ?";
-       queryParams.push(`%${search}%`, `%${search}%`);
-    }
-
-    const [totalRows] = await db.query(countQuery, queryParams);
-    const total = totalRows[0].total;
-    
-    const l = parseInt(limit) || 10;
-    const p = parseInt(page) || 1;
-    const offset = (p - 1) * l;
-    
-    query += " ORDER BY id ASC LIMIT ? OFFSET ?";
-    queryParams.push(l, offset);
-    
-    const [rows] = await db.query(query, queryParams);
-    
-    // Aggregate queries
+    const [stats] = await db.query(`SELECT COUNT(*) as jumlah_penduduk, COUNT(DISTINCT no_kk) as jumlah_kk, SUM(CASE WHEN jenis_kelamin = 'Lk' THEN 1 ELSE 0 END) as laki_laki, SUM(CASE WHEN jenis_kelamin = 'Pr' THEN 1 ELSE 0 END) as perempuan FROM penduduk`);
     const [agamaData] = await db.query(`SELECT agama as label, COUNT(*) as jumlah FROM penduduk GROUP BY agama ORDER BY jumlah DESC`);
     const [pendidikanData] = await db.query(`SELECT pendidikan as label, COUNT(*) as jumlah FROM penduduk GROUP BY pendidikan ORDER BY jumlah DESC`);
     const [pekerjaanData] = await db.query(`SELECT pekerjaan as label, COUNT(*) as jumlah FROM penduduk GROUP BY pekerjaan ORDER BY jumlah DESC`);
-    
-    const [umurData] = await db.query(`
-      SELECT 
-        CASE 
-          WHEN age BETWEEN 0 AND 4 THEN '0 - 4 Tahun'
-          WHEN age BETWEEN 5 AND 9 THEN '5 - 9 Tahun'
-          WHEN age BETWEEN 10 AND 14 THEN '10 - 14 Tahun'
-          WHEN age BETWEEN 15 AND 19 THEN '15 - 19 Tahun'
-          WHEN age BETWEEN 20 AND 24 THEN '20 - 24 Tahun'
-          WHEN age BETWEEN 25 AND 29 THEN '25 - 29 Tahun'
-          WHEN age BETWEEN 30 AND 34 THEN '30 - 34 Tahun'
-          WHEN age BETWEEN 35 AND 39 THEN '35 - 39 Tahun'
-          WHEN age BETWEEN 40 AND 44 THEN '40 - 44 Tahun'
-          WHEN age BETWEEN 45 AND 49 THEN '45 - 49 Tahun'
-          WHEN age BETWEEN 50 AND 54 THEN '50 - 54 Tahun'
-          WHEN age BETWEEN 55 AND 59 THEN '55 - 59 Tahun'
-          WHEN age BETWEEN 60 AND 64 THEN '60 - 64 Tahun'
-          WHEN age BETWEEN 65 AND 69 THEN '65 - 69 Tahun'
-          WHEN age BETWEEN 70 AND 74 THEN '70 - 74 Tahun'
-          ELSE '> 75 Tahun' 
-        END as label,
-        COUNT(*) as jumlah
-      FROM (
-        SELECT TIMESTAMPDIFF(YEAR, STR_TO_DATE(tanggal_lahir, '%d/%m/%Y'), CURDATE()) as age 
-        FROM penduduk
-      ) as tbl
-      GROUP BY label
-      ORDER BY MIN(age) ASC
-    `);
-    
-    res.json({
-      statistik: {
-        jumlah_penduduk: stats[0].jumlah_penduduk,
-        jumlah_kk: stats[0].jumlah_kk,
-        laki_laki: stats[0].laki_laki,
-        perempuan: stats[0].perempuan,
-      },
-      kelompok_umur: umurData,
-      pendidikan: pendidikanData,
-      pekerjaan: pekerjaanData,
-      agama: agamaData,
-      data: rows,
-      total: total,
-      page: p,
-      limit: l
-    });
+    const [umurData] = await db.query(`SELECT CASE WHEN age BETWEEN 0 AND 4 THEN '0 - 4 Tahun' WHEN age BETWEEN 5 AND 9 THEN '5 - 9 Tahun' WHEN age BETWEEN 10 AND 14 THEN '10 - 14 Tahun' WHEN age BETWEEN 15 AND 19 THEN '15 - 19 Tahun' WHEN age BETWEEN 20 AND 24 THEN '20 - 24 Tahun' WHEN age BETWEEN 25 AND 29 THEN '25 - 29 Tahun' WHEN age BETWEEN 30 AND 34 THEN '30 - 34 Tahun' WHEN age BETWEEN 35 AND 39 THEN '35 - 39 Tahun' WHEN age BETWEEN 40 AND 44 THEN '40 - 44 Tahun' WHEN age BETWEEN 45 AND 49 THEN '45 - 49 Tahun' WHEN age BETWEEN 50 AND 54 THEN '50 - 54 Tahun' WHEN age BETWEEN 55 AND 59 THEN '55 - 59 Tahun' WHEN age BETWEEN 60 AND 64 THEN '60 - 64 Tahun' WHEN age BETWEEN 65 AND 69 THEN '65 - 69 Tahun' WHEN age BETWEEN 70 AND 74 THEN '70 - 74 Tahun' ELSE '> 75 Tahun' END as label, COUNT(*) as jumlah FROM (SELECT TIMESTAMPDIFF(YEAR, STR_TO_DATE(tanggal_lahir, '%d/%m/%Y'), CURDATE()) as age FROM penduduk) as tbl GROUP BY label ORDER BY MIN(age) ASC`);
+    res.json({ statistik: stats[0], kelompok_umur: umurData, pendidikan: pendidikanData, pekerjaan: pekerjaanData, agama: agamaData });
   } catch (error) {
-    console.error('DB error:', error.message);
-    res.status(500).json({error: error.message});
+    console.error('DB error penduduk/stats:', error.message);
+    res.status(500).json({ error: 'Terjadi kesalahan server' });
+  }
+});
+
+// GET /api/penduduk - Data individual penduduk - HANYA ADMIN
+app.get('/api/penduduk', authMiddleware, async (req, res) => {
+  try {
+    const { search, limit, page } = req.query;
+    const [stats] = await db.query(`SELECT COUNT(*) as jumlah_penduduk, COUNT(DISTINCT no_kk) as jumlah_kk, SUM(CASE WHEN jenis_kelamin = 'Lk' THEN 1 ELSE 0 END) as laki_laki, SUM(CASE WHEN jenis_kelamin = 'Pr' THEN 1 ELSE 0 END) as perempuan FROM penduduk`);
+    let query = "SELECT * FROM penduduk";
+    let countQuery = "SELECT COUNT(*) as total FROM penduduk";
+    let queryParams = [];
+    if (search) {
+      query += " WHERE nama_lengkap LIKE ? OR nik LIKE ?";
+      countQuery += " WHERE nama_lengkap LIKE ? OR nik LIKE ?";
+      queryParams.push(`%${search}%`, `%${search}%`);
+    }
+    const [totalRows] = await db.query(countQuery, queryParams);
+    const total = totalRows[0].total;
+    const l = parseInt(limit) || 10;
+    const p = parseInt(page) || 1;
+    const offset = (p - 1) * l;
+    query += " ORDER BY id ASC LIMIT ? OFFSET ?";
+    queryParams.push(l, offset);
+    const [rows] = await db.query(query, queryParams);
+    const [agamaData] = await db.query(`SELECT agama as label, COUNT(*) as jumlah FROM penduduk GROUP BY agama ORDER BY jumlah DESC`);
+    const [pendidikanData] = await db.query(`SELECT pendidikan as label, COUNT(*) as jumlah FROM penduduk GROUP BY pendidikan ORDER BY jumlah DESC`);
+    const [pekerjaanData] = await db.query(`SELECT pekerjaan as label, COUNT(*) as jumlah FROM penduduk GROUP BY pekerjaan ORDER BY jumlah DESC`);
+    const [umurData] = await db.query(`SELECT CASE WHEN age BETWEEN 0 AND 4 THEN '0 - 4 Tahun' WHEN age BETWEEN 5 AND 9 THEN '5 - 9 Tahun' WHEN age BETWEEN 10 AND 14 THEN '10 - 14 Tahun' WHEN age BETWEEN 15 AND 19 THEN '15 - 19 Tahun' WHEN age BETWEEN 20 AND 24 THEN '20 - 24 Tahun' WHEN age BETWEEN 25 AND 29 THEN '25 - 29 Tahun' WHEN age BETWEEN 30 AND 34 THEN '30 - 34 Tahun' WHEN age BETWEEN 35 AND 39 THEN '35 - 39 Tahun' WHEN age BETWEEN 40 AND 44 THEN '40 - 44 Tahun' WHEN age BETWEEN 45 AND 49 THEN '45 - 49 Tahun' WHEN age BETWEEN 50 AND 54 THEN '50 - 54 Tahun' WHEN age BETWEEN 55 AND 59 THEN '55 - 59 Tahun' WHEN age BETWEEN 60 AND 64 THEN '60 - 64 Tahun' WHEN age BETWEEN 65 AND 69 THEN '65 - 69 Tahun' WHEN age BETWEEN 70 AND 74 THEN '70 - 74 Tahun' ELSE '> 75 Tahun' END as label, COUNT(*) as jumlah FROM (SELECT TIMESTAMPDIFF(YEAR, STR_TO_DATE(tanggal_lahir, '%d/%m/%Y'), CURDATE()) as age FROM penduduk) as tbl GROUP BY label ORDER BY MIN(age) ASC`);
+    res.json({ statistik: { jumlah_penduduk: stats[0].jumlah_penduduk, jumlah_kk: stats[0].jumlah_kk, laki_laki: stats[0].laki_laki, perempuan: stats[0].perempuan }, kelompok_umur: umurData, pendidikan: pendidikanData, pekerjaan: pekerjaanData, agama: agamaData, data: rows, total, page: p, limit: l });
+  } catch (error) {
+    console.error('DB error penduduk:', error.message);
+    res.status(500).json({ error: 'Terjadi kesalahan server' });
   }
 });
 
@@ -473,31 +432,33 @@ app.delete('/api/agenda/:id', authMiddleware, async (req, res) => {
 app.get('/api/berita', async (req, res) => {
   try {
     const { limit, page, search } = req.query;
-    let query = "SELECT * FROM berita"; // wait, old code didn't force aktif=1 here unless specified, I'll just return all
-    let countQuery = "SELECT COUNT(*) as total FROM berita";
+    // Cek apakah request dari admin (untuk melihat semua termasuk draft)
+    let isAdmin = false;
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (token) { try { jwt.verify(token, JWT_SECRET); isAdmin = true; } catch(e){} }
+
+    // Publik hanya melihat berita yang aktif
+    const baseWhere = isAdmin ? '' : 'WHERE aktif = 1';
+    let query = `SELECT * FROM berita ${baseWhere}`;
+    let countQuery = `SELECT COUNT(*) as total FROM berita ${baseWhere}`;
     let params = [];
 
     if (search) {
-      query += " WHERE (judul LIKE ? OR ringkasan LIKE ?)";
-      countQuery += " WHERE (judul LIKE ? OR ringkasan LIKE ?)";
+      const connector = baseWhere ? 'AND' : 'WHERE';
+      query += ` ${connector} (judul LIKE ? OR ringkasan LIKE ?)`;
+      countQuery += ` ${connector} (judul LIKE ? OR ringkasan LIKE ?)`;
       params.push('%' + search + '%', '%' + search + '%');
     }
 
     const [totalRows] = await db.query(countQuery, params);
     const total = totalRows[0].total;
-
-    let p = 1;
-    let l = 100;
-    
-    if (page) p = parseInt(page);
-    if (limit) l = parseInt(limit);
-    
+    const p = parseInt(page) || 1;
+    const l = parseInt(limit) || 100;
     query += " ORDER BY id DESC LIMIT ? OFFSET ?";
     params.push(l, (p - 1) * l);
-
     const [rows] = await db.query(query, params);
     res.json({ data: rows, total, page: p, limit: l });
-  } catch (err) { res.status(500).json({error: err.message}); }
+  } catch (err) { console.error('Berita error:', err.message); res.status(500).json({ error: 'Terjadi kesalahan server' }); }
 });
 app.get('/api/berita/:id', async (req, res) => {
   try {

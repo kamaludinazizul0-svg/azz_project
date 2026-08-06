@@ -20,7 +20,7 @@ async function apiFetch(endpoint, options = {}) {
 
 const API = {
   desa: () => apiFetch('/desa'),
-  penduduk: () => apiFetch('/penduduk'),
+  penduduk: () => apiFetch('/penduduk/stats'),
   slider: () => apiFetch('/slider'),
   perangkat: () => apiFetch('/perangkat'),
   berita: (params = {}) => {
