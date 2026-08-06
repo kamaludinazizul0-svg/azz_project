@@ -102,9 +102,12 @@
       }
       cont.innerHTML = res.map(d => {
         let icon = '📞';
-        if (d.kategori === 'Kesehatan') icon = '🚑';
-        else if (d.kategori.includes('Keamanan') || d.kategori.includes('Kebakaran')) icon = '🚒';
-        else if (d.kategori === 'Layanan Umum') icon = '🏢';
+        const kat = d.kategori ? d.kategori.toLowerCase() : '';
+        if (kat.includes('kesehatan') || kat.includes('medis') || kat.includes('rs') || kat.includes('puskesmas')) icon = '🚑';
+        else if (kat.includes('kebakaran') || kat.includes('damkar')) icon = '🚒';
+        else if (kat.includes('keamanan') || kat.includes('polisi') || kat.includes('polsek') || kat.includes('bhabin')) icon = '🚓';
+        else if (kat.includes('bencana') || kat.includes('bpbd') || kat.includes('sar')) icon = '🚁';
+        else if (kat.includes('umum')) icon = '🏢';
         
         return `
           <div class="darurat-card">
