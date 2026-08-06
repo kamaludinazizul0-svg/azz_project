@@ -206,7 +206,7 @@ Aturan menjawab:
 - Jika tidak tahu informasi spesifik, sarankan warga menghubungi kantor desa`;
 
       const result = await ai.models.generateContent({
-        model: 'gemini-1.5-flash-8b',
+        model: 'gemini-flash-latest',
         contents: [{ role: 'user', parts: [{ text: message }] }],
         config: {
           systemInstruction: systemPrompt,
