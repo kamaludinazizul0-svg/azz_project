@@ -273,7 +273,9 @@
             <label class="form-label">Kategori</label>
             <select id="fKategori" class="form-control" required>
               <option value="Kesehatan">Kesehatan</option>
-              <option value="Keamanan & Penyelamatan">Keamanan & Penyelamatan</option>
+              <option value="Keamanan (Polisi)">Keamanan (Polisi)</option>
+              <option value="Kebakaran (Damkar)">Kebakaran (Damkar)</option>
+              <option value="Bencana (BPBD/SAR)">Bencana (BPBD/SAR)</option>
               <option value="Layanan Umum">Layanan Umum</option>
               <option value="Lainnya">Lainnya</option>
             </select>
@@ -304,16 +306,22 @@
     }
 
     function getIcon(kat) {
-      if(kat === 'Kesehatan') return '🚑';
-      if(kat === 'Keamanan & Penyelamatan') return '🚓';
-      if(kat === 'Layanan Umum') return '🏢';
+      if(!kat) return '☎️';
+      if(kat.includes('Kesehatan')) return '🚑';
+      if(kat.includes('Keamanan')) return '🚓';
+      if(kat.includes('Kebakaran')) return '🚒';
+      if(kat.includes('Bencana')) return '🚁';
+      if(kat.includes('Layanan Umum')) return '🏢';
       return '☎️';
     }
     
     function getClass(kat) {
-      if(kat === 'Kesehatan') return 'kesehatan';
-      if(kat === 'Keamanan & Penyelamatan') return 'keamanan';
-      if(kat === 'Layanan Umum') return 'layanan';
+      if(!kat) return 'lainnya';
+      if(kat.includes('Kesehatan')) return 'kesehatan';
+      if(kat.includes('Keamanan')) return 'keamanan';
+      if(kat.includes('Kebakaran')) return 'kesehatan'; // red theme
+      if(kat.includes('Bencana')) return 'layanan'; // orange theme
+      if(kat.includes('Layanan Umum')) return 'layanan';
       return 'lainnya';
     }
 
