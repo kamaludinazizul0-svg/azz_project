@@ -4,12 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Peta Administrasi - Desa Kauman, Ngoro, Jombang</title>
-  <meta name="description" content="Peta Administrasi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang - WebGIS Interaktif." />
+  <meta name="description" content="Peta Administrasi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang." />
   <link rel="icon" href="/images/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 
   <style>
     .peta-hero {
@@ -19,83 +18,90 @@
       color: #fff;
     }
     .peta-hero h1 { font-size: 2.4rem; margin-bottom: 10px; }
-    .peta-hero p { opacity:.85; font-size:1.05rem; max-width:600px; margin:0 auto; line-height:1.6; }
+    .peta-hero p  { opacity:.85; font-size:1.05rem; max-width:600px; margin:0 auto; line-height:1.6; }
 
-    .peta-wrapper { padding: 40px 0 60px; background: #f1f5f9; }
+    .peta-wrapper { padding: 36px 0 60px; background: #f1f5f9; }
 
-    /* ==== FILTER TABS ==== */
+    /* ==== TABS ==== */
     .map-filters {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 20px;
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; margin-bottom: 20px;
     }
     .map-filter-btn {
-      padding: 10px 20px;
-      border-radius: 50px;
-      border: 2px solid #d1d5db;
-      background: #fff;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 600;
-      color: #374151;
-      cursor: pointer;
-      transition: all .25s;
-      font-size: .9rem;
+      padding: 10px 20px; border-radius: 50px;
+      border: 2px solid #d1d5db; background: #fff;
+      font-family: 'Outfit', sans-serif; font-weight: 600;
+      color: #374151; cursor: pointer; transition: all .25s; font-size: .9rem;
     }
-    .map-filter-btn:hover { border-color:#1b5e20; color:#1b5e20; }
+    .map-filter-btn:hover  { border-color:#1b5e20; color:#1b5e20; }
     .map-filter-btn.active {
-      background: #1b5e20;
-      border-color: #1b5e20;
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(27,94,32,.3);
+      background:#1b5e20; border-color:#1b5e20; color:#fff;
+      box-shadow:0 4px 14px rgba(27,94,32,.3);
     }
 
-    /* ==== MAP ==== */
-    #map {
-      width: 100%;
-      height: 600px;
-      border-radius: 16px;
-      box-shadow: 0 12px 32px rgba(0,0,0,.18);
-      overflow: hidden;
+    /* ==== MAP CONTAINER ==== */
+    #gmap {
+      width: 100%; height: 600px;
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 12px 32px rgba(0,0,0,.2);
     }
-
-    /* Leaflet Popup */
-    .leaflet-popup-content-wrapper { border-radius:12px; overflow:hidden; padding:0; }
-    .leaflet-popup-content { margin:0; width:240px !important; }
-    .popup-img { width:100%; height:130px; object-fit:cover; display:block; }
-    .popup-body { padding:14px; }
-    .popup-name { font-family:'Outfit',sans-serif; font-weight:700; font-size:1rem; color:#1e293b; margin-bottom:4px; }
-    .popup-cat { font-size:.72rem; font-weight:600; padding:2px 8px; border-radius:4px; display:inline-block; margin-bottom:6px; }
-    .popup-desc { font-size:.82rem; color:#64748b; line-height:1.4; margin:0; }
 
     /* ==== LEGEND ==== */
     .legend-panel {
-      margin-top:24px; background:#fff; border-radius:12px; border:1px solid #e2e8f0;
-      padding:18px 22px; box-shadow:0 4px 12px rgba(0,0,0,.06);
+      margin-top: 24px; background:#fff; border-radius:12px;
+      border:1px solid #e2e8f0; padding:18px 22px;
+      box-shadow:0 4px 12px rgba(0,0,0,.06);
       display:flex; flex-wrap:wrap; gap:14px; align-items:center;
     }
-    .legend-title { font-weight:700; font-size:.95rem; color:#1e293b; width:100%; margin-bottom:2px; }
-    .legend-item { display:flex; align-items:center; gap:8px; font-size:.85rem; color:#374151; }
-    .ldot { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
+    .legend-title { font-weight:700; font-size:.95rem; color:#1e293b; width:100%; }
+    .legend-item  { display:flex; align-items:center; gap:8px; font-size:.85rem; color:#374151; }
+    .ldot  { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
     .ldash { width:26px; height:0; border-top:3px dashed; flex-shrink:0; }
 
-    /* ==== Leaflet Info Control (Kop peta pojok atas) ==== */
-    .leaflet-control-kop {
-      background: rgba(255,255,255,.96);
-      border: 2px solid #1e293b;
-      border-radius: 6px;
-      padding: 12px 14px;
-      width: 190px;
+    /* ==== NO-KEY WARNING ==== */
+    #noKeyBanner {
+      display:none;
+      background:#1e293b; color:#f8fafc;
+      border-radius:12px; padding:24px 28px;
+      margin-bottom:20px; line-height:1.7;
+      font-size:.95rem;
+    }
+    #noKeyBanner h3 { color:#fbbf24; margin:0 0 8px; font-size:1.1rem; }
+    #noKeyBanner code { background:#0f172a; padding:2px 8px; border-radius:4px; color:#4ade80; font-size:.85rem; }
+    #noKeyBanner ol  { margin:10px 0 0 18px; padding:0; }
+    #noKeyBanner a   { color:#60a5fa; }
+
+    /* ==== KOP PETA (Google Maps Custom Control) ==== */
+    .kop-peta {
+      background:rgba(255,255,255,.97);
+      border:2px solid #1e293b;
+      border-radius:6px;
+      padding:12px 14px;
+      width:190px;
       font-family:'Outfit',sans-serif;
       box-shadow:0 4px 10px rgba(0,0,0,.25);
       text-align:center;
+      margin:8px;
     }
-    .leaflet-control-kop img { width:36px; margin-bottom:6px; }
-    .leaflet-control-kop .judul { font-size:.78rem; font-weight:800; color:#1e293b; line-height:1.3; }
-    .leaflet-control-kop .sub { font-size:.65rem; font-weight:600; color:#475569; margin-top:3px; }
-    .leaflet-control-kop hr { border:1px solid #e2e8f0; margin:8px 0; }
-    .leaflet-control-kop .src { font-size:.6rem; color:#94a3b8; }
+    .kop-peta img    { width:36px; margin-bottom:6px; }
+    .kop-peta .judul { font-size:.76rem; font-weight:800; color:#1e293b; line-height:1.3; }
+    .kop-peta .sub   { font-size:.64rem; font-weight:600; color:#475569; margin-top:3px; }
+    .kop-peta hr     { border:1px solid #e2e8f0; margin:7px 0; }
+    .kop-peta .src   { font-size:.6rem; color:#94a3b8; }
+
+    /* Spinner */
+    .map-placeholder {
+      width:100%; height:600px; border-radius:16px;
+      background:#e2e8f0; display:flex; align-items:center;
+      justify-content:center; flex-direction:column; gap:14px;
+      font-family:'Outfit',sans-serif; color:#64748b;
+    }
+    .spinner {
+      width:40px; height:40px; border:4px solid #cbd5e1;
+      border-top-color:#1b5e20; border-radius:50%;
+      animation:spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -131,36 +137,57 @@
 <!-- HERO -->
 <section class="peta-hero">
   <div class="container">
-    <h1>🗺️ Peta Potensi Desa</h1>
-    <p>Peta Administrasi Interaktif — Wilayah, Fasilitas, dan Infrastruktur Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang.</p>
+    <h1>🗺️ Peta Administrasi Desa</h1>
+    <p>Visualisasi interaktif wilayah, fasilitas, dan infrastruktur Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang — menggunakan Google Maps.</p>
   </div>
 </section>
 
-<!-- MAP -->
+<!-- MAP SECTION -->
 <div class="peta-wrapper">
   <div class="container">
 
-    <!-- TABS FILTER -->
-    <div class="map-filters">
-      <button class="map-filter-btn active" id="tab-all"           onclick="switchTab('all')">📍 Semua</button>
-      <button class="map-filter-btn" id="tab-pemerintahan"         onclick="switchTab('pemerintahan')">🏛️ Pemerintahan</button>
-      <button class="map-filter-btn" id="tab-fasilitas"            onclick="switchTab('fasilitas')">🏥 Fasilitas Umum</button>
-      <button class="map-filter-btn" id="tab-ibadah"              onclick="switchTab('ibadah')">🕌 Ibadah</button>
-      <button class="map-filter-btn" id="tab-pendidikan"          onclick="switchTab('pendidikan')">🏫 Pendidikan</button>
-      <button class="map-filter-btn" id="tab-umkm"               onclick="switchTab('umkm')">🏪 UMKM</button>
+    <!-- Banner jika belum ada API Key -->
+    <div id="noKeyBanner">
+      <h3>⚠️ Google Maps API Key Diperlukan</h3>
+      Untuk menampilkan Google Maps secara penuh, ikuti langkah berikut (<strong>gratis, 5 menit</strong>):
+      <ol>
+        <li>Buka <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a></li>
+        <li>Buat project baru → Aktifkan <strong>"Maps JavaScript API"</strong></li>
+        <li>Buka <strong>Credentials</strong> → <strong>Create Credentials</strong> → <strong>API Key</strong></li>
+        <li>Salin kunci (contoh: <code>AIzaSyXXXXXXXX...</code>)</li>
+        <li>Buka file <code>.env</code> di project Anda, ubah baris:<br>
+            <code>GOOGLE_MAPS_KEY=AIzaSyXXXXXXXX...</code></li>
+        <li>Restart server, lalu refresh halaman ini.</li>
+      </ol>
     </div>
 
-    <div id="map"></div>
+    <!-- TABS FILTER -->
+    <div class="map-filters">
+      <button class="map-filter-btn active" id="tab-all"          onclick="switchTab('all')">📍 Semua</button>
+      <button class="map-filter-btn"        id="tab-pemerintahan" onclick="switchTab('pemerintahan')">🏛️ Pemerintahan</button>
+      <button class="map-filter-btn"        id="tab-fasilitas"    onclick="switchTab('fasilitas')">🏥 Fasilitas Umum</button>
+      <button class="map-filter-btn"        id="tab-ibadah"       onclick="switchTab('ibadah')">🕌 Ibadah</button>
+      <button class="map-filter-btn"        id="tab-pendidikan"   onclick="switchTab('pendidikan')">🏫 Pendidikan</button>
+      <button class="map-filter-btn"        id="tab-umkm"         onclick="switchTab('umkm')">🏪 UMKM</button>
+    </div>
+
+    <!-- Map div atau loading placeholder -->
+    <div class="map-placeholder" id="mapPlaceholder">
+      <div class="spinner"></div>
+      <span>Memuat Google Maps…</span>
+    </div>
+    <div id="gmap" style="display:none;"></div>
 
     <!-- LEGEND -->
     <div class="legend-panel">
-      <div class="legend-title">Legenda Peta Desa Kauman</div>
-      <div class="legend-item"><div class="ldash" style="border-color:#00C853;"></div> Batas Desa (Perkiraan)</div>
+      <div class="legend-title">Legenda Peta Administrasi Desa Kauman</div>
+      <div class="legend-item"><div class="ldash" style="border-color:#00C853;"></div> Batas Desa</div>
       <div class="legend-item"><div class="ldot" style="background:#e53935;"></div> Pemerintahan</div>
       <div class="legend-item"><div class="ldot" style="background:#1e88e5;"></div> Fasilitas Umum</div>
       <div class="legend-item"><div class="ldot" style="background:#8e24aa;"></div> Tempat Ibadah</div>
       <div class="legend-item"><div class="ldot" style="background:#fb8c00;"></div> Pendidikan</div>
       <div class="legend-item"><div class="ldot" style="background:#00897b;"></div> UMKM / Ekonomi</div>
+      <div class="legend-item"><div class="ldot" style="background:#546e7a;"></div> Infrastruktur</div>
     </div>
 
   </div>
@@ -168,284 +195,267 @@
 
 <footer class="footer">
   <div class="container" style="text-align:center; padding:20px 0;">
-    <p style="color:#94a3b8; font-size:.85rem;">© 2026 Pemerintah Desa Kauman · Peta: Esri World Imagery & OpenStreetMap</p>
+    <p style="color:#94a3b8; font-size:.85rem;">© 2026 Pemerintah Desa Kauman · Peta © Google Maps</p>
   </div>
 </footer>
 
 <script src="/js/api.js"></script>
 <script src="/js/main.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
 <script>
 /* ============================================================
-   KONFIGURASI LOKASI PENTING DESA KAUMAN
-   (Koordinat perkiraan — Admin bisa menyempurnakan via Panel GIS)
+   LOKASI & KONFIGURASI DESA KAUMAN
 ============================================================ */
-const DESA_CENTER = [-7.6850, 112.2605];
-const DESA_ZOOM   = 15; // zoom untuk "Semua"
+const DESA_CENTER  = { lat: -7.6850, lng: 112.2605 };
+const DESA_ZOOM    = 15;
 
-// Poligon batas desa (koordinat perkiraan wilayah administratif)
-const BATAS_DESA = [
-  [-7.672, 112.252],
-  [-7.669, 112.261],
-  [-7.671, 112.271],
-  [-7.678, 112.276],
-  [-7.688, 112.274],
-  [-7.695, 112.268],
-  [-7.698, 112.258],
-  [-7.693, 112.248],
-  [-7.684, 112.246],
-  [-7.675, 112.249]
+// Koordinat poligon batas desa (perkiraan wilayah admin)
+const BATAS_DESA_COORDS = [
+  { lat:-7.672, lng:112.252 }, { lat:-7.669, lng:112.261 },
+  { lat:-7.671, lng:112.271 }, { lat:-7.678, lng:112.276 },
+  { lat:-7.688, lng:112.274 }, { lat:-7.695, lng:112.268 },
+  { lat:-7.698, lng:112.258 }, { lat:-7.693, lng:112.248 },
+  { lat:-7.684, lng:112.246 }, { lat:-7.675, lng:112.249 }
 ];
 
-// Lokasi default per kategori (pusat pan/zoom saat tab diklik)
-// Format: { lat, lng, zoom, nama, info }
-const TAB_LOCATIONS = {
-  all: {
-    lat: DESA_CENTER[0], lng: DESA_CENTER[1], zoom: 14,
-    label: 'Desa Kauman', info: 'Seluruh Wilayah Desa Kauman'
-  },
-  pemerintahan: {
-    lat: -7.6848, lng: 112.2612, zoom: 17,
-    label: 'Balai Desa Kauman', info: 'Kantor Kepala Desa & Perangkat Desa Kauman',
-    kategori: 'Kantor Pemerintahan'
-  },
-  fasilitas: {
-    lat: -7.6860, lng: 112.2600, zoom: 17,
-    label: 'Puskesmas / Polindes', info: 'Fasilitas Kesehatan Desa Kauman',
-    kategori: 'Fasilitas Umum'
-  },
-  ibadah: {
-    lat: -7.6840, lng: 112.2618, zoom: 17,
-    label: 'Masjid Jami Desa Kauman', info: 'Masjid utama dan mushola warga',
-    kategori: 'Ibadah'
-  },
-  pendidikan: {
-    lat: -7.6835, lng: 112.2595, zoom: 17,
-    label: 'SDN Kauman', info: 'Sekolah Dasar Negeri dan lembaga pendidikan',
-    kategori: 'Pendidikan'
-  },
-  umkm: {
-    lat: -7.6870, lng: 112.2630, zoom: 16,
-    label: 'Sentra Jamu Tradisional', info: 'Pusat kegiatan UMKM & Kampung Jamu Kauman',
-    kategori: 'UMKM'
-  }
+// Konfigurasi tiap tab: ke mana peta akan pan+zoom
+const TAB_CONFIG = {
+  all:          { center:DESA_CENTER,                          zoom:DESA_ZOOM, label:'Desa Kauman' },
+  pemerintahan: { center:{ lat:-7.6848, lng:112.2612 },       zoom:18,        label:'Balai Desa Kauman',        kat:'Kantor Pemerintahan' },
+  fasilitas:    { center:{ lat:-7.6862, lng:112.2600 },       zoom:18,        label:'Puskesmas / Polindes',     kat:'Fasilitas Umum' },
+  ibadah:       { center:{ lat:-7.6840, lng:112.2618 },       zoom:18,        label:'Masjid Jami Desa Kauman',  kat:'Ibadah' },
+  pendidikan:   { center:{ lat:-7.6833, lng:112.2595 },       zoom:18,        label:'SDN Kauman',               kat:'Pendidikan' },
+  umkm:         { center:{ lat:-7.6872, lng:112.2632 },       zoom:17,        label:'Sentra Jamu Tradisional',  kat:'UMKM' }
 };
 
-// Warna marker per kategori
-const CAT_COLORS = {
-  'Kantor Pemerintahan': { bg:'#e53935', emoji:'🏛️' },
-  'Fasilitas Umum':      { bg:'#1e88e5', emoji:'🏥' },
-  'Ibadah':              { bg:'#8e24aa', emoji:'🕌' },
-  'Pendidikan':          { bg:'#fb8c00', emoji:'🏫' },
-  'UMKM':                { bg:'#00897b', emoji:'🏪' },
-  'Infrastruktur':       { bg:'#546e7a', emoji:'🚧' },
-  'Lainnya':             { bg:'#757575', emoji:'📍' }
+// Warna & ikon per kategori
+const CAT_STYLE = {
+  'Kantor Pemerintahan': { color:'#e53935', label:'A' },
+  'Fasilitas Umum':      { color:'#1e88e5', label:'H' },
+  'Ibadah':              { color:'#8e24aa', label:'M' },
+  'Pendidikan':          { color:'#fb8c00', label:'S' },
+  'UMKM':                { color:'#00897b', label:'U' },
+  'Infrastruktur':       { color:'#546e7a', label:'I' },
+  'Lainnya':             { color:'#757575', label:'?' }
 };
 
-// Pemetaan tab → kategori
-const TAB_TO_KAT = {
-  all:          null,
-  pemerintahan: 'Kantor Pemerintahan',
-  fasilitas:    'Fasilitas Umum',
-  ibadah:       'Ibadah',
-  pendidikan:   'Pendidikan',
-  umkm:         'UMKM'
-};
+// Lokasi default (sebelum admin isi data di panel GIS)
+const DEFAULT_POINTS = [
+  { lat:-7.6848, lng:112.2612, kat:'Kantor Pemerintahan', nama:'Balai Desa Kauman',      desc:'Pusat pelayanan administrasi desa' },
+  { lat:-7.6862, lng:112.2600, kat:'Fasilitas Umum',      nama:'Polindes / Posyandu',    desc:'Pelayanan kesehatan dasar warga' },
+  { lat:-7.6840, lng:112.2618, kat:'Ibadah',              nama:'Masjid Jami Desa Kauman',desc:'Masjid utama desa' },
+  { lat:-7.6852, lng:112.2590, kat:'Ibadah',              nama:'Mushola Al-Hidayah',     desc:'Mushola Dusun Krenggan' },
+  { lat:-7.6833, lng:112.2595, kat:'Pendidikan',          nama:'SDN Kauman',             desc:'Sekolah Dasar Negeri' },
+  { lat:-7.6822, lng:112.2607, kat:'Pendidikan',          nama:'TK / PAUD Desa Kauman',  desc:'Taman Kanak-kanak' },
+  { lat:-7.6872, lng:112.2632, kat:'UMKM',                nama:'Sentra Jamu Tradisional',desc:'Kampung Jamu kebanggaan Desa Kauman' },
+  { lat:-7.6878, lng:112.2616, kat:'UMKM',                nama:'Kelompok Usaha Bersama', desc:'Pusat kegiatan ekonomi warga' },
+  { lat:-7.6856, lng:112.2648, kat:'Infrastruktur',       nama:'Gapura Pintu Masuk Desa',desc:'Gapura utama jalan masuk desa' }
+];
 
 /* ============================================================
    STATE
 ============================================================ */
-let map;
-let allMarkers    = []; // { leafletMarker, kategori }
-let defaultMarkers= []; // marker default (sebelum admin input data)
-let boundaryLayer;
+let gmap, allGMarkers = [], boundaryPolygon, openInfoWindow = null;
 let currentTab = 'all';
 
 /* ============================================================
-   INIT MAP
+   BUAT PIN SVG GOOGLE MAPS
 ============================================================ */
-function initMap() {
-  map = L.map('map', { zoomControl: false })
-         .setView(DESA_CENTER, 14);
-
-  L.control.zoom({ position: 'bottomright' }).addTo(map);
-
-  // Base: Citra Satelit Esri (gratis, tanpa API key)
-  L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { attribution: '© Esri — Satellite Imagery' }
-  ).addTo(map);
-
-  // Overlay label jalan
-  L.tileLayer(
-    'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',
-    { attribution: '© CartoDB', opacity: 0.85 }
-  ).addTo(map);
-
-  // Gambar batas desa
-  boundaryLayer = L.polygon(BATAS_DESA, {
-    color: '#00C853',
-    weight: 3,
-    dashArray: '8 8',
-    fillColor: '#00C853',
-    fillOpacity: 0.07
-  }).addTo(map);
-  boundaryLayer.bindTooltip('Batas Administrasi Desa Kauman (Perkiraan)', { sticky:true });
-
-  // Kop Peta (pojok kanan atas)
-  const KopControl = L.Control.extend({
-    options: { position: 'topright' },
-    onAdd: function() {
-      const div = L.DomUtil.create('div','leaflet-control-kop');
-      div.innerHTML = `
-        <img src="/images/logo.png" alt="Logo"><br>
-        <div class="judul">PETA ADMINISTRASI<br>DESA KAUMAN</div>
-        <div class="sub">KECAMATAN NGORO<br>KABUPATEN JOMBANG</div>
-        <hr>
-        <div class="src">Esri World Imagery<br>© OpenStreetMap</div>
-      `;
-      return div;
-    }
-  });
-  new KopControl().addTo(map);
-}
-
-/* ============================================================
-   BUAT CUSTOM ICON
-============================================================ */
-function makeIcon(kategori, size=36) {
-  const c = CAT_COLORS[kategori] || CAT_COLORS['Lainnya'];
-  return L.divIcon({
-    className: '',
-    html: `<div style="
-        background:${c.bg};
-        width:${size}px; height:${size}px;
-        border-radius:50%;
-        border:3px solid #fff;
-        box-shadow:0 3px 8px rgba(0,0,0,.4);
-        display:flex; align-items:center; justify-content:center;
-        font-size:${size*.45}px;
-        transition:transform .2s;
-      ">${c.emoji}</div>`,
-    iconSize: [size, size],
-    iconAnchor: [size/2, size],
-    popupAnchor: [0, -size]
-  });
+function makePinIcon(kat) {
+  const s = CAT_STYLE[kat] || CAT_STYLE['Lainnya'];
+  return {
+    path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
+    fillColor:    s.color,
+    fillOpacity:  1,
+    strokeColor:  '#ffffff',
+    strokeWeight: 2,
+    scale:        2,
+    anchor:       new google.maps.Point(12, 24),
+    labelOrigin:  new google.maps.Point(12, 9)
+  };
 }
 
 /* ============================================================
    TAMBAH MARKER
 ============================================================ */
-function addMarker(lat, lng, kategori, nama, deskripsi='', foto='', fromDB=false) {
-  const m = L.marker([lat, lng], { icon: makeIcon(kategori) });
+function addGMarker(lat, lng, kat, nama, desc, foto) {
+  const s     = CAT_STYLE[kat] || CAT_STYLE['Lainnya'];
+  const marker = new google.maps.Marker({
+    position: { lat, lng },
+    map: gmap,
+    title: nama,
+    icon: makePinIcon(kat),
+    label: { text: s.label, color:'#ffffff', fontWeight:'800', fontSize:'11px' },
+    animation: google.maps.Animation.DROP
+  });
 
-  const c = CAT_COLORS[kategori] || CAT_COLORS['Lainnya'];
-  const imgHtml = foto ? `<img src="${foto}" class="popup-img" />` : '';
-  m.bindPopup(`
-    <div>${imgHtml}
-      <div class="popup-body">
-        <div class="popup-name">${nama}</div>
-        <span class="popup-cat" style="background:${c.bg}20;color:${c.bg};">${c.emoji} ${kategori}</span>
-        ${deskripsi ? `<p class="popup-desc">${deskripsi}</p>` : ''}
-      </div>
-    </div>`);
+  const imgTag = foto ? `<img src="${foto}" style="width:100%;height:130px;object-fit:cover;border-radius:6px;margin-bottom:8px;">` : '';
+  const iw = new google.maps.InfoWindow({
+    content: `
+      <div style="font-family:'Outfit',sans-serif;max-width:230px;padding:4px;">
+        ${imgTag}
+        <strong style="font-size:15px;color:#1e293b;">${nama}</strong><br>
+        <span style="font-size:11px;background:${s.color}22;color:${s.color};padding:2px 8px;border-radius:4px;font-weight:700;display:inline-block;margin:5px 0;">${kat}</span>
+        ${desc ? `<p style="font-size:13px;color:#64748b;margin:4px 0 0;">${desc}</p>` : ''}
+      </div>`
+  });
 
-  m.addTo(map);
-  allMarkers.push({ m, kategori });
-  if (!fromDB) defaultMarkers.push({ m, kategori });
-  return m;
+  marker.addListener('click', () => {
+    if (openInfoWindow) openInfoWindow.close();
+    iw.open(gmap, marker);
+    openInfoWindow = iw;
+  });
+
+  marker._kat = kat;
+  allGMarkers.push(marker);
+  return marker;
 }
 
 /* ============================================================
-   MARKER DEFAULT (tampil sebelum admin input data GIS)
+   FILTER & TAMPILKAN MARKER
 ============================================================ */
-function addDefaultMarkers() {
-  addMarker(-7.6848, 112.2612, 'Kantor Pemerintahan', 'Balai Desa Kauman', 'Pusat pelayanan administrasi desa');
-  addMarker(-7.6860, 112.2600, 'Fasilitas Umum',       'Polindes / Posyandu Desa',  'Pelayanan kesehatan dasar warga');
-  addMarker(-7.6840, 112.2618, 'Ibadah',               'Masjid Jami Desa Kauman',   'Masjid utama desa');
-  addMarker(-7.6852, 112.2590, 'Ibadah',               'Mushola Al-Hidayah',         'Mushola warga Dusun Krenggan');
-  addMarker(-7.6835, 112.2595, 'Pendidikan',           'SDN Kauman',                 'Sekolah Dasar Negeri');
-  addMarker(-7.6822, 112.2605, 'Pendidikan',           'TK / PAUD Desa Kauman',      'Taman Kanak-kanak');
-  addMarker(-7.6870, 112.2630, 'UMKM',                 'Sentra Jamu Tradisional',    'Kampung Jamu kebanggaan Desa Kauman');
-  addMarker(-7.6878, 112.2615, 'UMKM',                 'Kelompok Usaha Bersama',     'Pusat kegiatan ekonomi warga');
-  addMarker(-7.6855, 112.2645, 'Infrastruktur',        'Gapura Pintu Desa',          'Gapura utama jalan masuk desa');
+function filterMarkers(targetKat) {
+  allGMarkers.forEach(m => {
+    m.setVisible(!targetKat || m._kat === targetKat);
+  });
 }
 
 /* ============================================================
-   LOAD MARKER DARI DATABASE ADMIN
-============================================================ */
-async function loadDbMarkers() {
-  try {
-    const points = await API.gis();
-    if (!Array.isArray(points) || points.length === 0) return;
-
-    // Jika ada data dari admin, hapus default markers
-    defaultMarkers.forEach(d => d.m.remove());
-    allMarkers = allMarkers.filter(a => !defaultMarkers.includes(a));
-    defaultMarkers = [];
-
-    points.forEach(p => {
-      if (!p.lat || !p.lng) return;
-      addMarker(
-        parseFloat(p.lat), parseFloat(p.lng),
-        p.kategori, p.nama, p.deskripsi||'', p.foto||'',
-        true
-      );
-    });
-  } catch(e) {
-    console.warn('Gunakan marker default (DB tidak tersedia):', e.message);
-  }
-}
-
-/* ============================================================
-   SWITCH TAB — PAN & FILTER MARKER
+   SWITCH TAB
 ============================================================ */
 function switchTab(tabKey) {
   currentTab = tabKey;
-
-  // Update active class
   document.querySelectorAll('.map-filter-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + tabKey).classList.add('active');
 
-  const loc = TAB_LOCATIONS[tabKey];
-  const targetKat = TAB_TO_KAT[tabKey];
+  const cfg = TAB_CONFIG[tabKey];
+  if (openInfoWindow) { openInfoWindow.close(); openInfoWindow = null; }
 
-  // Pan + Zoom ke lokasi yang sesuai
   if (tabKey === 'all') {
-    // Semua → fit bounds ke poligon desa
-    map.fitBounds(boundaryLayer.getBounds(), { padding: [30, 30], animate: true, duration: 0.6 });
+    // Fit ke seluruh polygon batas desa
+    const bounds = new google.maps.LatLngBounds();
+    BATAS_DESA_COORDS.forEach(p => bounds.extend(p));
+    gmap.fitBounds(bounds);
+    filterMarkers(null);
   } else {
-    // Kategori → pan ke lokasi spesifik
-    map.flyTo([loc.lat, loc.lng], loc.zoom, { animate: true, duration: 0.8 });
-  }
+    // Pan ke lokasi spesifik dengan animasi smooth
+    gmap.panTo(cfg.center);
+    setTimeout(() => gmap.setZoom(cfg.zoom), 300);
+    filterMarkers(cfg.kat);
 
-  // Filter marker: tampilkan/sembunyikan sesuai kategori
-  allMarkers.forEach(({ m, kategori }) => {
-    if (!targetKat || kategori === targetKat) {
-      m.addTo(map);
-    } else {
-      m.remove();
-    }
-  });
-
-  // Buka popup marker yang relevan secara otomatis
-  if (tabKey !== 'all') {
+    // Buka popup marker pertama dari kategori ini
     setTimeout(() => {
-      const found = allMarkers.find(a => a.kategori === targetKat);
-      if (found) found.m.openPopup();
-    }, 900);
+      const found = allGMarkers.find(m => m._kat === cfg.kat && m.getVisible());
+      if (found) {
+        found.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(() => found.setAnimation(null), 1400);
+        google.maps.event.trigger(found, 'click');
+      }
+    }, 700);
   }
 }
 
 /* ============================================================
-   MAIN
+   INIT GOOGLE MAPS
 ============================================================ */
-document.addEventListener('DOMContentLoaded', async () => {
-  initMap();
-  addDefaultMarkers();
-  await loadDbMarkers();
-});
+async function initGoogleMap(apiKey) {
+  // Load Google Maps SDK
+  await new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src     = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&language=id&region=ID`;
+    s.async   = true;
+    s.defer   = true;
+    s.onload  = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+
+  gmap = new google.maps.Map(document.getElementById('gmap'), {
+    center:           DESA_CENTER,
+    zoom:             DESA_ZOOM,
+    mapTypeId:        'hybrid',      // SATELLITE + jalan + label
+    tilt:             0,
+    mapTypeControl:   true,
+    mapTypeControlOptions: {
+      mapTypeIds: ['roadmap','satellite','hybrid','terrain'],
+      style:      google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+      position:   google.maps.ControlPosition.BOTTOM_LEFT
+    },
+    fullscreenControl:    true,
+    streetViewControl:    false,
+    zoomControlOptions:   { position: google.maps.ControlPosition.RIGHT_BOTTOM },
+    fullscreenControlOptions: { position: google.maps.ControlPosition.RIGHT_TOP }
+  });
+
+  // ---- Batas Desa (Polygon Hijau) ----
+  boundaryPolygon = new google.maps.Polygon({
+    paths:          BATAS_DESA_COORDS,
+    strokeColor:    '#00C853',
+    strokeOpacity:  1.0,
+    strokeWeight:   3,
+    fillColor:      '#00C853',
+    fillOpacity:    0.08,
+    map:            gmap
+  });
+
+  // ---- Kop Peta (Custom Control Google Maps) ----
+  const kopDiv = document.createElement('div');
+  kopDiv.className = 'kop-peta';
+  kopDiv.innerHTML = `
+    <img src="/images/logo.png" alt="Logo">
+    <div class="judul">PETA ADMINISTRASI<br>DESA KAUMAN</div>
+    <div class="sub">KEC. NGORO · KAB. JOMBANG</div>
+    <hr>
+    <div class="src">© Google Maps · WGS 1984</div>`;
+  gmap.controls[google.maps.ControlPosition.TOP_RIGHT].push(kopDiv);
+
+  // ---- Marker Default ----
+  let dbLoaded = false;
+  try {
+    const pts = await API.gis();
+    if (Array.isArray(pts) && pts.length > 0) {
+      pts.forEach(p => {
+        if (p.lat && p.lng)
+          addGMarker(parseFloat(p.lat), parseFloat(p.lng), p.kategori, p.nama, p.deskripsi||'', p.foto||'');
+      });
+      dbLoaded = true;
+    }
+  } catch(e) { /* gunakan default */ }
+
+  if (!dbLoaded) {
+    DEFAULT_POINTS.forEach(p => addGMarker(p.lat, p.lng, p.kat, p.nama, p.desc, ''));
+  }
+
+  // Tampilkan peta
+  document.getElementById('mapPlaceholder').style.display = 'none';
+  document.getElementById('gmap').style.display = 'block';
+}
+
+/* ============================================================
+   ENTRYPOINT
+============================================================ */
+(async () => {
+  try {
+    const { key } = await (await fetch('/api/maps-key')).json();
+    const valid = key && key !== 'MASUKKAN_GOOGLE_MAPS_API_KEY_ANDA_DISINI' && key.length > 20;
+
+    if (!valid) {
+      document.getElementById('noKeyBanner').style.display = 'block';
+      document.getElementById('mapPlaceholder').style.display = 'none';
+      // Tampilkan Google Maps Embed sementara (tanpa JS API)
+      document.getElementById('gmap').style.display = 'block';
+      document.getElementById('gmap').innerHTML = `
+        <iframe style="width:100%;height:600px;border:0;border-radius:16px;" loading="lazy" allowfullscreen
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3955.8!2d112.2580!3d-7.6850!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e5af5a8ef01f%3A0x33cf5a8d82df3e8c!2sKauman%2C%20Ngoro%2C%20Jombang%2C%20Jawa%20Timur!5e1!3m2!1sid!2sid!4v1691400000000!5m2!1sid!2sid">
+        </iframe>`;
+      return;
+    }
+
+    await initGoogleMap(key);
+  } catch(e) {
+    document.getElementById('mapPlaceholder').innerHTML = '<p>⚠️ Gagal memuat peta. Periksa koneksi Anda.</p>';
+  }
+})();
 </script>
 
 <script src="/js/ai-widget.js"></script>
