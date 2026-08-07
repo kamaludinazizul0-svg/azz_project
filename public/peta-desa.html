@@ -178,50 +178,74 @@
         </iframe>
       </div>
 
-      <!-- BAGIAN KANAN: INDEKS WILAYAH -->
-      <div class="index-panel">
-        <h3>📋 Indeks Fasilitas Desa</h3>
-        <div class="index-list">
-          <div class="index-item">
-            <div class="index-icon">🏛️</div>
-            <div class="index-text">
-              <h4>Pusat Pemerintahan</h4>
-              <p>Kantor Kepala Desa & Balai Desa Kauman sebagai pusat administrasi warga.</p>
+      <!-- BAGIAN KANAN: INDEKS WILAYAH (LEGENDA ADMINISTRASI) -->
+      <div class="index-panel" style="padding:0; overflow:hidden;">
+        <div style="background:var(--primary-dark); color:#fff; padding:18px 24px; text-align:center;">
+          <h3 style="margin:0; font-size:1.2rem; font-weight:800; letter-spacing:1px; border:none; display:block; padding:0; color:#fff;">📋 KETERANGAN PETA</h3>
+          <p style="margin:4px 0 0; font-size:0.85rem; opacity:0.8;">Peta Administrasi Desa Kauman</p>
+        </div>
+        
+        <div style="padding:24px;">
+          <!-- LEGENDA -->
+          <h4 style="font-size:0.95rem; font-weight:800; color:#1e293b; margin-bottom:12px; border-bottom:2px solid #e2e8f0; padding-bottom:6px; text-transform:uppercase;">Legenda Peta</h4>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:24px;">
+            <div style="display:flex; align-items:center; gap:12px; font-size:0.9rem; color:#475569; font-weight:500;">
+              <div style="width:24px; height:0; border-top:3px dashed #ea4335; flex-shrink:0;"></div>
+              Batas Administrasi Desa
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; font-size:0.9rem; color:#475569; font-weight:500;">
+              <div style="width:24px; height:12px; background:linear-gradient(to right, #ffffff, #e2e8f0); border:1px solid #cbd5e1; flex-shrink:0; border-radius:2px;"></div>
+              Area Pemukiman / Bangunan
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; font-size:0.9rem; color:#475569; font-weight:500;">
+              <div style="width:24px; height:12px; background:#4ade80; opacity:0.6; flex-shrink:0; border-radius:2px;"></div>
+              Area Persawahan & Hijau
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; font-size:0.9rem; color:#475569; font-weight:500;">
+              <div style="width:24px; height:3px; background:#facc15; flex-shrink:0;"></div>
+              Jalan Raya Utama
             </div>
           </div>
-          <div class="index-item">
-            <div class="index-icon">🏥</div>
-            <div class="index-text">
-              <h4>Fasilitas Kesehatan</h4>
-              <p>Polindes (Pondok Bersalin Desa) dan Posyandu untuk pelayanan kesehatan dasar warga.</p>
+
+          <!-- PROFIL WILAYAH -->
+          <h4 style="font-size:0.95rem; font-weight:800; color:#1e293b; margin-bottom:12px; border-bottom:2px solid #e2e8f0; padding-bottom:6px; text-transform:uppercase;">Profil Geografis</h4>
+          <table style="width:100%; border-collapse:collapse; font-size:0.85rem; color:#475569; margin-bottom:24px;">
+            <tr>
+              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9; font-weight:600; width:45%;">Luas Wilayah</td>
+              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9;">: ± 135 Hektar</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9; font-weight:600;">Topografi</td>
+              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9;">: Dataran Rendah</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9; font-weight:600;">Jumlah Dusun</td>
+              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9;">: 3 Dusun</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9; font-weight:600;">Jumlah RT/RW</td>
+              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9;">: 18 RT / 6 RW</td>
+            </tr>
+          </table>
+
+          <!-- BATAS WILAYAH -->
+          <h4 style="font-size:0.95rem; font-weight:800; color:#1e293b; margin-bottom:12px; border-bottom:2px solid #e2e8f0; padding-bottom:6px; text-transform:uppercase;">Batas Wilayah</h4>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.85rem; color:#475569; text-align:center;">
+            <div style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
+              <span style="display:block; font-size:0.7rem; font-weight:700; color:#94a3b8; margin-bottom:2px;">UTARA</span>
+              <strong>Desa Rejoagung</strong>
             </div>
-          </div>
-          <div class="index-item">
-            <div class="index-icon">🕌</div>
-            <div class="index-text">
-              <h4>Tempat Ibadah</h4>
-              <p>Masjid Jami' Kauman, Masjid LDII Nur Wahid, dan beberapa musala yang tersebar di tiap dusun.</p>
+            <div style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
+              <span style="display:block; font-size:0.7rem; font-weight:700; color:#94a3b8; margin-bottom:2px;">SELATAN</span>
+              <strong>Desa Pulorejo</strong>
             </div>
-          </div>
-          <div class="index-item">
-            <div class="index-icon">🏫</div>
-            <div class="index-text">
-              <h4>Pendidikan</h4>
-              <p>SDN Kauman, MI Miftahul Huda, serta fasilitas PAUD/TK untuk pendidikan anak usia dini.</p>
+            <div style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
+              <span style="display:block; font-size:0.7rem; font-weight:700; color:#94a3b8; margin-bottom:2px;">TIMUR</span>
+              <strong>Desa Kesamben</strong>
             </div>
-          </div>
-          <div class="index-item">
-            <div class="index-icon">🏪</div>
-            <div class="index-text">
-              <h4>Perekonomian & UMKM</h4>
-              <p>Sentra industri rumahan, toko kelontong, dan warung kuliner yang menggerakkan ekonomi desa.</p>
-            </div>
-          </div>
-          <div class="index-item">
-            <div class="index-icon">🌾</div>
-            <div class="index-text">
-              <h4>Area Pertanian</h4>
-              <p>Lahan persawahan produktif yang menjadi mata pencaharian sebagian besar warga desa.</p>
+            <div style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
+              <span style="display:block; font-size:0.7rem; font-weight:700; color:#94a3b8; margin-bottom:2px;">BARAT</span>
+              <strong>Desa Badang</strong>
             </div>
           </div>
         </div>
