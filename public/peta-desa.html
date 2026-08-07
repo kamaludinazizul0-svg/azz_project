@@ -89,22 +89,143 @@
 <div class="peta-wrapper">
   <div class="container">
 
-    <!-- MAP CONTAINER -->
-    <div class="map-container">
-      <iframe 
-        class="map-iframe" 
-        loading="lazy" 
-        allowfullscreen 
-        referrerpolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15822.427772718131!2d112.247659!3d-7.685325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e5af5a8ef01f%3A0x33cf5a8d82df3e8c!2sKauman%2C%20Ngoro%2C%20Jombang%2C%20Jawa%20Timur!5e1!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid">
-      </iframe>
-    </div>
-    
-    <div style="margin-top:20px; background:#fff; padding:20px; border-radius:12px; border:2px solid #ef4444; color:#b91c1c; font-family:'Outfit', sans-serif;">
-      <h3 style="margin-top:0;">⚠️ Pemberitahuan Sistem:</h3>
-      <p style="margin:0; font-size:0.95rem;">
-        Ini adalah tampilan <b>Google Maps asli</b> (Iframe) seperti yang Anda minta. Namun perlu diketahui bahwa <b>Google Maps gratis TIDAK MENGIZINKAN programmer memasukkan ikon custom seperti dasi, topi, atau masjid ke dalam peta mereka</b>. Ikon-ikon custom tersebut <b>hanya</b> bisa dimasukkan jika kita menggunakan sistem alternatif (Leaflet) atau menggunakan <i>API Key Berbayar</i>.
-      </p>
+    <style>
+      .peta-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+      @media (max-width: 992px) {
+        .peta-layout { grid-template-columns: 1fr; }
+      }
+      
+      .map-container {
+        width: 100%; height: 650px;
+        border-radius: 16px; overflow: hidden;
+        box-shadow: 0 12px 32px rgba(0,0,0,.15);
+        position: relative;
+        background: #e2e8f0;
+        border: 4px solid #fff;
+      }
+      .map-iframe {
+        width: 100%; height: 100%; border: none;
+        position: absolute; top:0; left:0; z-index: 10;
+      }
+      
+      .index-panel {
+        background: #fff;
+        border-radius: 16px;
+        padding: 28px 24px;
+        box-shadow: 0 12px 32px rgba(0,0,0,.08);
+        border: 1px solid #e2e8f0;
+      }
+      .index-panel h3 {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 2px dashed #cbd5e1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .index-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .index-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .index-icon {
+        width: 42px; height: 42px;
+        border-radius: 10px;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+        border: 1px solid #e2e8f0;
+      }
+      .index-text h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 4px;
+      }
+      .index-text p {
+        font-size: 0.85rem;
+        color: #64748b;
+        line-height: 1.5;
+        margin: 0;
+      }
+    </style>
+
+    <div class="peta-layout">
+      <!-- BAGIAN KIRI: PETA GOOGLE -->
+      <div class="map-container">
+        <iframe 
+          class="map-iframe" 
+          loading="lazy" 
+          allowfullscreen 
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15822.427772718131!2d112.247659!3d-7.685325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e5af5a8ef01f%3A0x33cf5a8d82df3e8c!2sKauman%2C%20Ngoro%2C%20Jombang%2C%20Jawa%20Timur!5e1!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid">
+        </iframe>
+      </div>
+
+      <!-- BAGIAN KANAN: INDEKS WILAYAH -->
+      <div class="index-panel">
+        <h3>📋 Indeks Fasilitas Desa</h3>
+        <div class="index-list">
+          <div class="index-item">
+            <div class="index-icon">🏛️</div>
+            <div class="index-text">
+              <h4>Pusat Pemerintahan</h4>
+              <p>Kantor Kepala Desa & Balai Desa Kauman sebagai pusat administrasi warga.</p>
+            </div>
+          </div>
+          <div class="index-item">
+            <div class="index-icon">🏥</div>
+            <div class="index-text">
+              <h4>Fasilitas Kesehatan</h4>
+              <p>Polindes (Pondok Bersalin Desa) dan Posyandu untuk pelayanan kesehatan dasar warga.</p>
+            </div>
+          </div>
+          <div class="index-item">
+            <div class="index-icon">🕌</div>
+            <div class="index-text">
+              <h4>Tempat Ibadah</h4>
+              <p>Masjid Jami' Kauman, Masjid LDII Nur Wahid, dan beberapa musala yang tersebar di tiap dusun.</p>
+            </div>
+          </div>
+          <div class="index-item">
+            <div class="index-icon">🏫</div>
+            <div class="index-text">
+              <h4>Pendidikan</h4>
+              <p>SDN Kauman, MI Miftahul Huda, serta fasilitas PAUD/TK untuk pendidikan anak usia dini.</p>
+            </div>
+          </div>
+          <div class="index-item">
+            <div class="index-icon">🏪</div>
+            <div class="index-text">
+              <h4>Perekonomian & UMKM</h4>
+              <p>Sentra industri rumahan, toko kelontong, dan warung kuliner yang menggerakkan ekonomi desa.</p>
+            </div>
+          </div>
+          <div class="index-item">
+            <div class="index-icon">🌾</div>
+            <div class="index-text">
+              <h4>Area Pertanian</h4>
+              <p>Lahan persawahan produktif yang menjadi mata pencaharian sebagian besar warga desa.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
