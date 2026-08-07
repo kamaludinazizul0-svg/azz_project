@@ -840,11 +840,10 @@ app.get('/api/pengaduan', authMiddleware, async (req, res) => {
     res.json(rows);
   } catch (err) { res.status(500).json({error: err.message}); }
 });
-app.post('/api/pengaduan', upload.single('foto'), async (req, res) => {
+app.post('/api/pengaduan', async (req, res) => {
   try {
     const newId = Date.now();
     const data = { id: newId, ...req.body, created_at: new Date().toISOString() };
-    if (req.file) data.foto = '/uploads/' + req.file.filename;
     await db.query('INSERT INTO pengaduan SET ?', data);
     res.json({ message: 'Berhasil dikirim', id: newId });
   } catch (err) { res.status(500).json({error: err.message}); }
