@@ -286,10 +286,27 @@ async function initMap() {
     }
   ).addTo(map);
 
-  // ---- Batas Desa (Polygon Hijau Putus-putus) ----
+  // ---- Efek Spotlight (Luar Desa Gelap/Blur, Dalam Terang) ----
+  const outerBounds = [
+    [-90, -180],
+    [90, -180],
+    [90, 180],
+    [-90, 180]
+  ];
+
+  // Layer penutup luar desa
+  L.polygon([outerBounds, BATAS_DESA], {
+    color: 'transparent',
+    fillColor: '#000000',
+    fillOpacity: 0.55 // Tingkat kegelapan luar desa
+  }).addTo(map);
+
+  // ---- Garis Batas Desa yang Jelas ----
   boundaryLayer = L.polygon(BATAS_DESA, {
-    color:'#00C853', weight:3, dashArray:'10 8',
-    fillColor:'#00C853', fillOpacity:0.07
+    color: '#00E676', // Hijau terang menyala
+    weight: 4,        // Garis tebal
+    fill: false,      // Kosongkan bagian dalam agar sangat jelas
+    dashArray: '8 6'
   }).addTo(map);
   boundaryLayer.bindTooltip('Batas Administrasi Desa Kauman', { sticky:true });
 
