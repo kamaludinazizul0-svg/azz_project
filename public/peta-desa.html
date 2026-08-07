@@ -147,7 +147,7 @@
 
 <footer class="footer">
   <div class="container" style="text-align:center; padding:20px 0;">
-    <p style="color:#94a3b8; font-size:.85rem;">© 2026 Pemerintah Desa Kauman · Peta: Esri World Imagery & OpenStreetMap (GRATIS)</p>
+    <p style="color:#94a3b8; font-size:.85rem;">© 2026 Pemerintah Desa Kauman · Peta: © Google Maps</p>
   </div>
 </footer>
 
@@ -276,16 +276,14 @@ async function initMap() {
 
   L.control.zoom({ position:'bottomright' }).addTo(map);
 
-  // ---- Layer 1: Citra Satelit Esri (gratis, setara Google Satellite) ----
+  // ---- Google Maps Satellite (tile langsung dari server Google) ----
   L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { attribution:'Tiles © Esri — Source: Esri, USDA, USGS, GeoEye & others', maxZoom:19 }
-  ).addTo(map);
-
-  // ---- Layer 2: Label jalan transparan di atas satelit ----
-  L.tileLayer(
-    'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',
-    { attribution:'© CartoDB', opacity:0.9, maxZoom:19 }
+    'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+    {
+      subdomains: ['0','1','2','3'],
+      attribution: '© <a href="https://maps.google.com">Google Maps</a>',
+      maxZoom: 20
+    }
   ).addTo(map);
 
   // ---- Batas Desa (Polygon Hijau Putus-putus) ----
