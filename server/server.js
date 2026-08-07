@@ -1107,6 +1107,46 @@ app.delete('/api/darurat/:id', authMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({error: err.message}); }
 });
 
+// ====================== GOOGLE MAPS KEY (server-side safe) ======================
+app.get('/api/maps-key', (req, res) => {
+  const key = process.env.GOOGLE_MAPS_KEY || '';
+  res.json({ key });
+});
+
+// ====================== PETA GIS ======================
+app.get('/api/gis', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM gis_points ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.post('/api/gis', authMiddleware, upload.single('foto'), async (req, res) => {
+  logActivity(req.user?.username, 'POST /api/gis', 'Menambahkan titik peta');
+  try {
+    const newId = Date.now();
+    const data = { id: newId, ...req.body, created_at: new Date().toISOString() };
+    if (req.file) data.foto = '/uploads/' + req.file.filename;
+    await db.query('INSERT INTO gis_points SET ?', data);
+    res.json({ message: 'Berhasil ditambahkan', id: newId });
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.put('/api/gis/:id', authMiddleware, upload.single('foto'), async (req, res) => {
+  logActivity(req.user?.username, 'PUT /api/gis/:id', 'Mengubah titik peta');
+  try {
+    const data = { ...req.body };
+    if (req.file) data.foto = '/uploads/' + req.file.filename;
+    await db.query('UPDATE gis_points SET ? WHERE id = ?', [data, req.params.id]);
+    res.json({ message: 'Berhasil diubah' });
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+app.delete('/api/gis/:id', authMiddleware, async (req, res) => {
+  logActivity(req.user?.username, 'DELETE /api/gis/:id', 'Menghapus titik peta');
+  try {
+    await db.query('DELETE FROM gis_points WHERE id = ?', [req.params.id]);
+    res.json({ message: 'Dihapus' });
+  } catch (err) { res.status(500).json({error: err.message}); }
+});
+
 // ====================== GLOBAL 404 HANDLER ======================
 app.use('/api', (req, res) => {
   fs.appendFileSync('404_logs.txt', `[${new Date().toISOString()}] 404: ${req.method} ${req.originalUrl}\n`);

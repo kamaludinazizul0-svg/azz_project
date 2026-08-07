@@ -133,3 +133,15 @@ CREATE TABLE IF NOT EXISTS ppid (
   deskripsi TEXT,
   aktif BOOLEAN DEFAULT TRUE
 );
+
+DROP TABLE IF EXISTS gis_points;
+CREATE TABLE IF NOT EXISTS gis_points (
+  id BIGINT PRIMARY KEY,
+  nama VARCHAR(255),
+  kategori VARCHAR(100),
+  lat VARCHAR(50),
+  lng VARCHAR(50),
+  deskripsi TEXT,
+  foto VARCHAR(255),
+  created_at VARCHAR(100)
+);
