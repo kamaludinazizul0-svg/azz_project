@@ -178,76 +178,78 @@
         </iframe>
       </div>
 
-      <!-- BAGIAN KANAN: INDEKS WILAYAH (LEGENDA ADMINISTRASI) -->
+      <!-- BAGIAN KANAN: INDEKS WILAYAH (LEGENDA GOOGLE MAPS) -->
       <div class="index-panel" style="padding:0; overflow:hidden;">
         <div style="background:var(--primary-dark); color:#fff; padding:18px 24px; text-align:center;">
-          <h3 style="margin:0; font-size:1.2rem; font-weight:800; letter-spacing:1px; border:none; display:block; padding:0; color:#fff;">📋 KETERANGAN PETA</h3>
-          <p style="margin:4px 0 0; font-size:0.85rem; opacity:0.8;">Peta Administrasi Desa Kauman</p>
+          <h3 style="margin:0; font-size:1.2rem; font-weight:800; letter-spacing:1px; border:none; display:block; padding:0; color:#fff;">📋 INDEKS & LEGENDA</h3>
+          <p style="margin:4px 0 0; font-size:0.85rem; opacity:0.8;">Panduan Membaca Peta Google</p>
         </div>
         
         <div style="padding:24px;">
-          <!-- LEGENDA -->
-          <h4 style="font-size:0.95rem; font-weight:800; color:#1e293b; margin-bottom:12px; border-bottom:2px solid #e2e8f0; padding-bottom:6px; text-transform:uppercase;">Legenda Peta</h4>
-          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:24px;">
-            <div style="display:flex; align-items:center; gap:12px; font-size:0.9rem; color:#475569; font-weight:500;">
-              <div style="width:24px; height:0; border-top:3px dashed #ea4335; flex-shrink:0;"></div>
-              Batas Administrasi Desa
+          
+          <p style="font-size:0.85rem; color:#64748b; margin-bottom:20px; line-height:1.5;">
+            Peta di samping menggunakan standar visual dari Google Maps. Berikut adalah panduan ikon-ikon yang muncul di dalam batas wilayah Desa Kauman:
+          </p>
+
+          <div style="display:flex; flex-direction:column; gap:16px; margin-bottom:24px;">
+            
+            <div style="display:flex; align-items:flex-start; gap:12px;">
+              <div style="width:28px; height:28px; background:#fff; border:2px dashed #ea4335; flex-shrink:0; border-radius:4px;"></div>
+              <div>
+                <h4 style="font-size:0.9rem; font-weight:700; color:#1e293b; margin:0 0 2px;">Batas Desa (Garis Merah)</h4>
+                <p style="font-size:0.8rem; color:#64748b; margin:0;">Garis putus-putus merah yang mengelilingi area adalah batas resmi administratif desa.</p>
+              </div>
             </div>
-            <div style="display:flex; align-items:center; gap:12px; font-size:0.9rem; color:#475569; font-weight:500;">
-              <div style="width:24px; height:12px; background:linear-gradient(to right, #ffffff, #e2e8f0); border:1px solid #cbd5e1; flex-shrink:0; border-radius:2px;"></div>
-              Area Pemukiman / Bangunan
+
+            <div style="display:flex; align-items:flex-start; gap:12px;">
+              <div style="width:28px; height:28px; background:#ea4335; color:#fff; flex-shrink:0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:bold;">📍</div>
+              <div>
+                <h4 style="font-size:0.9rem; font-weight:700; color:#1e293b; margin:0 0 2px;">Pin Merah</h4>
+                <p style="font-size:0.8rem; color:#64748b; margin:0;">Menandakan titik tengah (pusat) wilayah Desa Kauman di Google Maps.</p>
+              </div>
             </div>
-            <div style="display:flex; align-items:center; gap:12px; font-size:0.9rem; color:#475569; font-weight:500;">
-              <div style="width:24px; height:12px; background:#4ade80; opacity:0.6; flex-shrink:0; border-radius:2px;"></div>
-              Area Persawahan & Hijau
+
+            <div style="display:flex; align-items:flex-start; gap:12px;">
+              <div style="width:28px; height:28px; background:#4b5563; color:#fff; flex-shrink:0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px;">🎓</div>
+              <div>
+                <h4 style="font-size:0.9rem; font-weight:700; color:#1e293b; margin:0 0 2px;">Ikon Abu-abu (Topi Toga)</h4>
+                <p style="font-size:0.8rem; color:#64748b; margin:0;">Fasilitas pendidikan seperti SD, MI, dan pondok pesantren.</p>
+              </div>
             </div>
-            <div style="display:flex; align-items:center; gap:12px; font-size:0.9rem; color:#475569; font-weight:500;">
-              <div style="width:24px; height:3px; background:#facc15; flex-shrink:0;"></div>
-              Jalan Raya Utama
+
+            <div style="display:flex; align-items:flex-start; gap:12px;">
+              <div style="width:28px; height:28px; background:#10b981; color:#fff; flex-shrink:0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px;">🕌</div>
+              <div>
+                <h4 style="font-size:0.9rem; font-weight:700; color:#1e293b; margin:0 0 2px;">Ikon Hijau / Abu (Kubah)</h4>
+                <p style="font-size:0.8rem; color:#64748b; margin:0;">Fasilitas keagamaan seperti masjid dan musala.</p>
+              </div>
             </div>
+
+            <div style="display:flex; align-items:flex-start; gap:12px;">
+              <div style="width:28px; height:28px; background:#f97316; color:#fff; flex-shrink:0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px;">🍽️</div>
+              <div>
+                <h4 style="font-size:0.9rem; font-weight:700; color:#1e293b; margin:0 0 2px;">Ikon Oranye</h4>
+                <p style="font-size:0.8rem; color:#64748b; margin:0;">Tempat makan, kafe, angkringan, dan sentra kuliner warga.</p>
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:flex-start; gap:12px;">
+              <div style="width:28px; height:28px; background:#3b82f6; color:#fff; flex-shrink:0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px;">🛒</div>
+              <div>
+                <h4 style="font-size:0.9rem; font-weight:700; color:#1e293b; margin:0 0 2px;">Ikon Biru</h4>
+                <p style="font-size:0.8rem; color:#64748b; margin:0;">Toko kelontong, minimarket, dan lokasi belanja UMKM.</p>
+              </div>
+            </div>
+
           </div>
 
-          <!-- PROFIL WILAYAH -->
-          <h4 style="font-size:0.95rem; font-weight:800; color:#1e293b; margin-bottom:12px; border-bottom:2px solid #e2e8f0; padding-bottom:6px; text-transform:uppercase;">Profil Geografis</h4>
-          <table style="width:100%; border-collapse:collapse; font-size:0.85rem; color:#475569; margin-bottom:24px;">
-            <tr>
-              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9; font-weight:600; width:45%;">Luas Wilayah</td>
-              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9;">: ± 135 Hektar</td>
-            </tr>
-            <tr>
-              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9; font-weight:600;">Topografi</td>
-              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9;">: Dataran Rendah</td>
-            </tr>
-            <tr>
-              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9; font-weight:600;">Jumlah Dusun</td>
-              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9;">: 3 Dusun</td>
-            </tr>
-            <tr>
-              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9; font-weight:600;">Jumlah RT/RW</td>
-              <td style="padding:6px 0; border-bottom:1px solid #f1f5f9;">: 18 RT / 6 RW</td>
-            </tr>
-          </table>
-
-          <!-- BATAS WILAYAH -->
-          <h4 style="font-size:0.95rem; font-weight:800; color:#1e293b; margin-bottom:12px; border-bottom:2px solid #e2e8f0; padding-bottom:6px; text-transform:uppercase;">Batas Wilayah</h4>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.85rem; color:#475569; text-align:center;">
-            <div style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
-              <span style="display:block; font-size:0.7rem; font-weight:700; color:#94a3b8; margin-bottom:2px;">UTARA</span>
-              <strong>Desa Rejoagung</strong>
-            </div>
-            <div style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
-              <span style="display:block; font-size:0.7rem; font-weight:700; color:#94a3b8; margin-bottom:2px;">SELATAN</span>
-              <strong>Desa Pulorejo</strong>
-            </div>
-            <div style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
-              <span style="display:block; font-size:0.7rem; font-weight:700; color:#94a3b8; margin-bottom:2px;">TIMUR</span>
-              <strong>Desa Kesamben</strong>
-            </div>
-            <div style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
-              <span style="display:block; font-size:0.7rem; font-weight:700; color:#94a3b8; margin-bottom:2px;">BARAT</span>
-              <strong>Desa Badang</strong>
-            </div>
+          <!-- PROFIL SINGKAT -->
+          <div style="background:#f1f5f9; padding:16px; border-radius:8px; border:1px solid #e2e8f0; text-align:center;">
+            <p style="font-size:0.8rem; color:#475569; margin:0; line-height:1.5;">
+              <strong>Geser, cubit (zoom in), atau klik ikon</strong> langsung pada peta Google di samping untuk melihat detail dan ulasan tiap lokasi di dalam Desa Kauman.
+            </p>
           </div>
+
         </div>
       </div>
     </div>
