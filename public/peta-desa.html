@@ -146,12 +146,12 @@
   const tabLinks = {
     all: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15822.427772718131!2d112.247659!3d-7.685325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e5af5a8ef01f%3A0x33cf5a8d82df3e8c!2sKauman%2C%20Ngoro%2C%20Jombang%2C%20Jawa%20Timur!5e1!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid",
     
-    // Untuk lokasi spesifik kita gunakan mode query (?q=...) mode satelit (t=k)
-    pemerintahan: "https://maps.google.com/maps?q=Balai+Desa+Kauman,+Ngoro,+Jombang&t=k&z=18&output=embed",
-    fasilitas:    "https://maps.google.com/maps?q=Polindes+Kauman,+Ngoro,+Jombang&t=k&z=18&output=embed",
-    ibadah:       "https://maps.google.com/maps?q=Masjid+Desa+Kauman,+Ngoro,+Jombang&t=k&z=18&output=embed",
-    pendidikan:   "https://maps.google.com/maps?q=SDN+Kauman,+Ngoro,+Jombang&t=k&z=18&output=embed",
-    umkm:         "https://maps.google.com/maps?q=Ngoro,+Jombang&t=k&z=16&output=embed"
+    // Menggunakan titik koordinat (latitude, longitude) agar 100% akurat di dalam Desa Kauman
+    pemerintahan: "https://maps.google.com/maps?q=-7.6848,112.2612&t=k&z=18&output=embed",
+    fasilitas:    "https://maps.google.com/maps?q=-7.6862,112.2600&t=k&z=18&output=embed",
+    ibadah:       "https://maps.google.com/maps?q=-7.6840,112.2618&t=k&z=18&output=embed",
+    pendidikan:   "https://maps.google.com/maps?q=-7.6833,112.2595&t=k&z=18&output=embed",
+    umkm:         "https://maps.google.com/maps?q=-7.6872,112.2632&t=k&z=18&output=embed"
   };
 
   function switchTab(key) {
