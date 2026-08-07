@@ -133,7 +133,7 @@
 
     <div class="legend-panel">
       <div class="legend-title">Legenda Peta Administrasi Desa Kauman</div>
-      <div class="legend-item"><div class="ldash" style="border-color:#00C853;"></div> Batas Desa (Perkiraan)</div>
+      <div class="legend-item"><div class="ldash" style="border-color:#fbbf24;"></div> Batas Desa (Perkiraan)</div>
       <div class="legend-item"><div class="ldot" style="background:#e53935;"></div> Pemerintahan</div>
       <div class="legend-item"><div class="ldot" style="background:#1e88e5;"></div> Fasilitas Umum</div>
       <div class="legend-item"><div class="ldot" style="background:#8e24aa;"></div> Tempat Ibadah</div>
@@ -286,27 +286,13 @@ async function initMap() {
     }
   ).addTo(map);
 
-  // ---- Efek Spotlight (Luar Desa Gelap/Blur, Dalam Terang) ----
-  const outerBounds = [
-    [-90, -180],
-    [90, -180],
-    [90, 180],
-    [-90, 180]
-  ];
-
-  // Layer penutup luar desa
-  L.polygon([outerBounds, BATAS_DESA], {
-    color: 'transparent',
-    fillColor: '#000000',
-    fillOpacity: 0.55 // Tingkat kegelapan luar desa
-  }).addTo(map);
-
   // ---- Garis Batas Desa yang Jelas ----
   boundaryLayer = L.polygon(BATAS_DESA, {
-    color: '#00E676', // Hijau terang menyala
-    weight: 4,        // Garis tebal
-    fill: false,      // Kosongkan bagian dalam agar sangat jelas
-    dashArray: '8 6'
+    color: '#fbbf24', // Kuning/emas agar kontras dengan satelit
+    weight: 4,
+    dashArray: '10 5',
+    fillColor: '#fbbf24', 
+    fillOpacity: 0.1 // Sedikit warna transparan di dalam
   }).addTo(map);
   boundaryLayer.bindTooltip('Batas Administrasi Desa Kauman', { sticky:true });
 
