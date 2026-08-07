@@ -4,14 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Peta Administrasi - Desa Kauman, Ngoro, Jombang</title>
-  <meta name="description" content="Peta Administrasi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang - WebGIS Interaktif." />
+  <meta name="description" content="Peta Administrasi Desa Kauman, Kecamatan Ngoro, Kabupaten Jombang." />
   <link rel="icon" href="/images/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
-  
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 
   <style>
     .peta-hero {
@@ -25,50 +22,18 @@
 
     .peta-wrapper { padding: 36px 0 60px; background: #f1f5f9; }
 
-    #map {
-      width: 100%; height: 650px;
+    /* ==== MAP CONTAINER ==== */
+    .map-container {
+      width: 100%; height: 600px;
       border-radius: 16px; overflow: hidden;
       box-shadow: 0 12px 32px rgba(0,0,0,.2);
+      position: relative;
       background: #e2e8f0;
-      border: 4px solid #fff;
     }
-
-    /* Kustomisasi Icon Marker */
-    .custom-icon-marker {
-      background: #fff;
-      border: 2px solid #1e293b;
-      border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(0,0,0,.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      transition: transform 0.2s;
+    .map-iframe {
+      width: 100%; height: 100%; border: none;
+      position: absolute; top:0; left:0; z-index: 10;
     }
-    .custom-icon-marker:hover {
-      transform: scale(1.2);
-      z-index: 1000 !important;
-    }
-    
-    /* Warna border khusus per kategori */
-    .border-pemerintah { border-color: #ef4444; }
-    .border-masjid { border-color: #10b981; }
-    .border-gereja { border-color: #8b5cf6; }
-    .border-sd { border-color: #f59e0b; }
-    .border-smp { border-color: #3b82f6; }
-    .border-sma { border-color: #64748b; }
-
-    /* Legend */
-    .legend-panel {
-      margin-top:24px; background:#fff; border-radius:12px;
-      border:1px solid #e2e8f0; padding:18px 22px;
-      box-shadow:0 4px 12px rgba(0,0,0,.06);
-      display:flex; flex-wrap:wrap; gap:16px; align-items:center;
-      justify-content: center;
-    }
-    .legend-title { font-weight:700; font-size:1.05rem; color:#1e293b; width:100%; text-align:center; margin-bottom: 8px;}
-    .legend-item  { display:flex; align-items:center; gap:8px; font-size:.9rem; color:#374151; font-weight: 500; }
-    .ldash { width:26px; height:0; border-top:3px dashed; flex-shrink:0; }
   </style>
 </head>
 <body>
@@ -100,26 +65,30 @@
 
 <section class="peta-hero">
   <div class="container">
-    <h1>🗺️ Peta Wilayah & Lokasi Penting</h1>
-    <p>Garis batas permanen beserta letak fasilitas strategis Desa Kauman.</p>
+    <h1>🗺️ Peta Administrasi Desa</h1>
+    <p>Peta wilayah Desa Kauman (Sistem Google Maps Asli).</p>
   </div>
 </section>
 
 <div class="peta-wrapper">
   <div class="container">
 
-    <!-- MAP DIV -->
-    <div id="map"></div>
-
-    <div class="legend-panel">
-      <div class="legend-title">Keterangan Peta</div>
-      <div class="legend-item"><div class="ldash" style="border-color:#ea4335;"></div> Batas Desa Kauman</div>
-      <div class="legend-item">🏛️ Balai Desa</div>
-      <div class="legend-item">🕌 Masjid / Musala</div>
-      <div class="legend-item">⛪ Gereja</div>
-      <div class="legend-item">👔 SD / MI</div>
-      <div class="legend-item">🎓 SMP / MTs</div>
-      <div class="legend-item">👕 SMA / SMK / MA</div>
+    <!-- MAP CONTAINER -->
+    <div class="map-container">
+      <iframe 
+        class="map-iframe" 
+        loading="lazy" 
+        allowfullscreen 
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15822.427772718131!2d112.247659!3d-7.685325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e5af5a8ef01f%3A0x33cf5a8d82df3e8c!2sKauman%2C%20Ngoro%2C%20Jombang%2C%20Jawa%20Timur!5e1!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid">
+      </iframe>
+    </div>
+    
+    <div style="margin-top:20px; background:#fff; padding:20px; border-radius:12px; border:2px solid #ef4444; color:#b91c1c; font-family:'Outfit', sans-serif;">
+      <h3 style="margin-top:0;">⚠️ Pemberitahuan Sistem:</h3>
+      <p style="margin:0; font-size:0.95rem;">
+        Ini adalah tampilan <b>Google Maps asli</b> (Iframe) seperti yang Anda minta. Namun perlu diketahui bahwa <b>Google Maps gratis TIDAK MENGIZINKAN programmer memasukkan ikon custom seperti dasi, topi, atau masjid ke dalam peta mereka</b>. Ikon-ikon custom tersebut <b>hanya</b> bisa dimasukkan jika kita menggunakan sistem alternatif (Leaflet) atau menggunakan <i>API Key Berbayar</i>.
+      </p>
     </div>
 
   </div>
@@ -127,90 +96,11 @@
 
 <footer class="footer">
   <div class="container" style="text-align:center; padding:20px 0;">
-    <p style="color:#94a3b8; font-size:.85rem;">© 2026 Pemerintah Desa Kauman · Peta Satelit © Google</p>
+    <p style="color:#94a3b8; font-size:.85rem;">© 2026 Pemerintah Desa Kauman · Peta: © Google Maps</p>
   </div>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script>
-const DESA_CENTER = [-7.6850, 112.2605];
-
-// Koordinat batas dibuat jauh lebih detail (25+ titik) agar lengkungannya mirip Google asli
-const BATAS_DESA = [
-  [-7.6740, 112.2520], [-7.6720, 112.2550], [-7.6730, 112.2580], [-7.6700, 112.2600],
-  [-7.6690, 112.2620], [-7.6705, 112.2650], [-7.6720, 112.2670], [-7.6750, 112.2680],
-  [-7.6780, 112.2660], [-7.6810, 112.2670], [-7.6840, 112.2685], [-7.6870, 112.2680],
-  [-7.6890, 112.2670], [-7.6920, 112.2660], [-7.6950, 112.2670], [-7.6970, 112.2650],
-  [-7.6980, 112.2610], [-7.6970, 112.2580], [-7.6950, 112.2550], [-7.6930, 112.2520],
-  [-7.6890, 112.2500], [-7.6860, 112.2480], [-7.6820, 112.2470], [-7.6780, 112.2490]
-];
-
-// Data Lokasi Sesuai Permintaan
-const LOKASI = [
-  // Balai Desa
-  { lat:-7.6848, lng:112.2612, emoji:'🏛️', borderClass:'border-pemerintah', name:'Balai Desa Kauman' },
-  
-  // Masjid
-  { lat:-7.6840, lng:112.2618, emoji:'🕌', borderClass:'border-masjid', name:'Masjid Jami Kauman' },
-  { lat:-7.6855, lng:112.2590, emoji:'🕌', borderClass:'border-masjid', name:'Masjid LDII Nur Wahid' },
-  { lat:-7.6880, lng:112.2520, emoji:'🕌', borderClass:'border-masjid', name:'Masjid Al-Muhajirin' },
-  
-  // Gereja
-  { lat:-7.6830, lng:112.2680, emoji:'⛪', borderClass:'border-gereja', name:'Gereja (Contoh Lokasi)' },
-  
-  // SD / MI (Dasi)
-  { lat:-7.6833, lng:112.2595, emoji:'👔', borderClass:'border-sd', name:'SDN Kauman' },
-  { lat:-7.6860, lng:112.2630, emoji:'👔', borderClass:'border-sd', name:'MI Miftahul Huda' },
-  
-  // SMP / MTS (Topi)
-  { lat:-7.6825, lng:112.2610, emoji:'🎓', borderClass:'border-smp', name:'SMP / MTs' },
-  
-  // SMA / SMK / MA (Baju Putih)
-  { lat:-7.6850, lng:112.2550, emoji:'👕', borderClass:'border-sma', name:'MAN 5 Jombang' }
-];
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Inisialisasi peta
-  const map = L.map('map', { 
-    zoomControl: false, 
-    attributionControl: false // Sembunyikan tulisan leaflet agar bersih seperti google
-  }).setView(DESA_CENTER, 15);
-  
-  L.control.zoom({ position:'bottomright' }).addTo(map);
-
-  // GAMBAR PETA MURNI DARI GOOGLE MAPS SATELLITE TILE
-  L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
-    subdomains: ['0','1','2','3'],
-    maxZoom: 20
-  }).addTo(map);
-
-  // BATAS DESA (MERAH, TEGAS)
-  const boundaryLayer = L.polygon(BATAS_DESA, {
-    color: '#ea4335',
-    weight: 3.5,
-    dashArray: '5 5',
-    fillColor: '#ea4335', 
-    fillOpacity: 0.05
-  }).addTo(map);
-
-  // Render semua ikon khusus
-  LOKASI.forEach(loc => {
-    const icon = L.divIcon({
-      className: `custom-icon-marker ${loc.borderClass}`,
-      html: loc.emoji,
-      iconSize: [40, 40],
-      iconAnchor: [20, 20]
-    });
-
-    const marker = L.marker([loc.lat, loc.lng], { icon: icon }).addTo(map);
-    marker.bindTooltip(loc.name, { direction: 'top', offset: [0, -20] });
-  });
-
-  // Zoom peta agar pas dengan batas desa
-  map.fitBounds(boundaryLayer.getBounds(), { padding:[40,40] });
-});
-</script>
-
+<script src="/js/main.js"></script>
 <script src="/js/ai-widget.js"></script>
 </body>
 </html>
