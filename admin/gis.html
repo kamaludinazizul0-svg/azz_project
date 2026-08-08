@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/admin/css/admin.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <style>
     .map-picker {
       height: 400px;
@@ -17,6 +18,7 @@
       border: 2px solid #e2e8f0;
       margin-top: 8px;
     }
+
     .gis-item {
       display: flex;
       gap: 16px;
@@ -26,154 +28,181 @@
       margin-bottom: 16px;
       background: #fff;
     }
+
     .gis-img {
       width: 120px;
       height: 120px;
       object-fit: cover;
       border-radius: 8px;
     }
-    .gis-content { flex: 1; }
-    .gis-title { font-weight: 700; font-size: 1.1rem; color: #1e293b; margin-bottom: 4px; }
-    .gis-category { font-size: 0.8rem; padding: 2px 8px; border-radius: 4px; background: #e8f5e9; color: #2e7d32; display: inline-block; margin-bottom: 8px; font-weight: 600; }
-    .gis-coords { font-size: 0.85rem; color: #64748b; font-family: monospace; }
+
+    .gis-content {
+      flex: 1;
+    }
+
+    .gis-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .gis-category {
+      font-size: 0.8rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #e8f5e9;
+      color: #2e7d32;
+      display: inline-block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .gis-coords {
+      font-size: 0.85rem;
+      color: #64748b;
+      font-family: monospace;
+    }
   </style>
 </head>
+
 <body>
 
-<div class="admin-layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <img src="/images/logo.png" alt="Logo">
-      <h2>Panel Admin</h2>
-      <button class="close-sidebar" onclick="document.getElementById('sidebar').classList.remove('open')">×</button>
-    </div>
-    <nav class="sidebar-nav">
-      <a href="dashboard.html">📊 Dashboard</a>
-      <a href="profil-desa.html">📄 Profil Desa</a>
-      <a href="perangkat.html">👥 Perangkat Desa</a>
-      <a href="berita.html">📰 Berita & Artikel</a>
-      <a href="agenda.html">📅 Agenda Desa</a>
-      <a href="surat.html">✉️ Permohonan Surat</a>
-      <a href="pengaduan.html">📢 Pengaduan Warga</a>
-      <a href="permohonan-info.html">ℹ️ Permohonan Info</a>
-      <a href="penduduk.html">👥 Data Penduduk</a>
-      <a href="statistik.html">📈 Statistik Desa</a>
-      <a href="idm.html">🏆 IDM</a>
-      <a href="apbdesa.html">💰 APBDesa</a>
-      <a href="ppid.html">📂 PPID</a>
-      <a href="listing.html">💼 Listing UMKM</a>
-      <a href="galeri.html">📷 Galeri</a>
-      <a href="gis.html" class="active">🗺️ Peta GIS</a>
-      <a href="darurat.html">☎️ Kontak Darurat</a>
-      <a href="slider.html">🖼️ Slider Banner</a>
-      <a href="mitra.html">🤝 Mitra & Link</a>
-      <a href="log-aktivitas.html">🕒 Log Aktivitas</a>
-      <a href="pengaturan.html">⚙️ Pengaturan</a>
-      <a href="#" onclick="logout()" style="color: #ef4444; margin-top: 20px;">🚪 Keluar</a>
-    </nav>
-  </aside>
-
-  <main class="main-content">
-    <header class="topbar">
-      <button class="burger-btn" onclick="document.getElementById('sidebar').classList.add('open')">☰</button>
-      <div class="topbar-title">Manajemen Peta GIS (WebGIS)</div>
-      <div class="user-profile">
-        <span id="adminName">Admin</span>
-        <div class="avatar">A</div>
+  <div class="admin-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="/images/logo.png" alt="Logo">
+        <h2>Panel Admin</h2>
+        <button class="close-sidebar" onclick="document.getElementById('sidebar').classList.remove('open')">×</button>
       </div>
-    </header>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="profil-desa.html">📄 Profil Desa</a>
+        <a href="perangkat.html">👥 Perangkat Desa</a>
+        <a href="berita.html">📰 Berita & Artikel</a>
+        <a href="agenda.html">📅 Agenda Desa</a>
+        <a href="surat.html">✉️ Permohonan Surat</a>
+        <a href="pengaduan.html">📢 Pengaduan Warga</a>
+        <a href="permohonan-info.html">ℹ️ Permohonan Info</a>
+        <a href="penduduk.html">👥 Data Penduduk</a>
+        <a href="statistik.html">📈 Statistik Desa</a>
+        <a href="idm.html">🏆 IDM</a>
+        <a href="apbdesa.html">💰 APBDesa</a>
+        <a href="ppid.html">📂 PPID</a>
+        <a href="listing.html">💼 Listing UMKM</a>
+        <a href="galeri.html">📷 Galeri</a>
+        <a href="gis.html" class="active">🗺️ Peta GIS</a>
+        <a href="darurat.html">☎️ Kontak Darurat</a>
+        <a href="slider.html">🖼️ Slider Banner</a>
+        <a href="mitra.html">🤝 Mitra & Link</a>
+        <a href="log-aktivitas.html">🕒 Log Aktivitas</a>
+        <a href="pengaturan.html">⚙️ Pengaturan</a>
+        <a href="#" onclick="logout()" style="color: #ef4444; margin-top: 20px;">🚪 Keluar</a>
+      </nav>
+    </aside>
 
-    <div class="content">
-      <div class="card" style="margin-bottom: 24px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
-          <h3 style="font-size:1.2rem; color:#1e293b;">Daftar Titik Lokasi</h3>
-          <button class="btn-primary" onclick="openModal()">+ Tambah Lokasi</button>
+    <main class="main-content">
+      <header class="topbar">
+        <button class="burger-btn" onclick="document.getElementById('sidebar').classList.add('open')">☰</button>
+        <div class="topbar-title">Manajemen Peta GIS (WebGIS)</div>
+        <div class="user-profile">
+          <span id="adminName">Admin</span>
+          <div class="avatar">A</div>
         </div>
-        <div id="gisList">Memuat data...</div>
-      </div>
-    </div>
-  </main>
-</div>
+      </header>
 
-<!-- Modal Form -->
-<div class="modal" id="modalForm">
-  <div class="modal-content" style="max-width: 700px;">
-    <h3 id="modalTitle" style="margin-bottom:16px;">Tambah Lokasi Peta</h3>
-    <form id="gisForm" onsubmit="saveGis(event)">
-      <input type="hidden" id="gisId" />
-      
-      <div class="form-group">
-        <label>Nama Lokasi / Objek <span class="req">*</span></label>
-        <input type="text" id="gNama" required />
-      </div>
-      
-      <div class="form-group">
-        <label>Kategori <span class="req">*</span></label>
-        <select id="gKategori" required>
-          <option value="">-- Pilih --</option>
-          <option value="Fasilitas Umum">Fasilitas Umum</option>
-          <option value="Kantor Pemerintahan">Kantor Pemerintahan</option>
-          <option value="UMKM">UMKM</option>
-          <option value="Infrastruktur">Infrastruktur</option>
-          <option value="Pariwisata">Pariwisata</option>
-          <option value="Lainnya">Lainnya</option>
-        </select>
-      </div>
-      
-      <div class="form-group">
-        <label>Foto Lokasi (Opsional)</label>
-        <input type="file" id="gFoto" accept="image/*" />
-        <small>Biarkan kosong jika tidak ingin mengubah foto</small>
-      </div>
-      
-      <div class="form-group">
-        <label>Deskripsi (Opsional)</label>
-        <textarea id="gDeskripsi" rows="3"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Pilih Lokasi di Peta <span class="req">*</span></label>
-        <small style="display:block;margin-bottom:8px;color:#64748b;">Geser marker atau klik pada peta untuk menentukan koordinat.</small>
-        <div style="display:flex; gap:16px; margin-bottom:8px;">
-          <input type="text" id="gLat" placeholder="Latitude" required readonly style="background:#f1f5f9" />
-          <input type="text" id="gLng" placeholder="Longitude" required readonly style="background:#f1f5f9" />
+      <div class="content">
+        <div class="card" style="margin-bottom: 24px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+            <h3 style="font-size:1.2rem; color:#1e293b;">Daftar Titik Lokasi</h3>
+            <button class="btn-primary" onclick="openModal()">+ Tambah Lokasi</button>
+          </div>
+          <div id="gisList">Memuat data...</div>
         </div>
-        <div id="mapPicker" class="map-picker"></div>
       </div>
-
-      <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
-        <button type="button" class="btn-secondary" onclick="closeModal()">Batal</button>
-        <button type="submit" class="btn-primary" id="btnSave">Simpan Lokasi</button>
-      </div>
-    </form>
+    </main>
   </div>
-</div>
 
-<script src="/admin/js/admin.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script>
-let gisData = [];
-let mapPicker;
-let markerPicker;
+  <!-- Modal Form -->
+  <div class="modal" id="modalForm">
+    <div class="modal-content" style="max-width: 700px;">
+      <h3 id="modalTitle" style="margin-bottom:16px;">Tambah Lokasi Peta</h3>
+      <form id="gisForm" onsubmit="saveGis(event)">
+        <input type="hidden" id="gisId" />
 
-async function loadGis() {
-  try {
-    const res = await fetch('/api/gis');
-    gisData = await res.json();
-    renderList();
-  } catch (err) {
-    console.error(err);
-  }
-}
+        <div class="form-group">
+          <label>Nama Lokasi / Objek <span class="req">*</span></label>
+          <input type="text" id="gNama" required />
+        </div>
 
-function renderList() {
-  const container = document.getElementById('gisList');
-  if (gisData.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:#64748b;padding:24px;">Belum ada titik lokasi yang ditambahkan.</div>';
-    return;
-  }
-  
-  container.innerHTML = gisData.map(g => `
+        <div class="form-group">
+          <label>Kategori <span class="req">*</span></label>
+          <select id="gKategori" required>
+            <option value="">-- Pilih --</option>
+            <option value="Fasilitas Umum">Fasilitas Umum</option>
+            <option value="Kantor Pemerintahan">Kantor Pemerintahan</option>
+            <option value="UMKM">UMKM</option>
+            <option value="Infrastruktur">Infrastruktur</option>
+            <option value="Pariwisata">Pariwisata</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Foto Lokasi (Opsional)</label>
+          <input type="file" id="gFoto" accept="image/*" />
+          <small>Biarkan kosong jika tidak ingin mengubah foto</small>
+        </div>
+
+        <div class="form-group">
+          <label>Deskripsi (Opsional)</label>
+          <textarea id="gDeskripsi" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Pilih Lokasi di Peta <span class="req">*</span></label>
+          <small style="display:block;margin-bottom:8px;color:#64748b;">Geser marker atau klik pada peta untuk
+            menentukan koordinat.</small>
+          <div style="display:flex; gap:16px; margin-bottom:8px;">
+            <input type="text" id="gLat" placeholder="Latitude" required readonly style="background:#f1f5f9" />
+            <input type="text" id="gLng" placeholder="Longitude" required readonly style="background:#f1f5f9" />
+          </div>
+          <div id="mapPicker" class="map-picker"></div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
+          <button type="button" class="btn-secondary" onclick="closeModal()">Batal</button>
+          <button type="submit" class="btn-primary" id="btnSave">Simpan Lokasi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/admin/js/admin.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    let gisData = [];
+    let mapPicker;
+    let markerPicker;
+
+    async function loadGis() {
+      try {
+        const res = await fetch('/api/gis');
+        gisData = await res.json();
+        renderList();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function renderList() {
+      const container = document.getElementById('gisList');
+      if (gisData.length === 0) {
+        container.innerHTML = '<div style="text-align:center;color:#64748b;padding:24px;">Belum ada titik lokasi yang ditambahkan.</div>';
+        return;
+      }
+
+      container.innerHTML = gisData.map(g => `
     <div class="gis-item">
       ${g.foto ? `<img src="${g.foto}" class="gis-img">` : `<div class="gis-img" style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#94a3b8">No Image</div>`}
       <div class="gis-content">
@@ -189,134 +218,135 @@ function renderList() {
       </div>
     </div>
   `).join('');
-}
-
-function openModal() {
-  document.getElementById('modalForm').classList.add('show');
-  document.getElementById('gisForm').reset();
-  document.getElementById('gisId').value = '';
-  document.getElementById('modalTitle').textContent = 'Tambah Lokasi';
-  initMapPicker(-7.683333, 112.261667); // Default Kauman center
-}
-
-function closeModal() {
-  document.getElementById('modalForm').classList.remove('show');
-}
-
-function editGis(id) {
-  const g = gisData.find(x => x.id === id);
-  if (!g) return;
-  document.getElementById('gisId').value = g.id;
-  document.getElementById('gNama').value = g.nama;
-  document.getElementById('gKategori').value = g.kategori;
-  document.getElementById('gDeskripsi').value = g.deskripsi;
-  document.getElementById('gLat').value = g.lat;
-  document.getElementById('gLng').value = g.lng;
-  
-  document.getElementById('modalTitle').textContent = 'Edit Lokasi';
-  document.getElementById('modalForm').classList.add('show');
-  
-  initMapPicker(parseFloat(g.lat), parseFloat(g.lng));
-}
-
-function initMapPicker(lat, lng) {
-  if (mapPicker) {
-    mapPicker.remove();
-  }
-  
-  setTimeout(() => {
-    mapPicker = L.map('mapPicker').setView([lat, lng], 15);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapPicker);
-    
-    // Highlight Area Desa (Radius 1.5 KM)
-    L.circle([-7.683333, 112.261667], {
-      color: '#1b2e1c',
-      fillColor: '#4ade80',
-      fillOpacity: 0.15,
-      radius: 1500, // 1.5 km
-      weight: 3,
-      dashArray: '5, 10'
-    }).addTo(mapPicker);
-
-    markerPicker = L.marker([lat, lng], { draggable: true }).addTo(mapPicker);
-    
-    // Update inputs when marker dragged
-    markerPicker.on('dragend', function(e) {
-      const pos = e.target.getLatLng();
-      document.getElementById('gLat').value = pos.lat.toFixed(6);
-      document.getElementById('gLng').value = pos.lng.toFixed(6);
-    });
-    
-    // Update marker when map clicked
-    mapPicker.on('click', function(e) {
-      markerPicker.setLatLng(e.latlng);
-      document.getElementById('gLat').value = e.latlng.lat.toFixed(6);
-      document.getElementById('gLng').value = e.latlng.lng.toFixed(6);
-    });
-    
-    // Pre-fill if editing existing
-    if(document.getElementById('gLat').value === '') {
-       document.getElementById('gLat').value = lat.toFixed(6);
-       document.getElementById('gLng').value = lng.toFixed(6);
     }
-  }, 200); // delay to ensure modal is visible before map renders
-}
 
-async function saveGis(e) {
-  e.preventDefault();
-  const btn = document.getElementById('btnSave');
-  btn.disabled = true;
-  btn.textContent = 'Menyimpan...';
-  
-  const id = document.getElementById('gisId').value;
-  const fd = new FormData();
-  fd.append('nama', document.getElementById('gNama').value);
-  fd.append('kategori', document.getElementById('gKategori').value);
-  fd.append('lat', document.getElementById('gLat').value);
-  fd.append('lng', document.getElementById('gLng').value);
-  fd.append('deskripsi', document.getElementById('gDeskripsi').value);
-  
-  const fileInput = document.getElementById('gFoto');
-  if (fileInput.files[0]) fd.append('foto', fileInput.files[0]);
-  
-  const token = localStorage.getItem('token');
-  try {
-    const url = id ? '/api/gis/' + id : '/api/gis';
-    const method = id ? 'PUT' : 'POST';
-    const res = await fetch(url, {
-      method,
-      headers: { 'Authorization': 'Bearer ' + token },
-      body: fd
-    });
-    if (res.ok) {
-      closeModal();
+    function openModal() {
+      document.getElementById('modalForm').classList.add('show');
+      document.getElementById('gisForm').reset();
+      document.getElementById('gisId').value = '';
+      document.getElementById('modalTitle').textContent = 'Tambah Lokasi';
+      initMapPicker(-7.683333, 112.261667); // Default Kauman center
+    }
+
+    function closeModal() {
+      document.getElementById('modalForm').classList.remove('show');
+    }
+
+    function editGis(id) {
+      const g = gisData.find(x => x.id === id);
+      if (!g) return;
+      document.getElementById('gisId').value = g.id;
+      document.getElementById('gNama').value = g.nama;
+      document.getElementById('gKategori').value = g.kategori;
+      document.getElementById('gDeskripsi').value = g.deskripsi;
+      document.getElementById('gLat').value = g.lat;
+      document.getElementById('gLng').value = g.lng;
+
+      document.getElementById('modalTitle').textContent = 'Edit Lokasi';
+      document.getElementById('modalForm').classList.add('show');
+
+      initMapPicker(parseFloat(g.lat), parseFloat(g.lng));
+    }
+
+    function initMapPicker(lat, lng) {
+      if (mapPicker) {
+        mapPicker.remove();
+      }
+
+      setTimeout(() => {
+        mapPicker = L.map('mapPicker').setView([lat, lng], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapPicker);
+
+        // Highlight Area Desa (Radius 1.5 KM)
+        L.circle([-7.683333, 112.261667], {
+          color: '#1b2e1c',
+          fillColor: '#4ade80',
+          fillOpacity: 0.15,
+          radius: 1500, // 1.5 km
+          weight: 3,
+          dashArray: '5, 10'
+        }).addTo(mapPicker);
+
+        markerPicker = L.marker([lat, lng], { draggable: true }).addTo(mapPicker);
+
+        // Update inputs when marker dragged
+        markerPicker.on('dragend', function (e) {
+          const pos = e.target.getLatLng();
+          document.getElementById('gLat').value = pos.lat.toFixed(6);
+          document.getElementById('gLng').value = pos.lng.toFixed(6);
+        });
+
+        // Update marker when map clicked
+        mapPicker.on('click', function (e) {
+          markerPicker.setLatLng(e.latlng);
+          document.getElementById('gLat').value = e.latlng.lat.toFixed(6);
+          document.getElementById('gLng').value = e.latlng.lng.toFixed(6);
+        });
+
+        // Pre-fill if editing existing
+        if (document.getElementById('gLat').value === '') {
+          document.getElementById('gLat').value = lat.toFixed(6);
+          document.getElementById('gLng').value = lng.toFixed(6);
+        }
+      }, 200); // delay to ensure modal is visible before map renders
+    }
+
+    async function saveGis(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSave');
+      btn.disabled = true;
+      btn.textContent = 'Menyimpan...';
+
+      const id = document.getElementById('gisId').value;
+      const fd = new FormData();
+      fd.append('nama', document.getElementById('gNama').value);
+      fd.append('kategori', document.getElementById('gKategori').value);
+      fd.append('lat', document.getElementById('gLat').value);
+      fd.append('lng', document.getElementById('gLng').value);
+      fd.append('deskripsi', document.getElementById('gDeskripsi').value);
+
+      const fileInput = document.getElementById('gFoto');
+      if (fileInput.files[0]) fd.append('foto', fileInput.files[0]);
+
+      const token = localStorage.getItem('token');
+      try {
+        const url = id ? '/api/gis/' + id : '/api/gis';
+        const method = id ? 'PUT' : 'POST';
+        const res = await fetch(url, {
+          method,
+          headers: { 'Authorization': 'Bearer ' + token },
+          body: fd
+        });
+        if (res.ok) {
+          closeModal();
+          loadGis();
+        } else {
+          alert('Gagal menyimpan data');
+        }
+      } catch (err) {
+        alert('Terjadi kesalahan');
+      }
+      btn.disabled = false;
+      btn.textContent = 'Simpan Lokasi';
+    }
+
+    async function deleteGis(id) {
+      if (!confirm('Yakin ingin menghapus titik lokasi ini?')) return;
+      const token = localStorage.getItem('token');
+      try {
+        const res = await fetch('/api/gis/' + id, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (res.ok) loadGis();
+      } catch (e) { alert('Gagal menghapus data'); }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
       loadGis();
-    } else {
-      alert('Gagal menyimpan data');
-    }
-  } catch(err) {
-    alert('Terjadi kesalahan');
-  }
-  btn.disabled = false;
-  btn.textContent = 'Simpan Lokasi';
-}
-
-async function deleteGis(id) {
-  if (!confirm('Yakin ingin menghapus titik lokasi ini?')) return;
-  const token = localStorage.getItem('token');
-  try {
-    const res = await fetch('/api/gis/' + id, {
-      method: 'DELETE',
-      headers: { 'Authorization': 'Bearer ' + token }
     });
-    if (res.ok) loadGis();
-  } catch(e) { alert('Gagal menghapus data'); }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  checkAuth();
-  loadGis();
-});
-</script>
+  </script>
 </body>
+
 </html>

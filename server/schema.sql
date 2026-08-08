@@ -1,4 +1,10 @@
-DROP TABLE IF EXISTS berita;
+-- =====================================================
+-- Schema Database Website Desa Kauman
+-- Versi: Production-Safe (TANPA DROP TABLE)
+-- Gunakan script ini untuk setup database baru.
+-- Untuk update database yang sudah ada, gunakan ALTER TABLE.
+-- =====================================================
+
 CREATE TABLE IF NOT EXISTS berita (
   id BIGINT PRIMARY KEY,
   judul VARCHAR(255),
@@ -15,7 +21,6 @@ CREATE TABLE IF NOT EXISTS berita (
   lokasi VARCHAR(255)
 );
 
-DROP TABLE IF EXISTS agenda;
 CREATE TABLE IF NOT EXISTS agenda (
   id BIGINT PRIMARY KEY,
   nama VARCHAR(255),
@@ -25,7 +30,6 @@ CREATE TABLE IF NOT EXISTS agenda (
   deskripsi TEXT
 );
 
-DROP TABLE IF EXISTS telepon_darurat;
 CREATE TABLE IF NOT EXISTS telepon_darurat (
   id BIGINT PRIMARY KEY,
   nama VARCHAR(255),
@@ -33,25 +37,18 @@ CREATE TABLE IF NOT EXISTS telepon_darurat (
   kategori VARCHAR(100)
 );
 
-DROP TABLE IF EXISTS surat;
-CREATE TABLE IF NOT EXISTS surat (
+CREATE TABLE IF NOT EXISTS saran (
   id BIGINT PRIMARY KEY,
   nama VARCHAR(255),
-  nik VARCHAR(50),
-  alamat TEXT,
-  no_wa VARCHAR(50),
-  jenis_surat VARCHAR(150),
-  keperluan TEXT,
-  lampiran_ktp VARCHAR(255),
-  lampiran VARCHAR(255),
+  no_hp VARCHAR(50),
+  kategori VARCHAR(100),
+  rating VARCHAR(50),
+  judul VARCHAR(255),
+  isi TEXT,
   created_at VARCHAR(100),
-  workflow_stage VARCHAR(50) DEFAULT 'Operator',
-  status VARCHAR(50) DEFAULT 'Pending',
-  catatan TEXT,
-  hasil_surat VARCHAR(255)
+  status VARCHAR(50) DEFAULT 'Baru'
 );
 
-DROP TABLE IF EXISTS pengaduan;
 CREATE TABLE IF NOT EXISTS pengaduan (
   id BIGINT PRIMARY KEY,
   nama VARCHAR(255),
@@ -67,7 +64,6 @@ CREATE TABLE IF NOT EXISTS pengaduan (
   catatan TEXT
 );
 
-DROP TABLE IF EXISTS permohonan_info;
 CREATE TABLE IF NOT EXISTS permohonan_info (
   id BIGINT PRIMARY KEY,
   nama VARCHAR(255),
@@ -83,7 +79,6 @@ CREATE TABLE IF NOT EXISTS permohonan_info (
   link_dokumen VARCHAR(255)
 );
 
-DROP TABLE IF EXISTS perangkat;
 CREATE TABLE IF NOT EXISTS perangkat (
   id BIGINT PRIMARY KEY,
   nama VARCHAR(255),
@@ -91,10 +86,10 @@ CREATE TABLE IF NOT EXISTS perangkat (
   foto VARCHAR(255),
   nip VARCHAR(100),
   periode VARCHAR(100),
-  urutan INT
+  urutan INT,
+  tugas TEXT
 );
 
-DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
   id BIGINT PRIMARY KEY,
   username VARCHAR(100) UNIQUE,
@@ -103,7 +98,6 @@ CREATE TABLE IF NOT EXISTS users (
   role VARCHAR(50)
 );
 
-DROP TABLE IF EXISTS logs;
 CREATE TABLE IF NOT EXISTS logs (
   id BIGINT PRIMARY KEY,
   waktu VARCHAR(100),
@@ -112,7 +106,6 @@ CREATE TABLE IF NOT EXISTS logs (
   detail TEXT
 );
 
-DROP TABLE IF EXISTS mitra;
 CREATE TABLE IF NOT EXISTS mitra (
   id BIGINT PRIMARY KEY,
   nama VARCHAR(255),
@@ -122,7 +115,6 @@ CREATE TABLE IF NOT EXISTS mitra (
   link VARCHAR(255)
 );
 
-DROP TABLE IF EXISTS ppid;
 CREATE TABLE IF NOT EXISTS ppid (
   id BIGINT PRIMARY KEY,
   kategori VARCHAR(100),
@@ -134,7 +126,6 @@ CREATE TABLE IF NOT EXISTS ppid (
   aktif BOOLEAN DEFAULT TRUE
 );
 
-DROP TABLE IF EXISTS gis_points;
 CREATE TABLE IF NOT EXISTS gis_points (
   id BIGINT PRIMARY KEY,
   nama VARCHAR(255),
@@ -144,4 +135,82 @@ CREATE TABLE IF NOT EXISTS gis_points (
   deskripsi TEXT,
   foto VARCHAR(255),
   created_at VARCHAR(100)
+);
+
+-- Tabel data format JSON (id + data)
+CREATE TABLE IF NOT EXISTS desa_profil (
+  id BIGINT PRIMARY KEY,
+  data LONGTEXT
+);
+
+CREATE TABLE IF NOT EXISTS slider (
+  id BIGINT PRIMARY KEY,
+  data LONGTEXT
+);
+
+CREATE TABLE IF NOT EXISTS galeri (
+  id BIGINT PRIMARY KEY,
+  data LONGTEXT
+);
+
+CREATE TABLE IF NOT EXISTS listing (
+  id BIGINT PRIMARY KEY,
+  data LONGTEXT
+);
+
+CREATE TABLE IF NOT EXISTS apbdesa (
+  id BIGINT PRIMARY KEY,
+  data LONGTEXT
+);
+
+CREATE TABLE IF NOT EXISTS idm (
+  id BIGINT PRIMARY KEY,
+  data LONGTEXT
+);
+
+CREATE TABLE IF NOT EXISTS program (
+  id BIGINT PRIMARY KEY,
+  data LONGTEXT
+);
+
+CREATE TABLE IF NOT EXISTS pendidikan (
+  id BIGINT PRIMARY KEY,
+  data LONGTEXT
+);
+
+CREATE TABLE IF NOT EXISTS statistik_tambahan (
+  id BIGINT PRIMARY KEY,
+  data LONGTEXT
+);
+
+CREATE TABLE IF NOT EXISTS pembangunan (
+  id BIGINT PRIMARY KEY,
+  nama VARCHAR(255),
+  lokasi VARCHAR(255),
+  anggaran VARCHAR(100),
+  sumber_dana VARCHAR(150),
+  progress INT,
+  foto VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS statistik (
+  id BIGINT PRIMARY KEY,
+  judul VARCHAR(255),
+  tipe VARCHAR(50),
+  labels LONGTEXT,
+  data LONGTEXT
+);
+
+CREATE TABLE IF NOT EXISTS desa_config (
+  id INT NOT NULL AUTO_INCREMENT,
+  config_key VARCHAR(100) NOT NULL,
+  config_value LONGTEXT NOT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY config_key (config_key)
+);
+
+CREATE TABLE IF NOT EXISTS settings (
+  key_name VARCHAR(255) NOT NULL PRIMARY KEY,
+  value_data LONGTEXT
 );

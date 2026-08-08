@@ -8,8 +8,11 @@ services:
     environment:
       - DB_HOST=db
       - DB_USER=root
-      - DB_PASSWORD=root
+      - DB_PASSWORD=97ba531fd2ebfa07436c93ce09244861
       - DB_NAME=db_desa_kauman
+      - JWT_SECRET=${JWT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
     depends_on:
       - db
     volumes:
@@ -22,7 +25,7 @@ services:
     ports:
       - "3307:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=97ba531fd2ebfa07436c93ce09244861
       - MYSQL_DATABASE=db_desa_kauman
     volumes:
       - db_data:/var/lib/mysql

@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const perangkat = await API.perangkat();
   if (perangkat?.length) {
     document.getElementById('perangkatGrid').innerHTML = perangkat.map(p =>
-      `<div class="perangkat-card fade-in"><div class="perangkat-foto"><img src="${p.foto}" alt="${p.nama}" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem>&#128100;</span>'" /></div><div class="perangkat-nama">${p.nama}</div><div class="perangkat-jabatan">${p.jabatan}</div></div>`).join('');
+      `<div class="perangkat-card fade-in"><div class="perangkat-foto"><img src="${p.foto}" alt="${p.nama}" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem>&#128100;</span>'" /></div><div class="perangkat-nama">${p.nama}</div><div class="perangkat-jabatan">${p.jabatan}</div><div class="perangkat-tugas" style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;text-align:center;padding:0 10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${p.tugas || 'Belum ada deskripsi tugas.'}</div></div>`).join('');
     initScrollAnimations();
   }
 

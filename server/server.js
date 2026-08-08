@@ -427,9 +427,10 @@ app.post('/api/perangkat', authMiddleware, upload.single('foto'), async (req, re
     if (data.nip === undefined) data.nip = null;
     if (data.periode === undefined) data.periode = null;
     if (data.urutan === undefined) data.urutan = null;
+    if (data.tugas === undefined) data.tugas = null;
     
-    const query = 'INSERT INTO perangkat (id, nama, jabatan, foto, nip, periode, urutan) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    const values = [newId, data.nama, data.jabatan, data.foto, data.nip, data.periode, data.urutan];
+    const query = 'INSERT INTO perangkat (id, nama, jabatan, foto, nip, periode, urutan, tugas) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const values = [newId, data.nama, data.jabatan, data.foto, data.nip, data.periode, data.urutan, data.tugas];
     await db.query(query, values);
     res.json({ message: 'Berhasil ditambahkan', id: newId });
   } catch (err) { res.status(500).json({error: err.message}); }
@@ -441,8 +442,8 @@ app.put('/api/perangkat/:id', authMiddleware, upload.single('foto'), async (req,
     const data = { ...existing[0], ...req.body };
     if (req.file) data.foto = '/uploads/' + req.file.filename;
     
-    const query = 'UPDATE perangkat SET nama = ?, jabatan = ?, foto = ?, nip = ?, periode = ?, urutan = ? WHERE id = ?';
-    const values = [data.nama, data.jabatan, data.foto, data.nip, data.periode, data.urutan, req.params.id];
+    const query = 'UPDATE perangkat SET nama = ?, jabatan = ?, foto = ?, nip = ?, periode = ?, urutan = ?, tugas = ? WHERE id = ?';
+    const values = [data.nama, data.jabatan, data.foto, data.nip, data.periode, data.urutan, data.tugas, req.params.id];
     await db.query(query, values);
     res.json({ message: 'Berhasil diubah' });
   } catch (err) { res.status(500).json({error: err.message}); }
@@ -734,8 +735,8 @@ app.delete('/api/pendidikan/:id', authMiddleware, async (req, res) => {
 });
 
 // ====================== GALERI ======================
-app.get('/api/galeri', async (req, res) => { try { const [rows] = await db.query('SELECT data FROM galeri'); res.json(rows.map(r => typeof r.data === 'string' ? JSON.parse(r.data) : r.data)); } catch (err) { res.status(500).json({error: err.message}); } });
-app.get('/api/galeri/:id', async (req, res) => { try { const [rows] = await db.query('SELECT data FROM galeri WHERE id = ?', [req.params.id]); res.json(rows.length ? (typeof rows[0].data === 'string' ? JSON.parse(rows[0].data) : rows[0].data) : {}); } catch (err) { res.status(500).json({error: err.message}); } });
+app.get('/api/galeri', async (req, res) => { try { const [rows] = await db.query('SELECT id, data FROM galeri'); res.json(rows.map(r => { let d = typeof r.data === 'string' ? JSON.parse(r.data) : (r.data || {}); d.id = r.id; return d; })); } catch (err) { res.status(500).json({error: err.message}); } });
+app.get('/api/galeri/:id', async (req, res) => { try { const [rows] = await db.query('SELECT id, data FROM galeri WHERE id = ?', [req.params.id]); if (rows.length) { let d = typeof rows[0].data === 'string' ? JSON.parse(rows[0].data) : (rows[0].data || {}); d.id = rows[0].id; res.json(d); } else { res.json({}); } } catch (err) { res.status(500).json({error: err.message}); } });
 app.post('/api/galeri', authMiddleware, upload.single('gambar'), async (req, res) => {
   logActivity(req.user?.username, 'POST /api/galeri', 'Menambahkan data');
   try {
@@ -765,45 +766,30 @@ app.delete('/api/galeri/:id', authMiddleware, async (req, res) => {
 
 
 
-// ====================== SURAT ======================
-app.get('/api/surat', authMiddleware, async (req, res) => {
+// ====================== KRITIK & SARAN ======================
+app.get('/api/saran', authMiddleware, async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM surat ORDER BY created_at DESC');
+    const [rows] = await db.query('SELECT * FROM saran ORDER BY created_at DESC');
     res.json(rows);
   } catch (err) { res.status(500).json({error: err.message}); }
 });
-app.post('/api/surat', upload.fields([{name: 'lampiran_ktp'}, {name: 'lampiran'}]), async (req, res) => {
+app.post('/api/saran', async (req, res) => {
   try {
     const newId = Date.now();
     const data = { id: newId, ...req.body, created_at: new Date().toISOString() };
-    if (req.files) {
-      if (req.files.lampiran_ktp) data.lampiran_ktp = '/uploads/' + req.files.lampiran_ktp[0].filename;
-      if (req.files.lampiran) data.lampiran = '/uploads/' + req.files.lampiran[0].filename;
-    }
-    await db.query('INSERT INTO surat SET ?', data);
+    await db.query('INSERT INTO saran SET ?', data);
     res.json({ message: 'Berhasil dikirim', id: newId });
   } catch (err) { res.status(500).json({error: err.message}); }
 });
-app.put('/api/surat/:id', authMiddleware, upload.single('hasil_surat'), async (req, res) => {
+app.put('/api/saran/:id', authMiddleware, async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.hasil_surat = '/uploads/' + req.file.filename;
-    await db.query('UPDATE surat SET ? WHERE id = ?', [data, req.params.id]);
+    await db.query('UPDATE saran SET ? WHERE id = ?', [data, req.params.id]);
     res.json({ message: 'Berhasil diubah' });
   } catch (err) { res.status(500).json({error: err.message}); }
 });
-app.delete('/api/surat/:id', authMiddleware, async (req, res) => {
-  try { await db.query('DELETE FROM surat WHERE id = ?', [req.params.id]); res.json({ message: 'Dihapus' }); } catch (err) { res.status(500).json({error: err.message}); }
-});
-
-// ====================== TRACKING SURAT ======================
-app.get('/api/tracking-surat', async (req, res) => {
-  try {
-    const { nik, nama } = req.query;
-    if (!nik || !nama) return res.status(400).json({ error: 'NIK dan Nama wajib diisi' });
-    const [rows] = await db.query('SELECT id, created_at, jenis_surat, keperluan, workflow_stage, status, catatan, hasil_surat FROM surat WHERE nik = ? AND nama LIKE ? ORDER BY created_at DESC', [nik, '%' + nama + '%']);
-    res.json(rows);
-  } catch (err) { res.status(500).json({error: err.message}); }
+app.delete('/api/saran/:id', authMiddleware, async (req, res) => {
+  try { await db.query('DELETE FROM saran WHERE id = ?', [req.params.id]); res.json({ message: 'Dihapus' }); } catch (err) { res.status(500).json({error: err.message}); }
 });
 
 // ====================== PERMOHONAN INFO ======================
@@ -893,7 +879,7 @@ app.get('/api/stats', authMiddleware, async (req, res) => {
     const [[{c_penduduk}]] = await db.query('SELECT COUNT(*) as c_penduduk FROM penduduk');
     const [[{c_kk}]] = await db.query('SELECT COUNT(DISTINCT no_kk) as c_kk FROM penduduk WHERE no_kk IS NOT NULL AND no_kk != ""');
     const [[{c_berita}]] = await db.query('SELECT COUNT(*) as c_berita FROM berita');
-    const [[{c_surat}]] = await db.query('SELECT COUNT(*) as c_surat FROM surat');
+    const [[{c_saran}]] = await db.query('SELECT COUNT(*) as c_saran FROM saran');
     const [[{c_pengaduan}]] = await db.query('SELECT COUNT(*) as c_pengaduan FROM pengaduan');
     const [[{c_pengaduan_menunggu}]] = await db.query('SELECT COUNT(*) as c_pengaduan_menunggu FROM pengaduan WHERE status="Menunggu" OR status="Pending" OR status="Menunggu Diproses"');
     const [[{c_umkm}]] = await db.query('SELECT COUNT(*) as c_umkm FROM listing');
@@ -903,7 +889,7 @@ app.get('/api/stats', authMiddleware, async (req, res) => {
       jumlah_penduduk: c_penduduk,
       jumlah_kk: c_kk,
       total_berita: c_berita,
-      total_surat: c_surat,
+      total_saran: c_saran,
       total_pengaduan: c_pengaduan,
       pengaduan_menunggu: c_pengaduan_menunggu,
       total_listing: c_umkm,
@@ -924,8 +910,7 @@ app.get('/api/logs', authMiddleware, async (req, res) => {
 async function initServer() {
   app.listen(PORT, () => {
     console.log('\n🏡 Website Desa Kauman berjalan di http://localhost:' + PORT);
-    console.log('📊 Admin Panel: http://localhost:' + PORT + '/admin');
-    console.log('🔑 Login: admin / kauman2024\n');
+    console.log('📊 Admin Panel: http://localhost:' + PORT + '/admin\n');
   });
 }
 initServer();
@@ -933,10 +918,10 @@ initServer();
 // ====================== NOTIFICATIONS ======================
 app.get('/api/notifications', authMiddleware, async (req, res) => {
   try {
-    const [[{c_surat}]] = await db.query('SELECT COUNT(*) as c_surat FROM surat WHERE status = "Menunggu"');
+    const [[{c_saran}]] = await db.query('SELECT COUNT(*) as c_saran FROM saran WHERE status = "Baru"');
     const [[{c_pengaduan}]] = await db.query('SELECT COUNT(*) as c_pengaduan FROM pengaduan WHERE status = "Menunggu"');
     const notifs = [];
-    if (c_surat > 0) notifs.push({ icon: '✉️', title: `${c_surat} Surat Menunggu`, time: 'Baru saja' });
+    if (c_saran > 0) notifs.push({ icon: '💬', title: `${c_saran} Saran Baru`, time: 'Baru saja' });
     if (c_pengaduan > 0) notifs.push({ icon: '📢', title: `${c_pengaduan} Pengaduan Baru`, time: 'Baru saja' });
     res.json(notifs);
   } catch (err) { res.status(500).json({error: err.message}); }

@@ -63,8 +63,8 @@
           <div><div class="dash-stat-num" id="statPembangunan">-</div><div class="dash-stat-label">Proyek Pembangunan</div></div>
         </div>
         <div class="dash-stat-card">
-          <div class="dash-stat-icon yellow">✉️</div>
-          <div><div class="dash-stat-num" id="statSurat">-</div><div class="dash-stat-label">Permohonan Surat</div></div>
+          <div class="dash-stat-icon yellow">💬</div>
+          <div><div class="dash-stat-num" id="statSaran">-</div><div class="dash-stat-label">Kritik &amp; Saran</div></div>
         </div>
         <div class="dash-stat-card">
           <div class="dash-stat-icon blue">📢</div>
@@ -97,7 +97,7 @@
             <div class="admin-card-body" style="padding:16px">
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
                 <a href="/admin/berita.html" class="btn-admin btn-primary-admin" style="justify-content:center;font-size:0.82rem">➕ Tambah Berita</a>
-                <a href="/admin/surat.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">✉️ Permohonan Surat</a>
+                <a href="/admin/saran.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">💬 Kritik &amp; Saran</a>
                 <a href="/admin/pengaduan.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">📢 Pengaduan</a>
                 <a href="/admin/pembangunan.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">🏗️ Pembangunan</a>
                 <a href="/admin/permohonan-info.html" class="btn-admin btn-light" style="justify-content:center;font-size:0.82rem">ℹ️ Permohonan Info</a>
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('statPenduduk').textContent = Number(stats.jumlah_penduduk).toLocaleString('id-ID');
     document.getElementById('statKK').textContent = Number(stats.jumlah_kk).toLocaleString('id-ID');
     document.getElementById('statPembangunan').textContent = stats.total_pembangunan || 0;
-    document.getElementById('statSurat').textContent = stats.total_surat || 0;
+    document.getElementById('statSaran').textContent = stats.total_saran || 0;
     document.getElementById('statPengaduan').textContent = stats.total_pengaduan || 0;
     document.getElementById('statPengaduanMenunggu').textContent = stats.pengaduan_menunggu || 0;
   }

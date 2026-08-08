@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kritik & Saran - Admin Desa Kauman</title>
+  <link rel="icon" href="/images/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/css/admin.css" />
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar" data-page="saran"></aside>
+
+  <main class="admin-main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Kritik & Saran</div>
+        <div class="topbar-breadcrumb"><span>Admin</span> / <span>Kritik & Saran</span></div>
+      </div>
+      <div class="topbar-right">
+        <a href="/" target="_blank" class="topbar-btn topbar-view-site">🌐 Lihat Website</a>
+        <button class="topbar-btn" data-logout>🚪 Keluar</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div class="page-header-admin">
+        <div>
+          <h1>💬 Kelola Kritik & Saran</h1>
+          <p>Baca dan tanggapi masukan, kritik, dan saran dari masyarakat</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <select id="filterStatus" class="form-control" style="max-width:160px" onchange="renderTable()">
+            <option value="">Semua Status</option>
+            <option value="Baru">Baru</option>
+            <option value="Dibaca">Sudah Dibaca</option>
+          </select>
+          <select id="filterKategori" class="form-control" style="max-width:160px" onchange="renderTable()">
+            <option value="">Semua Kategori</option>
+            <option value="Pelayanan Publik">Pelayanan Publik</option>
+            <option value="Infrastruktur">Infrastruktur</option>
+            <option value="Kebersihan">Kebersihan</option>
+            <option value="Keamanan">Keamanan</option>
+            <option value="Apresiasi">Apresiasi</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon blue">📋</div>
+          <div><div class="dash-stat-num" id="statTotal">-</div><div class="dash-stat-label">Total Masukan</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon yellow" style="color:#e65100">🔴</div>
+          <div><div class="dash-stat-num" id="statBaru">-</div><div class="dash-stat-label">Pesan Baru</div></div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon green">✅</div>
+          <div><div class="dash-stat-num" id="statDibaca">-</div><div class="dash-stat-label">Sudah Dibaca</div></div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="admin-card">
+        <div class="admin-card-body" style="padding:0">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Pengirim</th>
+                <th>Kategori</th>
+                <th>Judul Topik</th>
+                <th>Tanggal</th>
+                <th>Rating</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">⏳ Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal Detail -->
+<div class="admin-modal-overlay" id="modalDetail">
+  <div class="admin-modal" style="max-width:620px">
+    <div class="admin-modal-header">
+      <span class="admin-modal-title">💬 Detail Kritik & Saran</span>
+      <button class="admin-modal-close" onclick="closeModal('modalDetail')">✕</button>
+    </div>
+    <div class="admin-modal-body" id="detailContent"></div>
+    <div class="admin-modal-footer" id="detailFooter"></div>
+  </div>
+</div>
+
+<script src="/admin/js/sidebar.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+let allData = [];
+
+document.addEventListener('DOMContentLoaded', loadData);
+
+async function loadData() {
+  const res = await adminFetch('/saran');
+  if (res) {
+    allData = Array.isArray(res) ? res : [];
+    updateStats();
+    renderTable();
+  }
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = allData.length;
+  document.getElementById('statBaru').textContent = allData.filter(d=>d.status==='Baru').length;
+  document.getElementById('statDibaca').textContent = allData.filter(d=>d.status==='Dibaca').length;
+}
+
+function renderTable() {
+  const filterStatus = document.getElementById('filterStatus').value;
+  const filterKategori = document.getElementById('filterKategori').value;
+  let filtered = allData;
+  if(filterStatus) filtered = filtered.filter(d => d.status === filterStatus);
+  if(filterKategori) filtered = filtered.filter(d => d.kategori === filterKategori);
+
+  const statusColors = { 'Baru':'warning', 'Dibaca':'success' };
+
+  document.getElementById('tableBody').innerHTML = filtered.length === 0
+    ? `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">📭 Tidak ada data</td></tr>`
+    : filtered.map((d, i) => `
+      <tr style="${d.status === 'Baru' ? 'background-color:#fffdf5' : ''}">
+        <td>${i+1}</td>
+        <td>
+          <div style="font-weight:600;color:var(--text-dark)">${d.nama||'Anonim'}</div>
+          <div style="font-size:0.76rem;color:var(--text-muted)">${d.no_hp||'-'}</div>
+        </td>
+        <td><span class="badge-admin">${d.kategori||'-'}</span></td>
+        <td>
+          <div style="max-width:200px;font-weight:500">${d.judul||'-'}</div>
+          <div style="font-size:0.76rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px">${d.isi||''}</div>
+        </td>
+        <td style="font-size:0.82rem">${formatDate(d.created_at)||'-'}</td>
+        <td style="font-size:1.1rem">${getEmojiForRating(d.rating)}</td>
+        <td><span class="badge-admin ${statusColors[d.status]||'light'}">${d.status||'Baru'}</span></td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <button class="btn-admin btn-light btn-sm-admin" onclick="viewDetail(${d.id})">👁️ Lihat</button>
+            <button class="btn-admin btn-danger btn-sm-admin" onclick="hapus(${d.id})">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+}
+
+function getEmojiForRating(rating) {
+  if (rating === 'Sangat Baik') return '🤩';
+  if (rating === 'Baik') return '😊';
+  if (rating === 'Cukup') return '😐';
+  if (rating === 'Buruk') return '😞';
+  if (rating === 'Sangat Buruk') return '😡';
+  return '⭐';
+}
+
+async function viewDetail(id) {
+  const d = allData.find(x => x.id === id);
+  if(!d) return;
+  
+  // tandai sudah dibaca
+  if (d.status === 'Baru') {
+    await adminFetch(`/saran/${id}`, { method:'PUT', body:JSON.stringify({ status: 'Dibaca' }) });
+    d.status = 'Dibaca';
+    updateStats();
+    renderTable();
+  }
+
+  document.getElementById('detailContent').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:14px;font-size:0.88rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><span style="color:var(--text-muted)">Pengirim</span><div style="font-weight:700">${d.nama||'Anonim'}</div></div>
+        <div><span style="color:var(--text-muted)">Kategori</span><div>${d.kategori||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">No. HP</span><div>${d.no_hp||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Tanggal Masuk</span><div>${formatDate(d.created_at)||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Status</span><div style="font-weight:700">${d.status||'-'}</div></div>
+        <div><span style="color:var(--text-muted)">Rating Pelayanan</span><div style="font-size:1.1rem">${getEmojiForRating(d.rating)} ${d.rating||'-'}</div></div>
+      </div>
+      <div style="background:var(--bg-page);padding:14px;border-radius:8px">
+        <div style="font-weight:600;margin-bottom:6px">${d.judul||'Tidak ada judul'}</div>
+        <div style="line-height:1.7;color:var(--text-body);white-space:pre-wrap;">${d.isi||'-'}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('detailFooter').innerHTML = `
+    <button class="btn-admin btn-light" onclick="hubungiWaSaran(${d.id})" style="background-color:#25D366;color:#fff;border:none;margin-right:auto" ${!d.no_hp ? 'disabled style="background:#ccc;color:#fff;border:none;margin-right:auto;cursor:not-allowed"' : ''}>💬 Balas di WA</button>
+    <button class="btn-admin btn-light" onclick="closeModal('modalDetail')">Tutup</button>
+  `;
+  openModal('modalDetail');
+}
+
+function hubungiWaSaran(id) {
+  const d = allData.find(x => x.id === id);
+  if(!d || !d.no_hp) { alert('Nomor HP tidak tersedia'); return; }
+  let phone = d.no_hp.replace(/\D/g, '');
+  if (phone.startsWith('0')) phone = '62' + phone.substring(1);
+  
+  let msgString = `Halo ${d.nama || 'Bpk/Ibu'},\nTerima kasih telah menyampaikan Kritik & Saran Anda melalui website Desa Kauman pada ${formatDate(d.created_at)}.\n\nKami telah membaca masukan Anda terkait:\n"${d.judul}"\n\n`;
+  
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msgString)}`, '_blank');
+}
+
+async function hapus(id) {
+  confirmDialog('Yakin ingin menghapus masukan ini?', async () => {
+    const res = await adminFetch(`/saran/${id}`, { method:'DELETE' });
+    if(res) { showToast('Data berhasil dihapus'); await loadData(); }
+  });
+}
+</script>
+</body>
+</html>
